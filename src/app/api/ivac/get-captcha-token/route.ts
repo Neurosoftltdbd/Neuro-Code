@@ -49,7 +49,7 @@ export async function GET() {
 
     try {
         browser = await puppeteer.launch({
-            headless: 'new',
+            headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
 
@@ -63,7 +63,6 @@ export async function GET() {
 
         await page.waitForSelector('iframe[src*="turnstile"]', { timeout: 60000 });
 
-        await page.waitForTimeout(60000);
 
         const captchaToken = await page.$eval(
             'input[name="cf-turnstile-response"]',
