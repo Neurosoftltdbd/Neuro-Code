@@ -48,7 +48,7 @@ async function getCloudflareToken() {
         console.log(await response.json());
 
 
-        // node gct.js
+        // node script.js
 
         console.log('Captcha Token:', token);
         return token;
