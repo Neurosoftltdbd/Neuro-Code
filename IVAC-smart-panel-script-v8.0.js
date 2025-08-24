@@ -22,16 +22,16 @@
             position: fixed;
             bottom: 80px;
             right: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 15px 5px rgb(0 0 0);
             padding: 8px;
             z-index: 9999;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             transform: translateY(20px);
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease-in-out;
             width: 350px;
             height: 450px;
             pointer-events: none;
@@ -89,12 +89,12 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #6a11cb, #2575fc);
+            background: linear-gradient(90deg, rgb(255 255 255) 0%, rgb(190 255 253) 50%, rgb(255 248 188) 100%);
             color: white;
             border: none;
             font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 25px 15px rgb(0 0 0);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -104,7 +104,7 @@
 
         #toggle-panel:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 0px 27px 15px rgb(0 0 0);
         }
         #smart-panel button {
             cursor: pointer;
@@ -138,8 +138,6 @@
     let fullName = "";
     let email = "";
     let phone = "";
-    let familyName = "";
-    let familyWebFileId = "";
     let familyMembers = [];
     let authToken = "";
     let cloudflareCaptchaToken = "";
@@ -168,40 +166,120 @@
         max = Math.floor(max); // Ensure max is an integer
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    const PostRequest = async (url, body) => {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": `Bearer ${authToken}`,
-                "language": "en",
-                // "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/237.84.2.178 Safari/537.36",
-                // "origin": 'https://payment.ivacbd.com/',
-                // "access-control-allow-origin": '*'
-            },
-            body: JSON.stringify(body),
-        });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            return {status: "failed", data: data};
+
+    const getCloudflareCaptchaToken = async () => {
+        const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+        if (token) {
+            setMessage("Cloudflare token found")
+            cloudflareCaptchaToken = token;
+        }else{
+            setMessage("Waiting for cloudflare token...");
+            setTimeout(() => {
+                getCloudflareCaptchaToken();
+            }, 5000);
         }
+    }
+    const PostRequest = async (url, body) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(async ()=>{
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json, text/plain, */*",
+                            "Authorization": `Bearer ${authToken}`,
+                            "language": "en",
+                            "origin": 'https://payment.ivacbd.com/',
+                            "priority": 'high',
+                            "access-control-allow-origin": '*',
+                            "X-Forwarded-For": 'https://payment.ivacbd.com/',
+                            "scheme": 'https',
+                            //"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36',
+                            //"User-Agent": 'Opera/9.80 (Windows NT 6.0; U; en) Presto/2.10.289 Version/12.02',
+                            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36',
+                            // "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+                            // "sec-ch-ua-mobile": '?0',
+                            // "sec-ch-ua-platform": "Windows",
+                            // "sec-fetch-dest": 'empty',
+                            // "sec-fetch-mode": 'cors',
+                            // "sec-fetch-site": 'cross-site',
+                            // "Referer": 'https://payment.ivacbd.com/',
+                            // "Referrer-Policy": 'strict-origin-when-cross-origin',
+                            // "Accept-Encoding": 'gzip, deflate, br',
+                            // "Accept-Language": 'en',
+                            // "DNT": '1',
+                            // "Connection": 'keep-alive',
+                            // "Upgrade-Insecure-Requests": '1',
+                            // "Strict-Transport-Security": 'max-age=31536000; includeSubDomains ; preload',
+                            // "Cross-Origin-Opener-Policy": 'same-origin',
+                            // "Cross-Origin-Embedder-Policy": 'same-origin',
+                            // "Cross-Origin-Resource-Policy": 'same-origin',
+                            // "X-Content-Type-Options": 'nosniff',
+                            // "X-Frame-Options": 'SAMEORIGIN',
+                            // "X-XSS-Protection": '0',
+                            // "Expect-CT": 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+                            // "TE": 'trailers',
+                            // "Host": 'payment.ivacbd.com',
+                            // "Origin": 'https://payment.ivacbd.com',
+                            // "Via": '1.1 google',
+                            // "CF-Cache-Status": 'DYNAMIC',
+                            // "CF-RAY": '7b7b4c4b4c4b4c4b-ORD',
+                            // "cf-connecting-ip": '127.0.0.1',
+                            // "Alt-Used": 'payment.ivacbd.com',
+                            // "CF-IPCountry": 'BD',
+                            // "CF-IPCountry-Primary": 'BD',
+
+
+                        },
+                        body: JSON.stringify(body),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        //return data;
+                        resolve(data);
+                    } else {
+                        return {status: "failed", data: data};
+                    }
+                }catch (e) {
+                    setMessage(e.message);
+                    reject(e);
+                }
+            }, getRandomInt(3000, 7000));
+
+        });
     }
 
 
     const GetRequest = async (url) => {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": `Bearer ${authToken}`,
-                "language": "en",
-            }
+        return new Promise((resolve, reject) => {
+            setTimeout(async ()=>{
+                try {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${authToken}`,
+                            "language": "en",
+                            "origin": 'https://payment.ivacbd.com/',
+                            "access-control-allow-origin": '*',
+
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        //return data;
+                        resolve(data);
+                    } else {
+                        return {status: "failed", data: data};
+                    }
+                }catch (e) {
+                    setMessage(e.message);
+                    reject(e);
+                }
+            }, getRandomInt(2000, 5000));
         });
-        return await response.json();
     }
 
 
@@ -216,7 +294,7 @@
             const fd = familyData.split('\n')
                 .filter(line => line.trim() !== '') // Good practice to filter out empty lines
                 .map(line => {
-                    const [webfileNo, name] = line.split(',').map(item => item.trim());
+                    const [name, webfileNo] = line.split(',').map(item => item.trim());
                     return {
                         name: name,
                         webfile_no: webfileNo,
@@ -260,28 +338,13 @@
                         webfile_id: webFileId,
                     }
                 }
-                setTimeout(async ()=>{
-
                 const personalInfoSubmit = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
                 if (personalInfoSubmit.status === "success") {
                     setMessage(personalInfoSubmit.message +" Payable amount: " +personalInfoSubmit.data.payable_amount);
-                    setTimeout(async () => {
-                        const sendOverview = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/overview-submit", {});
-                        if (sendOverview.status === "success") {
-                            setMessage(sendOverview.message);
-                            setTimeout( async () => {
-                                await sendOTP();
-                                toggleTab(2);
-                            }, 5000);
-                        } else {
-                            setMessage(sendOverview.message)
-                        }
-                    },10000);
                 } else {
                     console.log(personalInfoSubmit);
                     setMessage(personalInfoSubmit.message);
                 }
-                }, getRandomInt(3000, 10000));
             } else {
                 console.log("Application submission failed:", response);
                 setMessage(response.data.message || "Application submission failed");
@@ -289,6 +352,20 @@
         } catch (error) {
             console.log("Application submit error:", error);
             setMessage(error.message);
+        }
+    }
+    async function sendOverviewToServer() {
+        try {
+            const sendOverview = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
+            if (sendOverview.status === "success") {
+                setMessage(sendOverview.message);
+                await sendOTP();
+                toggleTab(2);
+            } else {
+                setMessage(sendOverview.message)
+            }
+        }catch (e) {
+            setMessage(e.message);
         }
     }
 
@@ -327,8 +404,6 @@
                 if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
                     document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
                     slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-
-                    setTimeout( async () => {
                         const slotTimes = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-slot-time",
                             {appointment_date: verifyOtp.data.slot_dates[0]});
                         if(slotTimes.status === "success"){
@@ -353,93 +428,15 @@
                         }else{
                             setMessage(slotTimes.message);
                         }
-
-                    }, getRandomInt(3000, 10000));
                 }
             }else {
                 setMessage(verifyOtp.message);
             }
-
         } catch (error) {
             setMessage(error.message);
         }
     }
 
-    // ========== Generate Captcha Function ==========
-    async function generateCaptcha() {
-
-        try {
-            const response = await fetch("https://api-payment.ivacbd.com/api/v2/captcha/generate-pay", {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": `Bearer ${authToken}`,
-                    "language": "en"
-                }
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setMessage(data.message);
-                captchaInfo.captcha_id = data.data.captcha_id;
-                // Display captcha in the panel
-                const captchaImageContainer = document.getElementById('captcha-container');
-                if (captchaImageContainer) {
-                    captchaImageContainer.innerHTML = '';
-                    const img = document.createElement('img');
-                    img.id = 'captcha-image';
-                    img.src = data.data.captcha_image;
-                    img.alt = 'CAPTCHA Image';
-                    img.style.maxWidth = '100%';
-                    img.style.maxHeight = '100%';
-
-                    captchaImageContainer.appendChild(img);
-                    document.getElementById('captcha-input').value = '';
-                }
-            } else {
-                setMessage(data.message);
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
-
-
-
-
-
-    // ========== Verify Captcha Function ==========
-    async function verifyCaptcha(captchaInput) {
-        if (!captchaInput) {
-            setMessage("Please enter the captcha text");
-            return;
-        }
-
-        if (!captchaInfo.captcha_id) {
-            setMessage("Please generate a captcha first");
-            document.getElementById('generate-captcha-button').classList.remove('hidden');
-            return;
-        }
-
-        try {
-            const sendCaptcha = await PostRequest("https://api-payment.ivacbd.com/api/v2/captcha/verify-pay",
-                {
-                    captcha_id: captchaInfo.captcha_id,
-                    captcha_input: captchaInput
-                });
-
-            if (sendCaptcha.status === "success") {
-                setMessage(sendCaptcha.message);
-                // Clear captcha input after successful verification
-                document.getElementById('captcha-input').value = '';
-                document.getElementById("paynow-button").classList.remove("hidden");
-                await payNow();
-            } else {
-                setMessage(sendCaptcha.message);
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
 
     // ========== Pay Now Function ==========
     async function payNow() {
@@ -507,42 +504,27 @@
             setMessage("Please enter a password");
             return;
         }
-        const token = document.querySelector('input[name="cf-turnstile-response"]').value;
-        if (token) {
-            setMessage("Cloudflare token found")
-            cloudflareCaptchaToken = token;
-        }else{
-            setMessage("Waiting for cloudflare token...");
-            return;
-        }
+
+        await getCloudflareCaptchaToken();
 
 
-        const response = await fetch("https://api-payment.ivacbd.com/api/v2/mobile-verify", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                mobile_no: mobile,
-                captcha_token: cloudflareCaptchaToken
-            })
+        const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/mobile-verify", {
+            mobile_no: mobile,
+            captcha_token: cloudflareCaptchaToken,
+            answer: 1,
+            problem: "abc"
         });
-
-        if (response.ok) {
-            const data = await response.json();
-            setMessage(data.message);
-            setTimeout( async () => {
-                const loginResponse = await PostRequest("https://api-payment.ivacbd.com/api/v2/login",{
-                    mobile_no: mobile,
-                    password: password,
-                })
-                if (loginResponse.status === "success") {
-                    setMessage(loginResponse.message);
-                } else {
-                    setMessage(loginResponse.message);
-                }
-            },getRandomInt(3000, 10000))
+        if (response.status === "success") {
+            setMessage(response.message);
+            const loginResponse = await PostRequest("https://api-payment.ivacbd.com/api/v2/login",{
+                mobile_no: mobile,
+                password: password,
+            })
+            if (loginResponse.status === "success") {
+                setMessage(loginResponse.message);
+            } else {
+                setMessage(loginResponse.message);
+            }
 
         } else {
             setMessage(response.message);
@@ -564,18 +546,15 @@
             otp: otp,
         });
 
-
         if (response.status === "success") {
             setMessage(response.message + " and " + response.data.slot_available ? "Slot Available" : "Slot Not Available");
             console.log(response);
             authToken = response.data.access_token;
             await GM_setValue("token", authToken);
             await localStorage.setItem("ivacToken", authToken);
-
             fullName = response.data.name;
             email = response.data.email;
             phone = response.data.mobile_no;
-
             document.querySelector("#logout").classList.remove("hidden");
             document.querySelector("#login").classList.add("hidden");
             toggleTab(1);
@@ -612,7 +591,7 @@
                 </select>
             </div>
             <div class="flex gap-1 flex-wrap rounded bg-[#135d32] text-white text-sm">
-                <button id="tab-0">Login</button>
+                <button id="tab-0"><i class="bi bi-person"></i> User</button>
                 <button id="tab-1">Info</button>
                 <button id="tab-2">Otp</button>
                 <button id="tab-3">Slot</button>
@@ -669,12 +648,10 @@
                         <div>
                             <input value="Medical purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <input name="full_name" id="input-full_name" type="text" placeholder="Enter Full Name">
-                            <input name="email" id="input-email" type="email" placeholder="Enter Email">
-                            <input name="phone" id="input-phone" type="tel" placeholder="Enter Phone Number">
+                        <div class="flex gap-4">
+                            <button id="send-info-button" type="button">Send Info</button>
+                            <button id="send-overview-button" type="button">Send overview</button>
                         </div>
-                        <button id="send-info-button" type="button">Send Info</button>
                         
                     </div>
                 </div>
@@ -710,7 +687,7 @@
         </div>
         `;
 
-    htmlData.querySelector('#tab-0').addEventListener('click', function (e) {
+    htmlData.querySelector('#tab-0').addEventListener('click', function () {
         toggleTab(0);
     });
     htmlData.querySelector('#close-button').addEventListener('click', () => {
@@ -731,7 +708,13 @@
     htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
 
 
-    htmlData.querySelector('#tab-1').addEventListener('click', function (e) {
+
+
+
+
+
+
+    htmlData.querySelector('#tab-1').addEventListener('click', function () {
         toggleTab(1);
     });
     htmlData.querySelector('#webfile').addEventListener('change', async () => {
@@ -750,9 +733,18 @@
             document.querySelector("#visit-purpose").value,
         );
     });
+    htmlData.querySelector('#send-overview-button').addEventListener('click', async ()=>{
+        await sendOverviewToServer();
+    });
 
 
-    htmlData.querySelector('#tab-2').addEventListener('click', function (e) {
+
+
+
+
+
+
+    htmlData.querySelector('#tab-2').addEventListener('click', function () {
         toggleTab(2);
     });
     htmlData.querySelector("#select-high-commission").addEventListener("change", async () => {
@@ -760,10 +752,13 @@
     })
 
 
-    htmlData.querySelector('#tab-3').addEventListener('click', function (e) {
+
+
+
+    htmlData.querySelector('#tab-3').addEventListener('click', function () {
         toggleTab(3);
     });
-    htmlData.querySelector('#otp-verify-button').addEventListener('click', async function (e) {
+    htmlData.querySelector('#otp-verify-button').addEventListener('click', async function () {
         await verifyOTP(document.querySelector("#otp-input").value);
     });
     htmlData.querySelector("#resend-otp-button").addEventListener('click', async () => {
@@ -778,9 +773,6 @@
     htmlData.querySelector("#paynow-button").addEventListener('click', async () => {
         await payNow();
     });
-
-
-
 
     document.body.appendChild(htmlData);
 
@@ -819,7 +811,10 @@
     // Create toggle button for the panel (fixed position)
     const togglePanelBtn = document.createElement('button');
     togglePanelBtn.id = 'toggle-panel';
-    togglePanelBtn.innerHTML = '⚙️';
+    togglePanelBtn.classList = 'p-3';
+    togglePanelBtn.innerHTML = `
+    <svg viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#0ba300" stroke="#0ba300"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>menu_navigation_grid [#0ba300]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-59.000000, -200.000000)" fill="#0ba300"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M14.55,60 L24,60 L24,51 L14.55,51 L14.55,60 Z M3,60 L12.45,60 L12.45,51 L3,51 L3,60 Z M14.55,49 L24,49 L24,40 L14.55,40 L14.55,49 Z M3,49 L12.45,49 L12.45,40 L3,40 L3,49 Z" id="menu_navigation_grid-[#0ba300]"> </path> </g> </g> </g> </g></svg>
+    `;
     togglePanelBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         htmlData.classList.toggle('visible');
@@ -861,7 +856,7 @@
         // Default position if none saved
         htmlData.style.position = 'fixed';
         htmlData.style.right = '20px';
-        htmlData.style.top = '20px';
+        htmlData.style.top = '100px';
     }
 
     htmlData.addEventListener('dragstart', function (e) {
@@ -921,14 +916,13 @@
     }
 
 
-    document.addEventListener('DOMContentLoaded', init);
+    //document.addEventListener('DOMContentLoaded', init);
 
-    // Run initialization
-    // if (document.readyState === 'loading') {
-    //     document.addEventListener('DOMContentLoaded', init);
-    // } else {
-    //     init();
-    // }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        await init();
+    }
 
 
 })();

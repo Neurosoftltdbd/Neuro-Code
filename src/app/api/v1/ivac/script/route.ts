@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 
 export async function GET(req: NextRequest) {
     try {
-        const key = req.nextUrl.searchParams.get('key');
+        const key: string = req.nextUrl.searchParams.get('key') || '';
         const keyList = [
             "B2B@2023",
             "B2C@2023",
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         }else{
             return NextResponse.json({status: "unauthorized", message: "You are not authorized to access this file"});
         }
-    } catch (error: any) {
+    } catch (error) {
         console.error('Error reading file:', error);
         return new Response('File not found', { status: 404 });
     }
