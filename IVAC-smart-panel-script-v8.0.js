@@ -123,6 +123,11 @@
     const getCloudflareCaptchaToken = () => {
         return new Promise(resolve => {
             const checkToken = () => {
+                if(!document.querySelector('input[name="cf-turnstile-response"]')){
+                    cloudflareCaptchaToken = localStorage.getItem("captchaToken")
+                    return resolve(cloudflareCaptchaToken);
+                }
+
                 const token = document.querySelector('input[name="cf-turnstile-response"]').value;
                 if (token) {
                     setMessage("Cloudflare token found");
@@ -222,17 +227,17 @@
 
 
         let payload = {
-            captcha_token:cloudflareCaptchaToken,
+            captcha_token: localStorage.getItem("captchaToken"),
             highcom: highCommission.toString(),
             webfile_id: webFileId,
             webfile_id_repeat: webFileId,
             ivac_id: ivacId.toString(),
             visa_type: visaType.toString(),
-            family_count_y7u4r6: familyCount.toString(),
+            family_count: familyCount.toString(),
             visit_purpose: visitPurpose,
         };
         try {
-            const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/application-info-submit-mu5h7k", payload);
+            const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/application-info-submit", payload);
             if (response.status === "success") {
                 setMessage(response.message +" Payable amount: " +response.data.payable_amount);
 
@@ -361,7 +366,7 @@
         }
 
         const payload = {
-            appointment_date_3y44u6: slotInfo.appointment_date,
+            appointment_date: slotInfo.appointment_date,
             appointment_time: slotInfo.appointment_time,
             captcha_token: cloudflareCaptchaToken,
             selected_payment: {
@@ -373,7 +378,7 @@
 
         try {
             //const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
-            const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now-a2f59h", payload);
+            const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
 
             if (sendPayment.status === "success") {
                 setMessage(sendPayment.message);
@@ -470,8 +475,8 @@
             setMessage(response.message + " and " + response.data.slot_available ? "Slot Available" : "Slot Not Available");
             console.log(response);
             authToken = response.data.access_token;
-            await GM_setValue("token", authToken);
-            await localStorage.setItem("ivacToken", authToken);
+            await GM_setValue("token", response.data.access_token);
+            await localStorage.setItem("ivacToken", response.data.token);
             fullName = response.data.name;
             email = response.data.email;
             phone = response.data.mobile_no;
