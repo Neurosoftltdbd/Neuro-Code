@@ -44,44 +44,13 @@
         }
 
         #smart-panel-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             animation: zoomInOut 2s infinite alternate;
-            text-align: center;
-            width: 100%;
-            justify-content: center;
         }
 
         @keyframes zoomInOut {
             0% { transform: scale(0.95); }
             100% { transform: scale(1.05); }
         }
-
-        #smart-panel-close {
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            color: #7f8c8d;
-            padding: 0;
-            line-height: 1;
-            transition: all 0.2s ease;
-            position: absolute;
-            right: 0;
-        }
-
-        #smart-panel-close:hover {
-            color: #e74c3c;
-            transform: scale(1.2);
-        }
-        
         #toggle-panel {
             position: fixed;
             bottom: 20px;
@@ -528,7 +497,7 @@
     htmlData.innerHTML = `
         <div id="smart-panel-header" class="flex gap-1 py-1 rounded items-center justify-between bg-[#135d32] text-sm cursor-move">
             <h3 id="smart-panel-title" class="text-white mx-4">IVAC Smart Panel</h3>
-            <button id="close-button"><span class="-me-2 py-1 px-2 bg-gray-200 hover:bg-gray-300 rounded text-red-600"><i class="bi bi-x-circle"></i></span></button>
+            <button id="close-button"><span class="-me-2 p-1 bg-gray-200 hover:bg-gray-300 rounded text-red-600"><i class="bi bi-x-circle"></i></span></button>
         </div>
         <div class="flex flex-col gap-2">
             <div class="flex justify-between gap-2 w-full">
@@ -543,9 +512,9 @@
             </div>
             <div class="flex gap-1 flex-wrap rounded bg-[#135d32] text-white text-sm">
                 <button id="tab-0"><i class="bi bi-person"></i> User</button>
-                <button id="tab-1">Info</button>
-                <button id="tab-2">Otp</button>
-                <button id="tab-3">Slot</button>
+                <button id="tab-1"><i class="bi bi-info-circle"></i> Info</button>
+                <button id="tab-2"><i class="bi bi-lock"></i> Otp</button>
+                <button id="tab-3"><i class="bi bi-calendar"></i> Slot</button>
             </div>
             <div class="tab-content-body py-4 w-full overflow-y-auto h-[300px] text-sm">
                 <div id="tab-0" class="tab-content">
@@ -562,8 +531,8 @@
                         <div class="flex flex-col gap-2">
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
-                            <button id="get-auth-token-button" type="button">Get auth token from ivac home page</button>
-                            <button id="get-captcha-token-button" type="button">Get captcha token from ivac home page</button>
+                            <button id="get-auth-token-button" type="button">Get ivac auth token</button>
+                            <button id="get-captcha-token-button" type="button">Get captcha token</button>
                         </div>
                     </div>
                 </div>

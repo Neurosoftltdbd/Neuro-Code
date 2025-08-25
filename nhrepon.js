@@ -19,15 +19,16 @@ style.textContent = `
             height: 450px;
             pointer-events: none;
         }
-
         #smart-panel.visible {
             transform: translateY(0);
             opacity: 1;
             pointer-events: auto;
         }
+        
         #smart-panel-title {
             animation: zoomInOut 2s infinite;
         }
+        
         @keyframes zoomInOut {
             0% { transform: scale(0.95); }
             100% { transform: scale(1.05); }
@@ -447,7 +448,6 @@ function toggleTab(index) {
     const contents = document.querySelectorAll(".tab-content");
     contents.forEach((content, i) => {
         content.classList.toggle("d-none", i !== index);
-        document.querySelector("#tab-" + i).classList.toggle("bg-[#135d32] text-white", i === index);
     });
 }
 
@@ -471,9 +471,9 @@ htmlData.innerHTML = `
             </div>
             <div class="flex gap-1 flex-wrap rounded bg-[#135d32] text-white text-sm">
                 <button id="tab-0"><i class="bi bi-person"></i> User</button>
-                <button id="tab-1">Info</button>
-                <button id="tab-2">Otp</button>
-                <button id="tab-3">Slot</button>
+                <button id="tab-1"><i class="bi bi-info-circle"></i> Info</button>
+                <button id="tab-2"><i class="bi bi-lock"></i> Otp</button>
+                <button id="tab-3"><i class="bi bi-calendar"></i> Slot</button>
             </div>
             <div class="tab-content-body py-4 w-full overflow-y-auto h-[300px] text-sm">
                 <div id="tab-0" class="tab-content">
