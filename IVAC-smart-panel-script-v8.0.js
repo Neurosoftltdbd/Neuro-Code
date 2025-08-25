@@ -527,7 +527,7 @@
     htmlData.id = "smart-panel";
     htmlData.innerHTML = `
         <div id="smart-panel-header" class="flex gap-1 py-1 rounded items-center justify-between bg-[#135d32] text-sm cursor-move">
-            <h3 class="text-white mx-4">IVAC Smart Panel</h3>
+            <h3 id="smart-panel-title" class="text-white mx-4">IVAC Smart Panel</h3>
             <button id="close-button"><span class="-me-2 py-1 px-2 bg-gray-200 hover:bg-gray-300 rounded text-red-600"><i class="bi bi-x-circle"></i></span></button>
         </div>
         <div class="flex flex-col gap-2">
@@ -782,7 +782,16 @@
     togglePanelBtn.id = 'toggle-panel';
     togglePanelBtn.classList = 'p-3';
     togglePanelBtn.innerHTML = `
-    <svg viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#0ba300" stroke="#0ba300"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>menu_navigation_grid [#0ba300]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-59.000000, -200.000000)" fill="#0ba300"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M14.55,60 L24,60 L24,51 L14.55,51 L14.55,60 Z M3,60 L12.45,60 L12.45,51 L3,51 L3,60 Z M14.55,49 L24,49 L24,40 L14.55,40 L14.55,49 Z M3,49 L12.45,49 L12.45,40 L3,40 L3,49 Z" id="menu_navigation_grid-[#0ba300]"> </path> </g> </g> </g> </g></svg>
+    <svg width="80px" height="80px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <!-- Top-left grid -->
+    <rect x="1" y="1" width="10" height="10" fill="#000000" />
+    <!-- Top-right grid -->
+    <rect x="13" y="1" width="10" height="10" fill="#000000" />
+    <!-- Bottom-left grid -->
+    <rect x="1" y="13" width="10" height="10" fill="#000000" />
+    <!-- Bottom-right grid -->
+    <rect x="13" y="13" width="10" height="10" fill="#000000" />
+</svg>
     `;
     togglePanelBtn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -795,9 +804,6 @@
     link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
     document.head.appendChild(link);
 
-    let script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
-    document.body.appendChild(script);
 
     // Handle clicks outside the panel to close it
     document.addEventListener('click', function (e) {

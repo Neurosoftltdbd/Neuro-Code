@@ -1,15 +1,41 @@
 // Create a <style> element
 const style = document.createElement('style');
 style.textContent = `
-    #toggle-panel:hover {
-        transform: scale(1.1);
-        box-shadow: 0px 0px 27px 15px rgb(0 0 0);
-    }
-    #smart-panel.visible {
+    #smart-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 5px rgb(0 0 0);
+            padding: 8px;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            width: 350px;
+            height: 450px;
+            pointer-events: none;
+        }
+
+        #smart-panel.visible {
             transform: translateY(0);
             opacity: 1;
             pointer-events: auto;
         }
+        #smart-panel-title {
+            animation: zoomInOut 2s infinite;
+        }
+        @keyframes zoomInOut {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.05); }
+        }
+    #toggle-panel:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 0px 27px 15px rgb(0 0 0);
+    }
         
         #smart-panel button {
             cursor: pointer;
@@ -322,9 +348,11 @@ async function payNow() {
         setMessage(error.message);
     }
 }
+
 function openPaymentLink(paymentLink) {
     window.open(paymentLink, '_blank', activeTab);
 }
+
 async function updatePaymentLinkDisplay(paymentLink) {
     const paymentLinkContainer = document.getElementById('payment-link-container');
     if (paymentLinkContainer) {
@@ -425,10 +453,9 @@ function toggleTab(index) {
 
 const htmlData = document.createElement('div');
 htmlData.id = "smart-panel";
-htmlData.style = "position: fixed;bottom: 80px;right: 20px;background: rgba(255, 255, 255, 0.8); border-radius: 10px; box-shadow: 0px 0px 15px 5px rgb(0 0 0);padding: 8px;z-index: 9999; backdrop-filter: blur(10px);border: 1px solid rgba(255, 255, 255, 0.3);transform: translateY(20px);opacity: 0;transition: all 0.5s ease-in-out;width: 350px;height: 450px;pointer-events: none;";
 htmlData.innerHTML = `
         <div id="smart-panel-header" class="flex gap-1 py-1 rounded items-center justify-between bg-[#135d32] text-sm cursor-move">
-            <h3 class="text-white mx-4">IVAC Smart Panel</h3>
+            <h3 id="smart-panel-title" class="text-white mx-4">IVAC Smart Panel</h3>
             <button id="close-button"><span class="-me-2 py-1 px-2 bg-gray-200 hover:bg-gray-300 rounded text-red-600"><i class="bi bi-x-circle"></i></span></button>
         </div>
         <div class="flex flex-col gap-2">
@@ -584,7 +611,7 @@ htmlData.querySelector('#get-captcha-token-button').addEventListener('click', as
 });
 
 
-htmlData.querySelector('#tab-1').addEventListener('click', ()=>{
+htmlData.querySelector('#tab-1').addEventListener('click', () => {
     toggleTab(1);
 });
 htmlData.querySelector('#webfile').addEventListener('change', async () => {
@@ -653,6 +680,7 @@ async function updateIvacCenters(highCom) {
         }
     }
 }
+
 await updateIvacCenters(4);
 
 
