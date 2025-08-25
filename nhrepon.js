@@ -26,17 +26,37 @@ style.textContent = `
         }
         
         #smart-panel-title {
-            animation: zoomInOut 2s infinite;
+            animation: zoomInOut 4s infinite;
         }
         
         @keyframes zoomInOut {
             0% { transform: scale(0.95); }
-            100% { transform: scale(1.05); }
+            50% { transform: scale(1.15); font-weight: bold; }
+            100% { transform: scale(0.95); }
         }
-    #toggle-panel:hover {
-        transform: scale(1.1);
-        box-shadow: 0px 0px 27px 15px rgb(0 0 0);
-    }
+        #toggle-panel{
+        position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, rgb(255 255 255) 0%, rgb(190 255 253) 50%, rgb(255 248 188) 100%);
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0px 0px 25px 15px rgb(0 0 0);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            }
+        #toggle-panel:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 27px 15px rgb(0 0 0);
+        }
         
         #smart-panel button {
             cursor: pointer;
@@ -486,12 +506,11 @@ htmlData.innerHTML = `
                             <input type="password" id="userPassword" name="password" required placeholder="Enter password" >
                             <button id="send-login-otp-button" type="button">Send OTP</button>
                         </div>
-    
                         <div class="flex flex-col gap-2">
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
-                            <button id="get-auth-token-button" type="button">Get auth token from ivac home page</button>
-                            <button id="get-captcha-token-button" type="button">Get captcha token from ivac home page</button>
+                            <button id="get-auth-token-button" type="button">Get ivac auth token</button>
+                            <button id="get-captcha-token-button" type="button">Get captcha token</button>
                         </div>
                     </div>
                 </div>
@@ -688,25 +707,6 @@ await updateIvacCenters(4);
 const togglePanelBtn = document.createElement('button');
 togglePanelBtn.id = 'toggle-panel';
 togglePanelBtn.classList = 'p-3';
-togglePanelBtn.style = `position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(90deg, rgb(255 255 255) 0%, rgb(190 255 253) 50%, rgb(255 248 188) 100%);
-            color: white;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 0px 0px 25px 15px rgb(0 0 0);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;`;
-togglePanelBtn.style.hover = `transform: scale(1.1);
-            box-shadow: 0px 0px 27px 15px rgb(0 0 0);`
 togglePanelBtn.innerHTML = `
     <svg width="80px" height="80px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <!-- Top-left grid -->
@@ -738,7 +738,7 @@ document.addEventListener('click', function (e) {
 });
 
 // Prevent panel clicks from bubbling up when panel is visible
-htmlData.addEventListener('click', function () {
+htmlData.addEventListener('click', function (e) {
     if (htmlData.classList.contains('visible')) {
         e.stopPropagation();
     }
