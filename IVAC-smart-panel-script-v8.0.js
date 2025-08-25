@@ -129,34 +129,18 @@
 
     `);
 
-    let highCommission = 4;
     let webFileId = "";
-    let ivacId = 4;
-    let visaType = 13;
     let familyCount = 0;
-    let visitPurpose = "Medical purpose";
     let fullName = "";
     let email = "";
     let phone = "";
     let familyMembers = [];
-    let authToken = "";
+    let authToken = "" || localStorage.getItem('authToken');
     let cloudflareCaptchaToken = "";
     let timeOut = null;
     let slotInfo = {
         appointment_date: null,
         appointment_time: null
-    };
-    let captchaInfo = {
-        captcha_id: null,
-        captcha_text: null
-    };
-    let paymentLink = null;
-
-    // Default payment method
-    const defaultPaymentMethod = {
-        name: "VISA",
-        slug: "visacard",
-        link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
     };
 
     const setMessage = (msg) => document.getElementById("message").textContent = msg;
@@ -167,18 +151,24 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    const getCloudflareCaptchaToken = async () => {
-        const token = document.querySelector('input[name="cf-turnstile-response"]').value;
-        if (token) {
-            setMessage("Cloudflare token found")
-            cloudflareCaptchaToken = token;
-        }else{
-            setMessage("Waiting for cloudflare token...");
-            setTimeout(() => {
-                getCloudflareCaptchaToken();
-            }, 5000);
-        }
-    }
+    const getCloudflareCaptchaToken = () => {
+        return new Promise(resolve => {
+            const checkToken = () => {
+                const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+                if (token) {
+                    setMessage("Cloudflare token found");
+                    GM_setValue("captchaToken", token);
+                    localStorage.setItem("captchaToken", token);
+                    cloudflareCaptchaToken = token;
+                    resolve(token);
+                } else {
+                    setMessage("Waiting for cloudflare token...");
+                    setTimeout(checkToken, 5000);
+                }
+            };
+            checkToken();
+        });
+    };
     const PostRequest = async (url, body) => {
         return new Promise((resolve, reject) => {
             setTimeout(async ()=>{
@@ -190,53 +180,11 @@
                             "Accept": "application/json, text/plain, */*",
                             "Authorization": `Bearer ${authToken}`,
                             "language": "en",
-                            "origin": 'https://payment.ivacbd.com/',
-                            "priority": 'high',
-                            "access-control-allow-origin": '*',
-                            "X-Forwarded-For": 'https://payment.ivacbd.com/',
-                            "scheme": 'https',
-                            //"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36',
-                            //"User-Agent": 'Opera/9.80 (Windows NT 6.0; U; en) Presto/2.10.289 Version/12.02',
-                            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36',
-                            // "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-                            // "sec-ch-ua-mobile": '?0',
-                            // "sec-ch-ua-platform": "Windows",
-                            // "sec-fetch-dest": 'empty',
-                            // "sec-fetch-mode": 'cors',
-                            // "sec-fetch-site": 'cross-site',
-                            // "Referer": 'https://payment.ivacbd.com/',
-                            // "Referrer-Policy": 'strict-origin-when-cross-origin',
-                            // "Accept-Encoding": 'gzip, deflate, br',
-                            // "Accept-Language": 'en',
-                            // "DNT": '1',
-                            // "Connection": 'keep-alive',
-                            // "Upgrade-Insecure-Requests": '1',
-                            // "Strict-Transport-Security": 'max-age=31536000; includeSubDomains ; preload',
-                            // "Cross-Origin-Opener-Policy": 'same-origin',
-                            // "Cross-Origin-Embedder-Policy": 'same-origin',
-                            // "Cross-Origin-Resource-Policy": 'same-origin',
-                            // "X-Content-Type-Options": 'nosniff',
-                            // "X-Frame-Options": 'SAMEORIGIN',
-                            // "X-XSS-Protection": '0',
-                            // "Expect-CT": 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
-                            // "TE": 'trailers',
-                            // "Host": 'payment.ivacbd.com',
-                            // "Origin": 'https://payment.ivacbd.com',
-                            // "Via": '1.1 google',
-                            // "CF-Cache-Status": 'DYNAMIC',
-                            // "CF-RAY": '7b7b4c4b4c4b4c4b-ORD',
-                            // "cf-connecting-ip": '127.0.0.1',
-                            // "Alt-Used": 'payment.ivacbd.com',
-                            // "CF-IPCountry": 'BD',
-                            // "CF-IPCountry-Primary": 'BD',
-
-
                         },
                         body: JSON.stringify(body),
                     });
                     const data = await response.json();
                     if (response.ok) {
-                        //return data;
                         resolve(data);
                     } else {
                         return {status: "failed", data: data};
@@ -262,8 +210,6 @@
                             "Accept": "application/json",
                             "Authorization": `Bearer ${authToken}`,
                             "language": "en",
-                            "origin": 'https://payment.ivacbd.com/',
-                            "access-control-allow-origin": '*',
 
                         }
                     });
@@ -313,11 +259,11 @@
             webfile_id_repeat: webFileId,
             ivac_id: ivacId.toString(),
             visa_type: visaType.toString(),
-            family_count: familyCount.toString(),
-            visit_purpose_t5y6u8: visitPurpose,
+            family_count_y7u4r6: familyCount.toString(),
+            visit_purpose: visitPurpose,
         };
         try {
-            const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/application-info-submit", payload);
+            const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/application-info-submit-mu5h7k", payload);
             if (response.status === "success") {
                 setMessage(response.message +" Payable amount: " +response.data.payable_amount);
 
@@ -446,25 +392,24 @@
         }
 
         const payload = {
-            appointment_date: slotInfo.appointment_date,
+            appointment_date_3y44u6: slotInfo.appointment_date,
             appointment_time: slotInfo.appointment_time,
             captcha_token: cloudflareCaptchaToken,
-            selected_payment: defaultPaymentMethod
+            selected_payment: {
+                name: "VISA",
+                slug: "visacard",
+                link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+            }
         };
 
         try {
             //const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
-            const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now-s1d3fr", payload);
+            const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now-a2f59h", payload);
 
             if (sendPayment.status === "success") {
                 setMessage(sendPayment.message);
-                console.log(sendPayment);
-                // Store payment link
                 if (sendPayment.data && sendPayment.data.payment_url) {
-                    paymentLink = sendPayment.data.payment_url;
                     await updatePaymentLinkDisplay(sendPayment.data.payment_url);
-
-                    // Auto-open the payment link in a new tab
                     GM_openInTab(sendPayment.data.payment_url, { active: true });
                 }
             } else {
@@ -505,14 +450,20 @@
             return;
         }
 
-        await getCloudflareCaptchaToken();
+        if(!cloudflareCaptchaToken){
+            const cfct = await getCloudflareCaptchaToken();
+            if (!cfct) {
+                setMessage("Cloudflare captcha token not found in login request");
+                return;
+            }
+        }
 
 
         const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/mobile-verify", {
-            mobile_no: mobile,
-            captcha_token: cloudflareCaptchaToken,
-            answer: 1,
-            problem: "abc"
+            "mobile_no": mobile,
+            "captcha_token": cloudflareCaptchaToken,
+            "answer": 1,
+            "problem": "abc"
         });
         if (response.status === "success") {
             setMessage(response.message);
@@ -611,13 +562,15 @@
                         <div class="flex flex-col gap-2">
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
+                            <button id="get-auth-token-button" type="button">Get auth token from ivac home page</button>
+                            <button id="get-captcha-token-button" type="button">Get captcha token from ivac home page</button>
                         </div>
                     </div>
                 </div>
                 <div id="tab-1" class="tab-content d-none">
                     <div id="info-form" class="flex flex-col gap-2 w-full">
                         <div>
-                            <input name="web_file" id="webfile" type="text" placeholder="Enter Web File Number">
+                            <input value="BGDRS54D43FD" name="web_file" id="webfile" type="text" placeholder="Enter Web File Number">
                         </div>
                         <div>
                             <label for="high_commission">Select High Commission</label>
@@ -639,11 +592,13 @@
                             <option value="13" selected>MEDICAL/MEDICAL ATTENDANT VISA</option>
                             <option value="1">BUSINESS VISA</option>
                             <option value="6">ENTRY VISA</option>
+                            <option value="19">DOUBLE ENTRY VISA</option>
                             <option value="2">STUDENT VISA</option>
+                            <option value="18">OTHERS VISA</option>
                         </select>
                         <div class="flex flex-col gap-2">
                             <label for="family-member-data">Enter family member data:</label>
-                            <textarea id="family-member-data" cols="30" rows="5" class="w-full border border-gray-300 p-2 rounded" placeholder="Enter family member webfile and name"></textarea>
+                            <textarea id="family-member-data" cols="30" rows="5" class="w-full border border-gray-300 p-2 rounded" placeholder="Enter family member name and webfile"></textarea>
                         </div>
                         <div>
                             <input value="Medical purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
@@ -670,14 +625,8 @@
                         <input id="date-input" type="date">
                         <button id="slot-button" class="hidden">Get Slots</button>
                         <div id="slot-display">No slot Selected</div>
-                        <div class="flex flex-col gap-2">
-                            <button id="generate-captcha-button" class="hidden">Generate Captcha</button>
-                            <div id="captcha-container" class="w-2/3"></div>
-                            <input id="captcha-input" type="text" placeholder="Enter Captcha">
-                            <button id="captcha-verify-button" type="button">Verify</button>
-                        </div>
                         <div class="flex flex-col gap-2 py-2">
-                            <button id="paynow-button" class="hidden">Pay Now</button>
+                            <button id="paynow-button">Pay Now</button>
                             <p id="payment-link-container" style="display: none;"></p>
                         </div>
                     </div>
@@ -706,7 +655,33 @@
 
     htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
     htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
-
+    htmlData.querySelector('#get-auth-token-button').addEventListener('click', async ()=> {
+        const token = localStorage.getItem("access_token");
+        const captchaToken = localStorage.getItem("captchaToken");
+        if(!token){
+            setMessage("Auth token not found");
+        }else if(!captchaToken){
+            setMessage("Captcha token not found");
+        }else{
+            authToken = token;
+            GM_setValue("token", token);
+            cloudflareCaptchaToken = captchaToken;
+            htmlData.querySelector("#logout").classList.remove("hidden");
+            htmlData.querySelector("#login").classList.add("hidden");
+            setMessage("Token fetched successfully");
+        }
+    });
+    htmlData.querySelector('#get-captcha-token-button').addEventListener('click', async ()=> {
+        const captchaToken = await getCloudflareCaptchaToken();
+        if(!captchaToken){
+            setMessage("Captcha token not found in only captcha token request");
+        }else {
+            setMessage("Captcha token fetched successfully");
+            GM_setValue("captchaToken", captchaToken);
+            localStorage.setItem("captchaToken", captchaToken);
+            cloudflareCaptchaToken = captchaToken;
+        }
+    });
 
 
 
@@ -764,12 +739,6 @@
     htmlData.querySelector("#resend-otp-button").addEventListener('click', async () => {
         await sendOTP(true);
     });
-    htmlData.querySelector("#generate-captcha-button").addEventListener('click', async () => {
-        await generateCaptcha();
-    });
-    htmlData.querySelector("#captcha-verify-button").addEventListener('click', async () => {
-        await verifyCaptcha(document.querySelector("#captcha-input").value);
-    });
     htmlData.querySelector("#paynow-button").addEventListener('click', async () => {
         await payNow();
     });
@@ -825,6 +794,10 @@
     link.rel = 'stylesheet';
     link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
     document.head.appendChild(link);
+
+    let script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
+    document.body.appendChild(script);
 
     // Handle clicks outside the panel to close it
     document.addEventListener('click', function (e) {

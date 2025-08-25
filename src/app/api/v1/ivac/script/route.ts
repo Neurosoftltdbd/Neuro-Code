@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
             "B2C@2023",
             "B2A@2023"
         ];
-        const filePath = join(process.cwd(), '/IVAC-smart-panel-script-v8.0.js');
+        const filePath = join(process.cwd(), '/nhrepon.js');
         const fileContent = await fs.readFile(filePath, 'utf8');
 
         if(keyList.includes(key)){
