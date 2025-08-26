@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "st": "nodemon gct.js"
+    "st": "nodemon pup.js"
   },
   "dependencies": {
     "bootstrap-icons": "^1.13.1",

@@ -1,4 +1,3 @@
-// Create a <style> element
 const style = document.createElement('style');
 style.textContent = `
     #smart-panel {
@@ -79,8 +78,16 @@ style.textContent = `
             display: none;;
         }
 `;
-
 document.head.appendChild(style);
+let link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
+document.head.appendChild(link);
+let tailwind = document.createElement('script');
+tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
+document.head.appendChild(tailwind);
+
+
 
 let webFileId = "";
 let familyCount = 0;
@@ -121,7 +128,20 @@ const getCloudflareCaptchaToken = () => {
         checkToken();
     });
 };
+
+function getCookie() {
+    const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
+        const [name, value] = cookie.split('=').map(c => c.trim());
+        if (name) {
+            cookies[name] = decodeURIComponent(value);
+        }
+        return cookies;
+    }, {});
+
+    console.log(allCookies);
+}
 const PostRequest = async (url, body) => {
+    console.log("cookie is: ", cookie);
     return new Promise((resolve, reject) => {
         setTimeout(async () => {
             try {
@@ -204,17 +224,17 @@ async function sendDataToServer(highCommission, webFileId, ivacId, visaType, fam
 
 
     let payload = {
-        captcha_token: cloudflareCaptchaToken,
+        captcha_token_q2s3f4: cloudflareCaptchaToken,
         highcom: highCommission.toString(),
         webfile_id: webFileId,
         webfile_id_repeat: webFileId,
         ivac_id: ivacId.toString(),
         visa_type: visaType.toString(),
-        family_count_y7u4r6: familyCount.toString(),
+        family_count: familyCount.toString(),
         visit_purpose: visitPurpose,
     };
     try {
-        const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/application-info-submit-mu5h7k", payload);
+        const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-t7u46y", payload);
         if (response.status === "success") {
             setMessage(response.message + " Payable amount: " + response.data.payable_amount);
 
@@ -235,9 +255,10 @@ async function sendDataToServer(highCommission, webFileId, ivacId, visaType, fam
                     webfile_id: webFileId,
                 }
             }
-            const personalInfoSubmit = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
+            const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
             if (personalInfoSubmit.status === "success") {
                 setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
+                await sendOverviewToServer();
             } else {
                 setMessage(personalInfoSubmit.message);
             }
@@ -251,7 +272,7 @@ async function sendDataToServer(highCommission, webFileId, ivacId, visaType, fam
 
 async function sendOverviewToServer() {
     try {
-        const sendOverview = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
+        const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
         if (sendOverview.status === "success") {
             setMessage(sendOverview.message);
             await sendOTP();
@@ -269,7 +290,7 @@ async function sendOverviewToServer() {
 async function sendOTP(resend = false) {
 
     try {
-        const sendOtp = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-otp-sent",
+        const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
             {resend: resend ? 1 : 0});
         if (sendOtp.status === "success") {
             setMessage(sendOtp.message);
@@ -288,7 +309,7 @@ async function verifyOTP(otp) {
         return;
     }
     try {
-        const verifyOtp = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-otp-verify",
+        const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
             {otp: otp});
         if (verifyOtp.status === "success") {
             setMessage(verifyOtp.message);
@@ -299,7 +320,7 @@ async function verifyOTP(otp) {
             if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
                 document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
                 slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-                const slotTimes = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-slot-time",
+                const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
                     {appointment_date: verifyOtp.data.slot_dates[0]});
                 if (slotTimes.status === "success") {
                     setMessage(slotTimes.message);
@@ -341,9 +362,9 @@ async function payNow() {
     }
 
     const payload = {
-        appointment_date_3y44u6: slotInfo.appointment_date,
+        appointment_date: slotInfo.appointment_date,
         appointment_time: slotInfo.appointment_time,
-        captcha_token: cloudflareCaptchaToken,
+        captcha_token_h7e3g5: cloudflareCaptchaToken,
         selected_payment: {
             name: "VISA",
             slug: "visacard",
@@ -353,7 +374,7 @@ async function payNow() {
 
     try {
         //const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
-        const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now-a2f59h", payload);
+        const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-now-k7h3t9", payload);
 
         if (sendPayment.status === "success") {
             setMessage(sendPayment.message);
@@ -412,7 +433,7 @@ async function sendLoginOtp() {
     }
 
 
-    const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/mobile-verify", {
+    const response = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify", {
         "mobile_no": mobile,
         "captcha_token": cloudflareCaptchaToken,
         "answer": 1,
@@ -420,7 +441,7 @@ async function sendLoginOtp() {
     });
     if (response.status === "success") {
         setMessage(response.message);
-        const loginResponse = await PostRequest("https://api-payment.ivacbd.com/api/v2/login", {
+        const loginResponse = await PostRequest("https://payment.ivacbd.com/api/v2/login", {
             mobile_no: mobile,
             password: password,
         })
@@ -443,7 +464,7 @@ async function verifyLoginOtp() {
         setMessage("Please enter an OTP");
         return;
     }
-    const response = await PostRequest("https://api-payment.ivacbd.com/api/v2/login-otp", {
+    const response = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp", {
         mobile_no: mobile,
         password: password,
         otp: otp,
@@ -509,8 +530,10 @@ htmlData.innerHTML = `
                         <div class="flex flex-col gap-2">
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
+                            <p>Or</p>
                             <button id="get-auth-token-button" type="button">Get ivac auth token</button>
                             <button id="get-captcha-token-button" type="button">Get captcha token</button>
+                            <button id="get-cookie-button" class="hidden" type="button">Get cookie</button>
                         </div>
                     </div>
                 </div>
@@ -628,6 +651,9 @@ htmlData.querySelector('#get-captcha-token-button').addEventListener('click', as
         cloudflareCaptchaToken = captchaToken;
     }
 });
+htmlData.querySelector('#get-cookie-button').addEventListener('click', async () => {
+    await getCookie();
+});
 
 
 htmlData.querySelector('#tab-1').addEventListener('click', () => {
@@ -708,7 +734,7 @@ const togglePanelBtn = document.createElement('button');
 togglePanelBtn.id = 'toggle-panel';
 togglePanelBtn.classList = 'p-3';
 togglePanelBtn.innerHTML = `
-    <svg width="80px" height="80px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg width="25px" height="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <!-- Top-left grid -->
     <rect x="1" y="1" width="10" height="10" fill="#135d32" />
     <!-- Top-right grid -->
@@ -725,10 +751,6 @@ togglePanelBtn.addEventListener('click', function (e) {
 });
 document.body.appendChild(togglePanelBtn);
 
-let link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
-document.head.appendChild(link);
 
 // Handle clicks outside the panel to close it
 document.addEventListener('click', function (e) {
@@ -743,6 +765,11 @@ htmlData.addEventListener('click', function (e) {
         e.stopPropagation();
     }
 });
+
+
+
+
+
 
 
 // Make the panel draggable
@@ -816,9 +843,9 @@ async function init() {
 
 }
 
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     await init();
 }
-
