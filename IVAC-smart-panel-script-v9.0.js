@@ -1,15 +1,18 @@
 // ==UserScript==
-// @name         IVAC Panel New Server
+// @name         NeuroCode smart panel
 // @namespace    http://tampermonkey.net/
 // @version      9.0
-// @description  Panel with captcha functionality and Pay Now button
+// @description  Panel with full functionality
 // @author       NHRepon
 // @match        https://payment.ivacbd.com/*
-// @match        https://ivacbd.com/*
 // @match        https://nhrepon-portfolio.vercel.app/*
+// @match        https://ivacbd.com/*
 // @grant        GM_openInTab
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @run-at       document-end
+// @inject-into  content
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 (async function () {
@@ -158,7 +161,6 @@
         console.log(allCookies);
     }
     const PostRequest = async (url, body) => {
-        console.log("cookie is: ", cookie);
         return new Promise((resolve, reject) => {
             setTimeout(async () => {
                 try {
@@ -166,7 +168,7 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Accept": "application/json, text/plain, */*",
+                            "Accept": "application/json",
                             "Authorization": `Bearer ${authToken}`,
                             "language": "en",
                         },
@@ -175,7 +177,9 @@
                     const data = await response.json();
                     if (response.ok) {
                         resolve(data);
+                        setMessage(data.message);
                     } else {
+                        setMessage(data.message);
                         return {status: "failed", data: data};
                     }
                 } catch (e) {
@@ -204,9 +208,10 @@
                     });
                     const data = await response.json();
                     if (response.ok) {
-                        //return data;
+                        setMessage(data.message);
                         resolve(data);
                     } else {
+                        setMessage(data.message);
                         return {status: "failed", data: data};
                     }
                 } catch (e) {
@@ -215,217 +220,6 @@
                 }
             }, getRandomInt(2000, 5000));
         });
-    }
-
-
-// ========== Application Submit Function ==========
-    async function sendDataToServer(highCommission, webFileId, ivacId, visaType, familyData, visitPurpose) {
-        if (!webFileId || !ivacId || !visaType) {
-            setMessage("Please, provide web file id, ivac id, visa type");
-            return;
-        }
-        if (familyData) {
-            const fd = familyData.split('\n')
-                .filter(line => line.trim() !== '') // Good practice to filter out empty lines
-                .map(line => {
-                    const [name, webfileNo] = line.split(',').map(item => item.trim());
-                    return {
-                        name: name,
-                        webfile_no: webfileNo,
-                        again_webfile_no: webfileNo
-                    };
-                });
-            familyMembers = fd;
-            familyCount = fd.length;
-        }
-
-
-        let payload = {
-            captcha_token_q2s3f4: cloudflareCaptchaToken,
-            highcom: highCommission.toString(),
-            webfile_id: webFileId,
-            webfile_id_repeat: webFileId,
-            ivac_id: ivacId.toString(),
-            visa_type: visaType.toString(),
-            family_count: familyCount.toString(),
-            visit_purpose: visitPurpose,
-        };
-        try {
-            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-t7u46y", payload);
-            if (response.status === "success") {
-                setMessage(response.message + " Payable amount: " + response.data.payable_amount);
-
-                let personalData = {};
-                if (familyMembers.length > 0) {
-                    personalData = {
-                        full_name: fullName,
-                        email_name: email,
-                        phone: phone,
-                        webfile_id: webFileId,
-                        family: familyMembers
-                    }
-                } else {
-                    personalData = {
-                        full_name: fullName,
-                        email_name: email,
-                        phone: phone,
-                        webfile_id: webFileId,
-                    }
-                }
-                const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
-                if (personalInfoSubmit.status === "success") {
-                    setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
-                    await sendOverviewToServer();
-                } else {
-                    setMessage(personalInfoSubmit.message);
-                }
-            } else {
-                setMessage(response.data.message || "Application submission failed");
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
-
-    async function sendOverviewToServer() {
-        try {
-            const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
-            if (sendOverview.status === "success") {
-                setMessage(sendOverview.message);
-                await sendOTP();
-                toggleTab(2);
-            } else {
-                setMessage(sendOverview.message)
-            }
-        } catch (e) {
-            setMessage(e.message);
-        }
-    }
-
-
-// ========== Send OTP Function ==========
-    async function sendOTP(resend = false) {
-
-        try {
-            const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
-                {resend: resend ? 1 : 0});
-            if (sendOtp.status === "success") {
-                setMessage(sendOtp.message);
-            } else {
-                setMessage(sendOtp.message);
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
-
-// ========== Verify OTP Function ==========
-    async function verifyOTP(otp) {
-        if (!otp || otp.length !== 6) {
-            setMessage("Please enter a valid 6-digit OTP");
-            return;
-        }
-        try {
-            const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
-                {otp: otp});
-            if (verifyOtp.status === "success") {
-                setMessage(verifyOtp.message);
-                toggleTab(3);
-                document.getElementById('otp-input').value = '';
-
-                // If date is available in response, set it in the date input
-                if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
-                    document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
-                    slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-                    const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
-                        {appointment_date: verifyOtp.data.slot_dates[0]});
-                    if (slotTimes.status === "success") {
-                        setMessage(slotTimes.message);
-                        // Display the slot time information
-                        if (slotTimes.data && slotTimes.data.slot_times && slotTimes.data.slot_times.length > 0) {
-                            const slot = slotTimes.data.slot_times[0];
-                            document.getElementById('slot-display').textContent =
-                                `${slot.time_display} (Slot: ${slot.availableSlot})`;
-
-                            // Store slot info for Pay Now
-                            slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-                            slotInfo.appointment_time = slot.time_display;
-
-                            await payNow();
-
-                        } else {
-                            document.getElementById('slot-display').textContent = "No slots available";
-                            slotInfo.appointment_date = null;
-                            slotInfo.appointment_time = null;
-                        }
-                    } else {
-                        setMessage(slotTimes.message);
-                    }
-                }
-            } else {
-                setMessage(verifyOtp.message);
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
-
-
-// ========== Pay Now Function ==========
-    async function payNow() {
-        if (!slotInfo.appointment_date || !slotInfo.appointment_time) {
-            setMessage("Please select a date and time slot first");
-            return;
-        }
-
-        const payload = {
-            appointment_date: slotInfo.appointment_date,
-            appointment_time: slotInfo.appointment_time,
-            captcha_token_h7e3g5: cloudflareCaptchaToken,
-            selected_payment: {
-                name: "VISA",
-                slug: "visacard",
-                link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
-            }
-        };
-
-        try {
-            //const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
-            const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-now-k7h3t9", payload);
-
-            if (sendPayment.status === "success") {
-                setMessage(sendPayment.message);
-                if (sendPayment.data && sendPayment.data.payment_url) {
-                    await updatePaymentLinkDisplay(sendPayment.data.payment_url);
-                    setMessage("Payment link updated: " + sendPayment.data.payment_url);
-                    openPaymentLink(sendPayment.data.payment_url);
-                }
-            } else {
-                setMessage(sendPayment.message);
-            }
-        } catch (error) {
-            setMessage(error.message);
-        }
-    }
-
-    function openPaymentLink(paymentLink) {
-        window.open(paymentLink, '_blank', activeTab);
-    }
-
-    async function updatePaymentLinkDisplay(paymentLink) {
-        const paymentLinkContainer = document.getElementById('payment-link-container');
-        if (paymentLinkContainer) {
-            paymentLinkContainer.style.display = 'block';
-
-            const link = document.createElement('a');
-            link.id = 'payment-link';
-            link.textContent = paymentLink;
-            link.href = paymentLink;
-            link.target = '_blank';
-            paymentLinkContainer.innerHTML = '';
-            await paymentLinkContainer.appendChild(link);
-
-        }
     }
 
 
@@ -488,12 +282,20 @@
         });
 
         if (response.status === "success") {
-            setMessage(response.message + " and " + response.data.slot_available ? "Slot Available" : "Slot Not Available");
+            setMessage(response.message + " and " + response.data.slot_available === "false" ? "Slot Available" : "Slot Not Available");
             authToken = response.data.access_token;
             await localStorage.setItem("ivacAuthToken", authToken);
+            await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
+            await localStorage.setItem("access_token", response.data.access_token);
             fullName = response.data.name;
             email = response.data.email;
             phone = response.data.mobile_no;
+            const data = response.data;
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    localStorage.setItem(key, data[key]);
+                }
+            }
             document.querySelector("#logout").classList.remove("hidden");
             document.querySelector("#login").classList.add("hidden");
             toggleTab(1);
@@ -501,6 +303,198 @@
             setMessage(response.message);
         }
     }
+
+
+// ========== Application Submit Function ==========
+    async function sendDataToServer(highCommission, webFileId, ivacId, visaType, familyData, visitPurpose) {
+        if (!webFileId || !ivacId || !visaType) {
+            setMessage("Please, provide web file id, ivac id, visa type");
+            return;
+        }
+        familyCount = 0;
+        if (familyData) {
+            const fd = familyData.split('\n')
+                .filter(line => line.trim() !== '') // Good practice to filter out empty lines
+                .map(line => {
+                    const [name, webfileNo] = line.split(',').map(item => item.trim());
+                    return {
+                        name: name,
+                        webfile_no: webfileNo,
+                        again_webfile_no: webfileNo
+                    };
+                });
+            familyMembers = fd;
+            familyCount = fd.length;
+        }
+
+
+        let payload = {
+            captcha_token_t6d8n3: cloudflareCaptchaToken,
+            highcom: highCommission.toString(),
+            webfile_id: webFileId,
+            webfile_id_repeat: webFileId,
+            ivac_id: ivacId.toString(),
+            visa_type: visaType.toString(),
+            family_count: familyCount.toString(),
+            visit_purpose: visitPurpose,
+        };
+        try {
+            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-y6u4d8", payload);
+            if (response.status === "success") {
+                setMessage(response.message + " Payable amount: " + response.data.payable_amount);
+            }
+        } catch (error) {
+            setMessage(error.message);
+        }
+    }
+    async function sendPersonalInfoToServer() {
+        let personalData = {};
+        if (familyMembers.length > 0) {
+            personalData = {
+                full_name: fullName,
+                email_name: email,
+                phone: phone,
+                webfile_id: webFileId,
+                family: familyMembers
+            }
+        } else {
+            personalData = {
+                full_name: fullName,
+                email_name: email,
+                phone: phone,
+                webfile_id: webFileId,
+            }
+        }
+        const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
+        if (personalInfoSubmit.status === "success") {
+            setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
+        }
+    }
+
+    async function sendOverviewToServer() {
+        const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
+        if (sendOverview.status === "success") {
+            setMessage(sendOverview.message);
+            toggleTab(3);
+        }
+    }
+
+
+// ========== Send OTP Function ==========
+    async function sendOTP(resend = false) {
+
+        try {
+            const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
+                {resend: resend ? 1 : 0});
+            if (sendOtp.status === "success") {
+                setMessage(sendOtp.message);
+            } else {
+                setMessage(sendOtp.message);
+            }
+        } catch (error) {
+            setMessage(error.message);
+        }
+    }
+
+// ========== Verify OTP Function ==========
+    async function verifyOTP(otp) {
+        if (!otp || otp.length !== 6) {
+            setMessage("Please enter a valid 6-digit OTP");
+            return;
+        }
+        try {
+            const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
+                {otp: otp});
+            if (verifyOtp.status === "success") {
+                setMessage(verifyOtp.message);
+                toggleTab(4);
+                document.getElementById('otp-input').value = '';
+
+                // If date is available in response, set it in the date input
+                if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
+                    document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
+                    slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
+                    const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
+                        {appointment_date: verifyOtp.data.slot_dates[0]});
+                    if (slotTimes.status === "success") {
+                        setMessage(slotTimes.message);
+                        // Display the slot time information
+                        if (slotTimes.data && slotTimes.data.slot_times && slotTimes.data.slot_times.length > 0) {
+                            document.getElementById('slot-display').textContent =
+                                `Date: ${verifyOtp.data.slot_dates[0]} and Time: ${slotTimes.data.slot_times[0]} (\nAvailable Slot: ${slotTimes.data.slot_times[0].availableSlot})`;
+                            // Store slot info for Pay Now
+                            slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
+                            slotInfo.appointment_time = slotTimes.data.slot_times[0];
+
+                        } else {
+                            document.getElementById('slot-display').textContent = "No slots available";
+                            slotInfo.appointment_date = null;
+                            slotInfo.appointment_time = null;
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            setMessage(error.message);
+        }
+    }
+
+
+// ========== Pay Now Function ==========
+    async function payNow() {
+        if (!slotInfo.appointment_date || !slotInfo.appointment_time) {
+            setMessage("Please select a date and time slot first");
+            return;
+        }
+
+        const payload = {
+            appointment_date: slotInfo.appointment_date,
+            appointment_time: slotInfo.appointment_time,
+            captcha_token_y4v9f6: cloudflareCaptchaToken,
+            selected_payment: {
+                name: "VISA",
+                slug: "visacard",
+                link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+            }
+        };
+        const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-now-d7h3s9", payload);
+
+        if (sendPayment.status === "success") {
+            setMessage(sendPayment.message);
+            if (sendPayment.data && sendPayment.data.payment_url) {
+                await updatePaymentLinkDisplay(sendPayment.data.payment_url);
+                setMessage("Payment link updated: " + sendPayment.data.payment_url);
+                document.getElementById('payment-link-container').innerHTML = `
+                <a href="${sendPayment.data.payment_url}" target="_blank">${sendPayment.data.payment_url}</a>
+                `;
+                window.open(sendPayment.data.payment_url, '_blank', activeTab);
+            }
+        }
+    }
+
+    async function updateIvacCenters(highCom) {
+        const selectIvacCenter = document.querySelector("#select-ivac-center");
+        selectIvacCenter.innerHTML = "";
+        const ivacCenters = [
+            [[]],
+            [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
+            [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
+            [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
+            [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
+            [[3, "IVAC, KHULNA"]]
+        ];
+        const centers = ivacCenters[highCom];
+        if (centers) {
+            for (let i = 0; i < centers.length; i++) {
+                const option = document.createElement('option');
+                option.value = centers[i][0];
+                option.textContent = centers[i][1];
+                selectIvacCenter.appendChild(option);
+            }
+        }
+    }
+
+
 
     function toggleTab(index) {
         const contents = document.querySelectorAll(".tab-content");
@@ -591,7 +585,8 @@
                             <input value="Medical purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
                         </div>
                         <div class="flex gap-4">
-                            <button id="send-info-button" type="button">Send Info</button>
+                            <button id="send-app-info-button" type="button">Send app Info</button>
+                            <button id="send-personal-info-button" type="button">Send personal Info</button>
                             <button id="send-overview-button" type="button">Send overview</button>
                         </div>
                         
@@ -602,6 +597,7 @@
                         <div>OTP Verification</div>
                         <div>
                             <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxLength="6" />
+                            <button id="otp-send-button" type="button">Send otp</button>
                             <button id="otp-verify-button" type="button">Verify</button>
                             <button id="resend-otp-button" type="button">Resend OTP</button>
                         </div>
@@ -677,12 +673,12 @@
         toggleTab(1);
     });
     htmlData.querySelector('#webfile').addEventListener('change', async () => {
-        let payment = await GetRequest(`https://api-payment.ivacbd.com/api/v2/payment/check/${document.querySelector("#webfile").value}`);
+        let payment = await GetRequest(`https:payment.ivacbd.com/api/v2/payment/check/${document.querySelector("#webfile").value}`);
         if (payment.status === "success") {
             setMessage(payment.message);
         }
     });
-    htmlData.querySelector('#send-info-button').addEventListener('click', async () => {
+    htmlData.querySelector('#send-app-info-button').addEventListener('click', async () => {
         await sendDataToServer(
             document.querySelector("#select-high-commission").value,
             document.querySelector("#webfile").value,
@@ -691,6 +687,9 @@
             document.querySelector("#family-member-data").value,
             document.querySelector("#visit-purpose").value,
         );
+    });
+    htmlData.querySelector('#send-personal-info-button').addEventListener('click', async () => {
+        await sendPersonalInfoToServer();
     });
     htmlData.querySelector('#send-overview-button').addEventListener('click', async () => {
         await sendOverviewToServer();
@@ -708,6 +707,9 @@
     htmlData.querySelector('#tab-3').addEventListener('click', function () {
         toggleTab(3);
     });
+    htmlData.querySelector('#otp-send-button').addEventListener('click', async function () {
+        await sendOTP(false);
+    });
     htmlData.querySelector('#otp-verify-button').addEventListener('click', async function () {
         await verifyOTP(document.querySelector("#otp-input").value);
     });
@@ -721,29 +723,7 @@
     document.body.appendChild(htmlData);
 
 
-    async function updateIvacCenters(highCom) {
-        const selectIvacCenter = document.querySelector("#select-ivac-center");
-        selectIvacCenter.innerHTML = "";
-        const ivacCenters = [
-            [[]],
-            [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
-            [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
-            [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
-            [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
-            [[3, "IVAC, KHULNA"]]
-        ];
-        const centers = ivacCenters[highCom];
-        if (centers) {
-            for (let i = 0; i < centers.length; i++) {
-                const option = document.createElement('option');
-                option.value = centers[i][0];
-                option.textContent = centers[i][1];
-                selectIvacCenter.appendChild(option);
-            }
-        }
-    }
 
-    await updateIvacCenters(4);
 
 
 // Create toggle button for the panel (fixed position)
@@ -837,6 +817,7 @@
 
 // Initialize all data when script starts
     async function init() {
+        await updateIvacCenters(4);
         const savedToken = localStorage.getItem("ivacAuthToken");
         if (authToken == null && savedToken != null) {
             authToken = savedToken;

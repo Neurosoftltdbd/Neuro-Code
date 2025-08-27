@@ -1,5 +1,7 @@
-const style = document.createElement('style');
-style.textContent = `
+
+
+    const style = document.createElement('style');
+    style.textContent = `
     #smart-panel {
             position: fixed;
             bottom: 80px;
@@ -78,302 +80,360 @@ style.textContent = `
             display: none;;
         }
 `;
-document.head.appendChild(style);
-let link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
-document.head.appendChild(link);
-let tailwind = document.createElement('script');
-tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
-document.head.appendChild(tailwind);
+    document.head.appendChild(style);
+    let link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css';
+    document.head.appendChild(link);
+    let tailwind = document.createElement('script');
+    tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
+    document.head.appendChild(tailwind);
 
 
 
-let webFileId = "";
-let familyCount = 0;
-let fullName = "";
-let email = "";
-let phone = "";
-let familyMembers = [];
-let authToken = "" || localStorage.getItem('authToken');
-let cloudflareCaptchaToken = "";
-let timeOut = null;
-let slotInfo = {
-    appointment_date: null,
-    appointment_time: null
-};
+    let webFileId = "";
+    let familyCount = 0;
+    let fullName = "";
+    let email = "";
+    let phone = "";
+    let familyMembers = [];
+    let authToken = "" || localStorage.getItem('authToken');
+    let cloudflareCaptchaToken = "";
+    let timeOut = null;
+    let slotInfo = {
+        appointment_date: null,
+        appointment_time: null
+    };
 
-const setMessage = (msg) => document.getElementById("message").textContent = msg;
+    const setMessage = (msg) => document.getElementById("message").textContent = msg;
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min); // Ensure min is an integer
-    max = Math.floor(max); // Ensure max is an integer
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+    function getRandomInt(min, max) {
+        min = Math.ceil(min); // Ensure min is an integer
+        max = Math.floor(max); // Ensure max is an integer
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
-const getCloudflareCaptchaToken = () => {
-    return new Promise(resolve => {
-        const checkToken = () => {
-            const token = document.querySelector('input[name="cf-turnstile-response"]').value;
-            if (token) {
-                setMessage("Cloudflare token found");
-                localStorage.setItem("captchaToken", token);
-                cloudflareCaptchaToken = token;
-                resolve(token);
-            } else {
-                setMessage("Waiting for cloudflare token...");
-                setTimeout(checkToken, 5000);
-            }
-        };
-        checkToken();
-    });
-};
-
-function getCookie() {
-    const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
-        const [name, value] = cookie.split('=').map(c => c.trim());
-        if (name) {
-            cookies[name] = decodeURIComponent(value);
-        }
-        return cookies;
-    }, {});
-
-    console.log(allCookies);
-}
-const PostRequest = async (url, body) => {
-    console.log("cookie is: ", cookie);
-    return new Promise((resolve, reject) => {
-        setTimeout(async () => {
-            try {
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text/plain, */*",
-                        "Authorization": `Bearer ${authToken}`,
-                        "language": "en",
-                    },
-                    body: JSON.stringify(body),
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    resolve(data);
+    const getCloudflareCaptchaToken = () => {
+        return new Promise(resolve => {
+            const checkToken = () => {
+                const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+                if (token) {
+                    setMessage("Cloudflare token found");
+                    localStorage.setItem("captchaToken", token);
+                    cloudflareCaptchaToken = token;
+                    resolve(token);
                 } else {
-                    return {status: "failed", data: data};
+                    setMessage("Waiting for cloudflare token...");
+                    setTimeout(checkToken, 5000);
                 }
-            } catch (e) {
-                setMessage(e.message);
-                reject(e);
+            };
+            checkToken();
+        });
+    };
+
+    function getCookie() {
+        const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
+            const [name, value] = cookie.split('=').map(c => c.trim());
+            if (name) {
+                cookies[name] = decodeURIComponent(value);
             }
-        }, getRandomInt(3000, 7000));
+            return cookies;
+        }, {});
 
-    });
-}
-
-
-const GetRequest = async (url) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(async () => {
-            try {
-                const response = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${authToken}`,
-                        "language": "en",
-
+        console.log(allCookies);
+    }
+    const PostRequest = async (url, body) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${authToken}`,
+                            "language": "en",
+                        },
+                        body: JSON.stringify(body),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        resolve(data);
+                        setMessage(data.message);
+                    } else {
+                        setMessage(data.message);
+                        return {status: "failed", data: data};
                     }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    //return data;
-                    resolve(data);
-                } else {
-                    return {status: "failed", data: data};
+                } catch (e) {
+                    setMessage(e.message);
+                    reject(e);
                 }
-            } catch (e) {
-                setMessage(e.message);
-                reject(e);
+            }, getRandomInt(3000, 7000));
+
+        });
+    }
+
+
+    const GetRequest = async (url) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+                try {
+                    const response = await fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${authToken}`,
+                            "language": "en",
+
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage(data.message);
+                        resolve(data);
+                    } else {
+                        setMessage(data.message);
+                        return {status: "failed", data: data};
+                    }
+                } catch (e) {
+                    setMessage(e.message);
+                    reject(e);
+                }
+            }, getRandomInt(2000, 5000));
+        });
+    }
+
+
+    async function sendLoginOtp() {
+        const mobile = document.getElementById('userMobile').value;
+        const password = document.getElementById('userPassword').value;
+        if (!mobile) {
+            setMessage("Please enter a mobile number");
+            return;
+        }
+        if (!password) {
+            setMessage("Please enter a password");
+            return;
+        }
+
+        if (!cloudflareCaptchaToken) {
+            const cfct = await getCloudflareCaptchaToken();
+            if (!cfct) {
+                setMessage("Cloudflare captcha token not found in login request");
+                return;
             }
-        }, getRandomInt(2000, 5000));
-    });
-}
+        }
+
+
+        const response = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify", {
+            "mobile_no": mobile,
+            "captcha_token": cloudflareCaptchaToken,
+            "answer": 1,
+            "problem": "abc"
+        });
+        if (response.status === "success") {
+            setMessage(response.message);
+            const loginResponse = await PostRequest("https://payment.ivacbd.com/api/v2/login", {
+                mobile_no: mobile,
+                password: password,
+            })
+            if (loginResponse.status === "success") {
+                setMessage(loginResponse.message);
+            } else {
+                setMessage(loginResponse.message);
+            }
+        } else {
+            setMessage(response.message);
+        }
+    }
+
+
+    async function verifyLoginOtp() {
+        const mobile = document.getElementById('userMobile').value;
+        const password = document.getElementById('userPassword').value;
+        const otp = document.getElementById("otp").value;
+        if (!otp) {
+            setMessage("Please enter an OTP");
+            return;
+        }
+        const response = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp", {
+            mobile_no: mobile,
+            password: password,
+            otp: otp,
+        });
+
+        if (response.status === "success") {
+            setMessage(response.message + " and " + response.data.slot_available === true ? "Slot Available" : "Slot Not Available");
+            authToken = response.data.access_token;
+            await localStorage.setItem("ivacAuthToken", authToken);
+            await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
+            await localStorage.setItem("access_token", response.data.access_token);
+            fullName = response.data.name;
+            email = response.data.email;
+            phone = response.data.mobile_no;
+            document.querySelector("#logout").classList.remove("hidden");
+            document.querySelector("#login").classList.add("hidden");
+            toggleTab(1);
+        } else {
+            setMessage(response.message);
+        }
+    }
 
 
 // ========== Application Submit Function ==========
-async function sendDataToServer(highCommission, webFileId, ivacId, visaType, familyData, visitPurpose) {
-    if (!webFileId || !ivacId || !visaType) {
-        setMessage("Please, provide web file id, ivac id, visa type");
-        return;
-    }
-    if (familyData) {
-        const fd = familyData.split('\n')
-            .filter(line => line.trim() !== '') // Good practice to filter out empty lines
-            .map(line => {
-                const [name, webfileNo] = line.split(',').map(item => item.trim());
-                return {
-                    name: name,
-                    webfile_no: webfileNo,
-                    again_webfile_no: webfileNo
-                };
-            });
-        familyMembers = fd;
-        familyCount = fd.length;
-    }
+    async function sendDataToServer(highCommission, webFileId, ivacId, visaType, familyData, visitPurpose) {
+        if (!webFileId || !ivacId || !visaType) {
+            setMessage("Please, provide web file id, ivac id, visa type");
+            return;
+        }
+        familyCount = 0;
+        if (familyData) {
+            const fd = familyData.split('\n')
+                .filter(line => line.trim() !== '') // Good practice to filter out empty lines
+                .map(line => {
+                    const [name, webfileNo] = line.split(',').map(item => item.trim());
+                    return {
+                        name: name,
+                        webfile_no: webfileNo,
+                        again_webfile_no: webfileNo
+                    };
+                });
+            familyMembers = fd;
+            familyCount = fd.length;
+        }
 
 
-    let payload = {
-        captcha_token_q2s3f4: cloudflareCaptchaToken,
-        highcom: highCommission.toString(),
-        webfile_id: webFileId,
-        webfile_id_repeat: webFileId,
-        ivac_id: ivacId.toString(),
-        visa_type: visaType.toString(),
-        family_count: familyCount.toString(),
-        visit_purpose: visitPurpose,
-    };
-    try {
-        const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-t7u46y", payload);
-        if (response.status === "success") {
-            setMessage(response.message + " Payable amount: " + response.data.payable_amount);
-
-            let personalData = {};
-            if (familyMembers.length > 0) {
-                personalData = {
-                    full_name: fullName,
-                    email_name: email,
-                    phone: phone,
-                    webfile_id: webFileId,
-                    family: familyMembers
-                }
-            } else {
-                personalData = {
-                    full_name: fullName,
-                    email_name: email,
-                    phone: phone,
-                    webfile_id: webFileId,
-                }
+        let payload = {
+            captcha_token_q2s3f4: cloudflareCaptchaToken,
+            highcom: highCommission.toString(),
+            webfile_id: webFileId,
+            webfile_id_repeat: webFileId,
+            visa_fee: 1500,
+            ivac_id: ivacId.toString(),
+            visa_type: visaType.toString(),
+            family_count: familyCount.toString(),
+            visit_purpose: visitPurpose,
+        };
+        try {
+            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-t7u46y", payload);
+            if (response.status === "success") {
+                setMessage(response.message + " Payable amount: " + response.data.payable_amount);
             }
-            const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
-            if (personalInfoSubmit.status === "success") {
-                setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
-                await sendOverviewToServer();
-            } else {
-                setMessage(personalInfoSubmit.message);
+        } catch (error) {
+            setMessage(error.message);
+        }
+    }
+    async function sendPersonalInfoToServer() {
+        let personalData = {};
+        if (familyMembers.length > 0) {
+            personalData = {
+                full_name: fullName,
+                email_name: email,
+                phone: phone,
+                webfile_id: webFileId,
+                family: familyMembers
             }
         } else {
-            setMessage(response.data.message || "Application submission failed");
+            personalData = {
+                full_name: fullName,
+                email_name: email,
+                phone: phone,
+                webfile_id: webFileId,
+            }
         }
-    } catch (error) {
-        setMessage(error.message);
+        const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
+        if (personalInfoSubmit.status === "success") {
+            setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
+        }
     }
-}
 
-async function sendOverviewToServer() {
-    try {
+    async function sendOverviewToServer() {
         const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
         if (sendOverview.status === "success") {
             setMessage(sendOverview.message);
-            await sendOTP();
-            toggleTab(2);
-        } else {
-            setMessage(sendOverview.message)
+            toggleTab(3);
         }
-    } catch (e) {
-        setMessage(e.message);
     }
-}
 
 
 // ========== Send OTP Function ==========
-async function sendOTP(resend = false) {
+    async function sendOTP(resend = false) {
 
-    try {
-        const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
-            {resend: resend ? 1 : 0});
-        if (sendOtp.status === "success") {
-            setMessage(sendOtp.message);
-        } else {
-            setMessage(sendOtp.message);
+        try {
+            const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
+                {resend: resend ? 1 : 0});
+            if (sendOtp.status === "success") {
+                setMessage(sendOtp.message);
+            } else {
+                setMessage(sendOtp.message);
+            }
+        } catch (error) {
+            setMessage(error.message);
         }
-    } catch (error) {
-        setMessage(error.message);
     }
-}
 
 // ========== Verify OTP Function ==========
-async function verifyOTP(otp) {
-    if (!otp || otp.length !== 6) {
-        setMessage("Please enter a valid 6-digit OTP");
-        return;
-    }
-    try {
-        const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
-            {otp: otp});
-        if (verifyOtp.status === "success") {
-            setMessage(verifyOtp.message);
-            toggleTab(3);
-            document.getElementById('otp-input').value = '';
+    async function verifyOTP(otp) {
+        if (!otp || otp.length !== 6) {
+            setMessage("Please enter a valid 6-digit OTP");
+            return;
+        }
+        try {
+            const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
+                {otp: otp});
+            if (verifyOtp.status === "success") {
+                setMessage(verifyOtp.message);
+                toggleTab(4);
+                document.getElementById('otp-input').value = '';
 
-            // If date is available in response, set it in the date input
-            if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
-                document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
-                slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-                const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
-                    {appointment_date: verifyOtp.data.slot_dates[0]});
-                if (slotTimes.status === "success") {
-                    setMessage(slotTimes.message);
-                    // Display the slot time information
-                    if (slotTimes.data && slotTimes.data.slot_times && slotTimes.data.slot_times.length > 0) {
-                        const slot = slotTimes.data.slot_times[0];
-                        document.getElementById('slot-display').textContent =
-                            `${slot.time_display} (Slot: ${slot.availableSlot})`;
+                // If date is available in response, set it in the date input
+                if (verifyOtp.data && verifyOtp.data.slot_dates && verifyOtp.data.slot_dates.length > 0) {
+                    document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
+                    slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
+                    const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
+                        {appointment_date: verifyOtp.data.slot_dates[0]});
+                    if (slotTimes.status === "success") {
+                        setMessage(slotTimes.message);
+                        // Display the slot time information
+                        if (slotTimes.data && slotTimes.data.slot_times && slotTimes.data.slot_times.length > 0) {
+                            document.getElementById('slot-display').textContent =
+                                `Date: ${verifyOtp.data.slot_dates[0]} and Time: ${slotTimes.data.slot_times[0]} (\nAvailable Slot: ${slotTimes.data.slot_times[0].availableSlot})`;
+                            // Store slot info for Pay Now
+                            slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
+                            slotInfo.appointment_time = slotTimes.data.slot_times[0];
 
-                        // Store slot info for Pay Now
-                        slotInfo.appointment_date = verifyOtp.data.slot_dates[0];
-                        slotInfo.appointment_time = slot.time_display;
-
-                        await payNow();
-
-                    } else {
-                        document.getElementById('slot-display').textContent = "No slots available";
-                        slotInfo.appointment_date = null;
-                        slotInfo.appointment_time = null;
+                        } else {
+                            document.getElementById('slot-display').textContent = "No slots available";
+                            slotInfo.appointment_date = null;
+                            slotInfo.appointment_time = null;
+                        }
                     }
-                } else {
-                    setMessage(slotTimes.message);
                 }
             }
-        } else {
-            setMessage(verifyOtp.message);
+        } catch (error) {
+            setMessage(error.message);
         }
-    } catch (error) {
-        setMessage(error.message);
     }
-}
 
 
 // ========== Pay Now Function ==========
-async function payNow() {
-    if (!slotInfo.appointment_date || !slotInfo.appointment_time) {
-        setMessage("Please select a date and time slot first");
-        return;
-    }
-
-    const payload = {
-        appointment_date: slotInfo.appointment_date,
-        appointment_time: slotInfo.appointment_time,
-        captcha_token_h7e3g5: cloudflareCaptchaToken,
-        selected_payment: {
-            name: "VISA",
-            slug: "visacard",
-            link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+    async function payNow() {
+        if (!slotInfo.appointment_date || !slotInfo.appointment_time) {
+            setMessage("Please select a date and time slot first");
+            return;
         }
-    };
 
-    try {
-        //const sendPayment = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-now", payload);
+        const payload = {
+            appointment_date: slotInfo.appointment_date,
+            appointment_time: slotInfo.appointment_time,
+            captcha_token_h7e3g5: cloudflareCaptchaToken,
+            selected_payment: {
+                name: "VISA",
+                slug: "visacard",
+                link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+            }
+        };
         const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-now-k7h3t9", payload);
 
         if (sendPayment.status === "success") {
@@ -381,120 +441,48 @@ async function payNow() {
             if (sendPayment.data && sendPayment.data.payment_url) {
                 await updatePaymentLinkDisplay(sendPayment.data.payment_url);
                 setMessage("Payment link updated: " + sendPayment.data.payment_url);
-                openPaymentLink(sendPayment.data.payment_url);
+                document.getElementById('payment-link-container').innerHTML = `
+                <a href="${sendPayment.data.payment_url}" target="_blank">${sendPayment.data.payment_url}</a>
+                `;
+                window.open(sendPayment.data.payment_url, '_blank', activeTab);
             }
-        } else {
-            setMessage(sendPayment.message);
         }
-    } catch (error) {
-        setMessage(error.message);
-    }
-}
-
-function openPaymentLink(paymentLink) {
-    window.open(paymentLink, '_blank', activeTab);
-}
-
-async function updatePaymentLinkDisplay(paymentLink) {
-    const paymentLinkContainer = document.getElementById('payment-link-container');
-    if (paymentLinkContainer) {
-        paymentLinkContainer.style.display = 'block';
-
-        const link = document.createElement('a');
-        link.id = 'payment-link';
-        link.textContent = paymentLink;
-        link.href = paymentLink;
-        link.target = '_blank';
-        paymentLinkContainer.innerHTML = '';
-        await paymentLinkContainer.appendChild(link);
-
-    }
-}
-
-
-async function sendLoginOtp() {
-    const mobile = document.getElementById('userMobile').value;
-    const password = document.getElementById('userPassword').value;
-    if (!mobile) {
-        setMessage("Please enter a mobile number");
-        return;
-    }
-    if (!password) {
-        setMessage("Please enter a password");
-        return;
     }
 
-    if (!cloudflareCaptchaToken) {
-        const cfct = await getCloudflareCaptchaToken();
-        if (!cfct) {
-            setMessage("Cloudflare captcha token not found in login request");
-            return;
+    async function updateIvacCenters(highCom) {
+        const selectIvacCenter = document.querySelector("#select-ivac-center");
+        selectIvacCenter.innerHTML = "";
+        const ivacCenters = [
+            [[]],
+            [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
+            [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
+            [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
+            [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
+            [[3, "IVAC, KHULNA"]]
+        ];
+        const centers = ivacCenters[highCom];
+        if (centers) {
+            for (let i = 0; i < centers.length; i++) {
+                const option = document.createElement('option');
+                option.value = centers[i][0];
+                option.textContent = centers[i][1];
+                selectIvacCenter.appendChild(option);
+            }
         }
     }
 
 
-    const response = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify", {
-        "mobile_no": mobile,
-        "captcha_token": cloudflareCaptchaToken,
-        "answer": 1,
-        "problem": "abc"
-    });
-    if (response.status === "success") {
-        setMessage(response.message);
-        const loginResponse = await PostRequest("https://payment.ivacbd.com/api/v2/login", {
-            mobile_no: mobile,
-            password: password,
-        })
-        if (loginResponse.status === "success") {
-            setMessage(loginResponse.message);
-        } else {
-            setMessage(loginResponse.message);
-        }
-    } else {
-        setMessage(response.message);
+
+    function toggleTab(index) {
+        const contents = document.querySelectorAll(".tab-content");
+        contents.forEach((content, i) => {
+            content.classList.toggle("d-none", i !== index);
+        });
     }
-}
 
-
-async function verifyLoginOtp() {
-    const mobile = document.getElementById('userMobile').value;
-    const password = document.getElementById('userPassword').value;
-    const otp = document.getElementById("otp").value;
-    if (!otp) {
-        setMessage("Please enter an OTP");
-        return;
-    }
-    const response = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp", {
-        mobile_no: mobile,
-        password: password,
-        otp: otp,
-    });
-
-    if (response.status === "success") {
-        setMessage(response.message + " and " + response.data.slot_available ? "Slot Available" : "Slot Not Available");
-        authToken = response.data.access_token;
-        await localStorage.setItem("ivacAuthToken", authToken);
-        fullName = response.data.name;
-        email = response.data.email;
-        phone = response.data.mobile_no;
-        document.querySelector("#logout").classList.remove("hidden");
-        document.querySelector("#login").classList.add("hidden");
-        toggleTab(1);
-    } else {
-        setMessage(response.message);
-    }
-}
-
-function toggleTab(index) {
-    const contents = document.querySelectorAll(".tab-content");
-    contents.forEach((content, i) => {
-        content.classList.toggle("d-none", i !== index);
-    });
-}
-
-const htmlData = document.createElement('div');
-htmlData.id = "smart-panel";
-htmlData.innerHTML = `
+    const htmlData = document.createElement('div');
+    htmlData.id = "smart-panel";
+    htmlData.innerHTML = `
         <div id="smart-panel-header" class="flex gap-1 py-1 rounded items-center justify-between bg-[#135d32] text-sm cursor-move">
             <h3 id="smart-panel-title" class="text-white mx-4">IVAC Smart Panel</h3>
             <button id="close-button"><span class="-me-2 py-1 px-2 bg-gray-200 hover:bg-gray-300 rounded text-red-600"><i class="bi bi-x-circle"></i></span></button>
@@ -574,7 +562,8 @@ htmlData.innerHTML = `
                             <input value="Medical purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
                         </div>
                         <div class="flex gap-4">
-                            <button id="send-info-button" type="button">Send Info</button>
+                            <button id="send-app-info-button" type="button">Send app Info</button>
+                            <button id="send-personal-info-button" type="button">Send personal Info</button>
                             <button id="send-overview-button" type="button">Send overview</button>
                         </div>
                         
@@ -585,6 +574,7 @@ htmlData.innerHTML = `
                         <div>OTP Verification</div>
                         <div>
                             <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxLength="6" />
+                            <button id="otp-send-button" type="button">Send otp</button>
                             <button id="otp-verify-button" type="button">Verify</button>
                             <button id="resend-otp-button" type="button">Resend OTP</button>
                         </div>
@@ -606,134 +596,118 @@ htmlData.innerHTML = `
         </div>
         `;
 
-htmlData.querySelector('#tab-0').addEventListener('click', function () {
-    toggleTab(0);
-});
-htmlData.querySelector('#close-button').addEventListener('click', () => {
-    htmlData.classList.remove('visible');
-});
-htmlData.querySelector("#time").addEventListener("change", () => {
-    timeOut = htmlData.querySelector("#time").value;
-    setMessage(timeOut + " milliseconds");
-});
-htmlData.querySelector("#logout-button").addEventListener("click", () => {
-    authToken = "";
-    localStorage.setItem("ivacAuthToken", "");
-    htmlData.querySelector("#logout").classList.add("hidden");
-    htmlData.querySelector("#login").classList.remove("hidden");
-});
+    htmlData.querySelector('#tab-0').addEventListener('click', function () {
+        toggleTab(0);
+    });
+    htmlData.querySelector('#close-button').addEventListener('click', () => {
+        htmlData.classList.remove('visible');
+    });
+    htmlData.querySelector("#time").addEventListener("change", () => {
+        timeOut = htmlData.querySelector("#time").value;
+        setMessage(timeOut + " milliseconds");
+    });
+    htmlData.querySelector("#logout-button").addEventListener("click", () => {
+        authToken = "";
+        localStorage.setItem("ivacAuthToken", "");
+        htmlData.querySelector("#logout").classList.add("hidden");
+        htmlData.querySelector("#login").classList.remove("hidden");
+    });
 
-htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
-htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
-htmlData.querySelector('#get-auth-token-button').addEventListener('click', async () => {
-    const token = localStorage.getItem("access_token");
-    const captchaToken = localStorage.getItem("captchaToken");
-    if (!token) {
-        setMessage("Auth token not found");
-    } else if (!captchaToken) {
-        setMessage("Captcha token not found");
-    } else {
-        authToken = token;
-        cloudflareCaptchaToken = captchaToken;
-        localStorage.setItem("ivacAuthToken", token);
-        htmlData.querySelector("#logout").classList.remove("hidden");
-        htmlData.querySelector("#login").classList.add("hidden");
-        setMessage("Token fetched successfully");
-    }
-});
-htmlData.querySelector('#get-captcha-token-button').addEventListener('click', async () => {
-    const captchaToken = await getCloudflareCaptchaToken();
-    if (!captchaToken) {
-        setMessage("Captcha token not found in only captcha token request");
-    } else {
-        setMessage("Captcha token fetched successfully");
-        localStorage.setItem("captchaToken", captchaToken);
-        cloudflareCaptchaToken = captchaToken;
-    }
-});
-htmlData.querySelector('#get-cookie-button').addEventListener('click', async () => {
-    await getCookie();
-});
-
-
-htmlData.querySelector('#tab-1').addEventListener('click', () => {
-    toggleTab(1);
-});
-htmlData.querySelector('#webfile').addEventListener('change', async () => {
-    let payment = await GetRequest(`https://api-payment.ivacbd.com/api/v2/payment/check/${document.querySelector("#webfile").value}`);
-    if (payment.status === "success") {
-        setMessage(payment.message);
-    }
-});
-htmlData.querySelector('#send-info-button').addEventListener('click', async () => {
-    await sendDataToServer(
-        document.querySelector("#select-high-commission").value,
-        document.querySelector("#webfile").value,
-        document.querySelector("#select-ivac-center").value,
-        document.querySelector("#select-visa-type").value,
-        document.querySelector("#family-member-data").value,
-        document.querySelector("#visit-purpose").value,
-    );
-});
-htmlData.querySelector('#send-overview-button').addEventListener('click', async () => {
-    await sendOverviewToServer();
-});
-
-
-htmlData.querySelector('#tab-2').addEventListener('click', function () {
-    toggleTab(2);
-});
-htmlData.querySelector("#select-high-commission").addEventListener("change", async () => {
-    await updateIvacCenters(Number(document.querySelector("#select-high-commission").value));
-})
-
-
-htmlData.querySelector('#tab-3').addEventListener('click', function () {
-    toggleTab(3);
-});
-htmlData.querySelector('#otp-verify-button').addEventListener('click', async function () {
-    await verifyOTP(document.querySelector("#otp-input").value);
-});
-htmlData.querySelector("#resend-otp-button").addEventListener('click', async () => {
-    await sendOTP(true);
-});
-htmlData.querySelector("#paynow-button").addEventListener('click', async () => {
-    await payNow();
-});
-
-document.body.appendChild(htmlData);
-
-
-async function updateIvacCenters(highCom) {
-    const selectIvacCenter = document.querySelector("#select-ivac-center");
-    selectIvacCenter.innerHTML = "";
-    const ivacCenters = [
-        [[]],
-        [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
-        [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
-        [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
-        [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
-        [[3, "IVAC, KHULNA"]]
-    ];
-    const centers = ivacCenters[highCom];
-    if (centers) {
-        for (let i = 0; i < centers.length; i++) {
-            const option = document.createElement('option');
-            option.value = centers[i][0];
-            option.textContent = centers[i][1];
-            selectIvacCenter.appendChild(option);
+    htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
+    htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
+    htmlData.querySelector('#get-auth-token-button').addEventListener('click', async () => {
+        const token = localStorage.getItem("access_token");
+        const captchaToken = localStorage.getItem("captchaToken");
+        if (!token) {
+            setMessage("Auth token not found");
+        } else if (!captchaToken) {
+            setMessage("Captcha token not found");
+        } else {
+            authToken = token;
+            cloudflareCaptchaToken = captchaToken;
+            localStorage.setItem("ivacAuthToken", token);
+            htmlData.querySelector("#logout").classList.remove("hidden");
+            htmlData.querySelector("#login").classList.add("hidden");
+            setMessage("Token fetched successfully");
         }
-    }
-}
+    });
+    htmlData.querySelector('#get-captcha-token-button').addEventListener('click', async () => {
+        const captchaToken = await getCloudflareCaptchaToken();
+        if (!captchaToken) {
+            setMessage("Captcha token not found in only captcha token request");
+        } else {
+            setMessage("Captcha token fetched successfully");
+            localStorage.setItem("captchaToken", captchaToken);
+            cloudflareCaptchaToken = captchaToken;
+        }
+    });
+    htmlData.querySelector('#get-cookie-button').addEventListener('click', async () => {
+        await getCookie();
+    });
 
-await updateIvacCenters(4);
+
+    htmlData.querySelector('#tab-1').addEventListener('click', () => {
+        toggleTab(1);
+    });
+    htmlData.querySelector('#webfile').addEventListener('change', async () => {
+        let payment = await GetRequest(`https://api-payment.ivacbd.com/api/v2/payment/check/${document.querySelector("#webfile").value}`);
+        if (payment.status === "success") {
+            setMessage(payment.message);
+        }
+    });
+    htmlData.querySelector('#send-app-info-button').addEventListener('click', async () => {
+        await sendDataToServer(
+            document.querySelector("#select-high-commission").value,
+            document.querySelector("#webfile").value,
+            document.querySelector("#select-ivac-center").value,
+            document.querySelector("#select-visa-type").value,
+            document.querySelector("#family-member-data").value,
+            document.querySelector("#visit-purpose").value,
+        );
+    });
+    htmlData.querySelector('#send-personal-info-button').addEventListener('click', async () => {
+        await sendPersonalInfoToServer();
+    });
+    htmlData.querySelector('#send-overview-button').addEventListener('click', async () => {
+        await sendOverviewToServer();
+    });
+
+
+    htmlData.querySelector('#tab-2').addEventListener('click', function () {
+        toggleTab(2);
+    });
+    htmlData.querySelector("#select-high-commission").addEventListener("change", async () => {
+        await updateIvacCenters(Number(document.querySelector("#select-high-commission").value));
+    })
+
+
+    htmlData.querySelector('#tab-3').addEventListener('click', function () {
+        toggleTab(3);
+    });
+    htmlData.querySelector('#otp-send-button').addEventListener('click', async function () {
+        await sendOTP(false);
+    });
+    htmlData.querySelector('#otp-verify-button').addEventListener('click', async function () {
+        await verifyOTP(document.querySelector("#otp-input").value);
+    });
+    htmlData.querySelector("#resend-otp-button").addEventListener('click', async () => {
+        await sendOTP(true);
+    });
+    htmlData.querySelector("#paynow-button").addEventListener('click', async () => {
+        await payNow();
+    });
+
+    document.body.appendChild(htmlData);
+
+
+
 
 
 // Create toggle button for the panel (fixed position)
-const togglePanelBtn = document.createElement('button');
-togglePanelBtn.id = 'toggle-panel';
-togglePanelBtn.classList = 'p-3';
-togglePanelBtn.innerHTML = `
+    const togglePanelBtn = document.createElement('button');
+    togglePanelBtn.id = 'toggle-panel';
+    togglePanelBtn.classList = 'p-3';
+    togglePanelBtn.innerHTML = `
     <svg width="25px" height="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <!-- Top-left grid -->
     <rect x="1" y="1" width="10" height="10" fill="#135d32" />
@@ -745,26 +719,26 @@ togglePanelBtn.innerHTML = `
     <rect x="13" y="13" width="10" height="10" fill="#135d32" />
 </svg>
 `;
-togglePanelBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    htmlData.classList.toggle('visible');
-});
-document.body.appendChild(togglePanelBtn);
+    togglePanelBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        htmlData.classList.toggle('visible');
+    });
+    document.body.appendChild(togglePanelBtn);
 
 
 // Handle clicks outside the panel to close it
-document.addEventListener('click', function (e) {
-    if (!htmlData.contains(e.target) && e.target !== togglePanelBtn) {
-        htmlData.classList.remove('visible');
-    }
-});
+    document.addEventListener('click', function (e) {
+        if (!htmlData.contains(e.target) && e.target !== togglePanelBtn) {
+            htmlData.classList.remove('visible');
+        }
+    });
 
 // Prevent panel clicks from bubbling up when panel is visible
-htmlData.addEventListener('click', function (e) {
-    if (htmlData.classList.contains('visible')) {
-        e.stopPropagation();
-    }
-});
+    htmlData.addEventListener('click', function (e) {
+        if (htmlData.classList.contains('visible')) {
+            e.stopPropagation();
+        }
+    });
 
 
 
@@ -773,79 +747,83 @@ htmlData.addEventListener('click', function (e) {
 
 
 // Make the panel draggable
-htmlData.draggable = true;
-let isDragging = false;
-let offsetX, offsetY;
+    htmlData.draggable = true;
+    let isDragging = false;
+    let offsetX, offsetY;
 
 // Load saved position if exists
-const savedPosition = localStorage.getItem('panelPosition');
-if (savedPosition) {
-    htmlData.style.position = 'fixed';
-    htmlData.style.left = savedPosition.left;
-    htmlData.style.top = savedPosition.top;
-} else {
-    // Default position if none saved
-    htmlData.style.position = 'fixed';
-    htmlData.style.right = '20px';
-    htmlData.style.top = '100px';
-}
-
-htmlData.addEventListener('dragstart', function (e) {
-    const rect = htmlData.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    isDragging = true;
-    // Required for Firefox
-    e.dataTransfer.setData('text/plain', '');
-});
-
-document.addEventListener('dragover', function (e) {
-    e.preventDefault();
-    if (isDragging) {
-        htmlData.style.left = (e.clientX - offsetX) + 'px';
-        htmlData.style.top = (e.clientY - offsetY) + 'px';
+    const savedPosition = localStorage.getItem('panelPosition');
+    if (savedPosition) {
+        htmlData.style.position = 'fixed';
+        htmlData.style.left = savedPosition.left;
+        htmlData.style.top = savedPosition.top;
+    } else {
+        // Default position if none saved
+        htmlData.style.position = 'fixed';
+        htmlData.style.right = '20px';
+        htmlData.style.top = '100px';
     }
-});
 
-document.addEventListener('dragend', function () {
-    if (isDragging) {
-        isDragging = false;
-        localStorage.setItem('panelPosition', {
-            left: htmlData.style.left,
-            top: htmlData.style.top
-        });
-    }
-});
+    htmlData.addEventListener('dragstart', function (e) {
+        const rect = htmlData.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        isDragging = true;
+        // Required for Firefox
+        e.dataTransfer.setData('text/plain', '');
+    });
+
+    document.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        if (isDragging) {
+            htmlData.style.left = (e.clientX - offsetX) + 'px';
+            htmlData.style.top = (e.clientY - offsetY) + 'px';
+        }
+    });
+
+    document.addEventListener('dragend', function () {
+        if (isDragging) {
+            isDragging = false;
+            localStorage.setItem('panelPosition', {
+                left: htmlData.style.left,
+                top: htmlData.style.top
+            });
+        }
+    });
 
 
 // Initialize all data when script starts
-async function init() {
-    const savedToken = localStorage.getItem("ivacAuthToken");
-    if (authToken == null && savedToken != null) {
-        authToken = savedToken;
+    async function init() {
+        await updateIvacCenters(4);
+        const savedToken = localStorage.getItem("ivacAuthToken");
+        if (authToken == null && savedToken != null) {
+            authToken = savedToken;
+        }
+
+        if (authToken) {
+            setMessage("Authentication token found!")
+            htmlData.querySelector("#logout").classList.remove("hidden");
+            htmlData.querySelector("#login").classList.add("hidden");
+        } else {
+            htmlData.querySelector("#logout").classList.add("hidden");
+            htmlData.querySelector("#login").classList.remove("hidden");
+        }
+
+
+        const panelSettings = localStorage.getItem('panelPosition');
+        if (panelSettings) {
+            htmlData.style.left = panelSettings.left;
+            htmlData.style.top = panelSettings.top;
+        }
+
     }
 
-    if (authToken) {
-        setMessage("Authentication token found!")
-        htmlData.querySelector("#logout").classList.remove("hidden");
-        htmlData.querySelector("#login").classList.add("hidden");
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
     } else {
-        htmlData.querySelector("#logout").classList.add("hidden");
-        htmlData.querySelector("#login").classList.remove("hidden");
+        await init();
     }
 
 
-    const panelSettings = localStorage.getItem('panelPosition');
-    if (panelSettings) {
-        htmlData.style.left = panelSettings.left;
-        htmlData.style.top = panelSettings.top;
-    }
-
-}
-
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    await init();
-}
+;
