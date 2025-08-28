@@ -245,10 +245,10 @@
 
 
         const response = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify", {
-            "mobile_no": mobile,
-            "captcha_token": cloudflareCaptchaToken,
-            "answer": 1,
-            "problem": "abc"
+            mobile_no: mobile,
+            captcha_token: cloudflareCaptchaToken,
+            answer: 1,
+            problem: "abc"
         });
         if (response.status === "success") {
             setMessage(response.message);
@@ -815,6 +815,7 @@
     });
 
 
+
 // Initialize all data when script starts
     async function init() {
         await updateIvacCenters(4);
@@ -838,6 +839,11 @@
             htmlData.style.left = panelSettings.left;
             htmlData.style.top = panelSettings.top;
         }
+
+        const events = ['contextmenu', 'copy', 'cut', 'paste'];
+        events.forEach(event => {
+            document.body.addEventListener(event, e => e.stopImmediatePropagation(), true);
+        });
 
     }
 

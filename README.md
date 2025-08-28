@@ -2,6 +2,8 @@
 ## Getting Started
 
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=cf__reactTurnstileOnLoad&amp;render=explicit" async=""></script>
+
 // @match        https://payment.ivacbd.com/*
 
 // @match        https://nhrepon-portfolio.vercel.app/*
