@@ -107,6 +107,45 @@
     tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
     document.head.appendChild(tailwind);
 
+const initDB = (event)=>{
+    const iDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+    const openDB = iDB.open("neurocode", 1);
+    const db = event.target.result;
+    openDB.onupgradeneeded = () => {
+        db.createObjectStore("users", {
+            keyPath: "id", autoIncrement: true,
+            mobile_no: "",
+            password: "",
+            answers: 1,
+            problem: "abc",
+            otp: "",
+            captcha_token: "",
+            authToken: "",
+        });
+        db.createObjectStore("appdata", {
+            captcha_token: "",
+            highCommission: "",
+            webFIleId: "",
+            ivacId: "",
+            visitPurpose: "",
+            visaType: "",
+            familyCount: 0,
+            fullName: "",
+            email: "",
+            phone: "",
+            familyMembers: [],
+            captchaToken: "",
+            appointment_date: "",
+            appointment_time: ""
+        });
+    };
+    openDB.onsuccess = () => {
+        const tx = db.transaction("users", "readwrite");
+        const store = tx.objectStore("users");
+        store.add({ id: 1, name: "John Doe" });
+    };
+}
+initDB();
 
 
     let webFileId = "";
@@ -122,6 +161,25 @@
         appointment_date: null,
         appointment_time: null
     };
+
+    const setAppDataToIvacPage = ()=>{
+        document.querySelector("#center")[0].value = "3";
+        document.getElementById("webfile_id").value = "BGDRS54D43FD";
+        document.getElementById("first-name").value = "BGDRS54D43FD";
+        document.querySelector("#center")[1].value = "2";
+        document.getElementById("visa_type").value = "6";
+        document.getElementById("family_count").value = "0";
+        document.getElementById("visit_purpose").value = "Medical Checkup purpose";
+    }
+
+    const getTommorrowDate = () => {
+        const today = new Date();
+        const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        const day = tomorrow.getDate();
+        const month = tomorrow.getMonth() + 1; // Months are zero-indexed
+        const year = tomorrow.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
 
     const setMessage = (msg) => document.getElementById("message").textContent = msg;
 
@@ -442,14 +500,16 @@
 
 // ========== Pay Now Function ==========
     async function payNow() {
+
+
         if (!slotInfo.appointment_date || !slotInfo.appointment_time) {
             setMessage("Please select a date and time slot first");
             return;
         }
 
         const payload = {
-            appointment_date: slotInfo.appointment_date,
-            appointment_time: slotInfo.appointment_time,
+            appointment_date: slotInfo.appointment_date || getTommorrowDate(),
+            appointment_time: slotInfo.appointment_time || "09:00-09:59",
             captcha_token_y4v9f6: cloudflareCaptchaToken,
             selected_payment: {
                 name: "VISA",
@@ -526,6 +586,7 @@
                 <button id="tab-1"><i class="bi bi-info-circle"></i> Info</button>
                 <button id="tab-2"><i class="bi bi-lock"></i> Otp</button>
                 <button id="tab-3"><i class="bi bi-calendar"></i> Slot</button>
+                <button id="tab-4"><i class="bi bi-settings"></i>IVAC</button>
             </div>
             <div class="tab-content-body py-4 w-full overflow-y-auto h-[300px] text-sm">
                 <div id="tab-0" class="tab-content">
@@ -605,7 +666,8 @@
                 </div>
                 <div id="tab-3" class="tab-content d-none">
                     <div id="slot-captcha-content" class="flex flex-col gap-2 w-full">
-                        <input id="date-input" type="date">
+                        <input id="date-input" type="date" value={getTommorrowDate()}>
+                        <input id="time-input" type="time" value="09:00-09:59">
                         <button id="slot-button" class="hidden">Get Slots</button>
                         <div id="slot-display">No slot Selected</div>
                         <div class="flex flex-col gap-2 py-2">
@@ -614,6 +676,18 @@
                         </div>
                     </div>
                 </div>
+                <div id="tab-4" class="tab-content d-none"> 
+                    <div>
+                        <div>IVAC</div>
+                        <div>
+                            <input type="text" id="ivac-input" placeholder="Enter IVAC" maxLength="6" />
+                            <button id="ivac-button" type="button" onClick="getIVAC()">Get IVAC</button>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
             </div>
             
         </div>

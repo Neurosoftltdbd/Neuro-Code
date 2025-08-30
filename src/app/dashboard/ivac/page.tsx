@@ -1,17 +1,25 @@
 "use client";
 import {useState} from "react";
-import {getCloudflareToken} from "@/app/dashboard/ivac/BreakHumanCaptch";
+import {PostRequest} from "./NetworkRequest";
+
 
 const IvacPanelPage = () => {
     const [retrying, setRetrying] = useState(3);
-    const [message, setMessage] = useState<string[]>([">>>"]);
+    const [messages, setMessages] = useState<string[]>([]);
+    const setMessage = (message: string) => {setMessages([...messages, message]);}
     const [cloudFlareToken, setCloudFlareToken] = useState("");
     const [personalInfo, setPersonalInfo] = useState({
         name: "",
         dob: "",
         gender: "",
-
     });
+    const ivacCenters = [
+        [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
+        [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
+        [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
+        [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
+        [[3, "IVAC, KHULNA"]]
+    ];
 
     const [appData, setAppData] = useState({
         captcha_token_t6d8n3: cloudFlareToken,
@@ -36,7 +44,7 @@ const IvacPanelPage = () => {
 
     const verifyMobile = async ()=>{
         if(loginData.mobile_no === ""){
-            setMessage(["Mobile number is required"]);
+            setMessage("Mobile number is required");
             return;
         }
         const res = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify",{mobile_no: loginData.mobile_no}, retrying);
@@ -49,7 +57,7 @@ const IvacPanelPage = () => {
     }
     const sendLoginOtp = async () => {
         if(loginData.password === ""){
-            setMessage(["Password is required"]);
+            setMessage("Password is required");
             return;
         }
         const res = await PostRequest("https://payment.ivacbd.com/api/v2/login",{mobile_no: loginData.mobile_no, password:loginData.password}, retrying);
@@ -61,7 +69,7 @@ const IvacPanelPage = () => {
     }
     const verifyLoginOtp = async () => {
         if(loginData.otp === ""){
-            setMessage(["OTP is required"]);
+            setMessage("OTP is required");
             return;
         }
         const res = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp",{mobile_no: loginData.mobile_no, password:loginData.password, otp:loginData.otp}, retrying);
@@ -93,10 +101,6 @@ const IvacPanelPage = () => {
     }
 
 
-    const clearLog = () => {
-        setMessage([]);
-    }
-
 
     return (
         <div className="p-4 bg-gray-200 h-screen w-full">
@@ -125,12 +129,12 @@ const IvacPanelPage = () => {
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div className="application-data shadow-lg rounded p-4 my-2">
                                         <h2>Application Data</h2>
-                                        <input value={appData.webfileId} onChange={(e) => setAppData({...appData, webfileId: e.target.value})} id="webfile" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter IVAC Webfile"/>
+                                        <input value={appData.webfile_id} onChange={(e) => setAppData({...appData, webfile_id: e.target.value})} id="webfile" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter IVAC Webfile"/>
                                         <div className="flex flex-col gap-2">
                                             <label htmlFor="highCommission">Select High Commission</label>
-                                            <select value={appData.highCommission} onChange={(e) => setAppData({...appData, highCommission: e.target.value})} name="highCommission" id="selectHighCommission" className="rounded border border-gray-300 p-2">
+                                            <select value={appData.highcom} onChange={(e) => setAppData({...appData, highcom: e.target.value})} className="rounded border border-gray-300 p-2">
                                                 <option value="4">Sylhet</option>
                                                 <option value="1">Dhaka</option>
                                                 <option value="2">Chittagong</option>
@@ -138,41 +142,47 @@ const IvacPanelPage = () => {
                                                 <option value="5">Khulna</option>
                                             </select>
                                         </div>
-                                        <input value={appData.visitPurpose} onChange={(e) => setAppData({...appData, visitPurpose: e.target.value})} id="visitPurpose" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter Visit Purpose"/>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="ivacCenter">Select IVAC Center</label>
+                                            <select value={appData.ivac_id} onChange={(e) => setAppData({...appData, ivac_id: e.target.value})} id="ivacCenter" className="rounded border border-gray-300 p-2">
+                                                {
+                                                    ivacCenters[appData.highcom - 1].map((center, index) => <option key={index} value={center[0]}>{center[1]}</option>)
+                                                }
+                                            </select>
+                                        </div>
+                                        <input value={appData.visit_purpose} onChange={(e) => setAppData({...appData, visit_purpose: e.target.value})} id="visitPurpose" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter Visit Purpose"/>
                                         <div>
                                             <label htmlFor="familyData">Family data: </label>
                                             <textarea
-                                                value={appData.familyData.map(({ name, webfileId }) => `${name}, ${webfileId}`).join('\n')}
+                                                value={appData.familyData.map(({ name, webfile_no }) => `${name}, ${webfile_no}`).join('\n')}
                                                 onChange={(e) =>
                                                     {
                                                         const familyData = e.target.value.split('\n')
-                                                            .filter(line => line.trim() !== '') // Good practice to filter out empty lines
+                                                            .filter(line => line.trim() !== '')
                                                             .map(line => {
                                                                 const [name, webfileId] = line.split(',').map(item => item.trim());
-                                                                return { name, webfileId };
+                                                                return { name: name, webfile_no: webfileId, again_webfile_no: webfileId };
                                                             });
-                                                        setAppData({...appData, familyData, familyCount: familyData.length});
+                                                        setAppData({...appData, familyData, family_count: familyData.length.toString()});
+                                                        return null;
                                                     }
                                             }
                                                 className="rounded border border-gray-300 p-2 my-2 w-full" name="familyData" id="familyData" cols={30} rows={5}></textarea>
                                         </div>
-
-                                        <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit" onClick={() => handleSubmit(appData)}>Submit</button>
-
+                                        <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit" onClick={() => submitApplicationData(appData)}>Submit</button>
                                     </div>
                                 </>
-
                         }
                     </div>
                 </div>
                 <div className="log flex flex-col mt-4 w-1/3">
                     <div className="log-header flex items-center justify-between">
                         <h3>Log message</h3>
-                        <button onClick={clearLog} id="clear-log" className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded w-fit">Clear Log</button>
+                        <button onClick={() => setMessages([])} id="clear-log" className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded w-fit">Clear Log</button>
                     </div>
                     <div id="log-message">
                         {
-                            message && message.map((msg, index) => <p key={index}>{"> " + msg}</p>)
+                            messages && messages.map((msg, index) => <p key={index}>{"> " + msg}</p>)
                         }
                     </div>
                 </div>
