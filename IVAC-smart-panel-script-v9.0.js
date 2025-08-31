@@ -107,42 +107,27 @@
     tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
     document.head.appendChild(tailwind);
 
-const initDB = (event)=>{
+const initDB = ()=>{
     const iDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
     const openDB = iDB.open("neurocode", 1);
-    const db = event.target.result;
-    openDB.onupgradeneeded = () => {
+
+    openDB.onupgradeneeded = (event) => {
+        const db = event.target.result;
         db.createObjectStore("users", {
-            keyPath: "id", autoIncrement: true,
-            mobile_no: "",
-            password: "",
-            answers: 1,
-            problem: "abc",
-            otp: "",
-            captcha_token: "",
-            authToken: "",
+            keyPath: "user",
         });
         db.createObjectStore("appdata", {
-            captcha_token: "",
-            highCommission: "",
-            webFIleId: "",
-            ivacId: "",
-            visitPurpose: "",
-            visaType: "",
-            familyCount: 0,
-            fullName: "",
-            email: "",
-            phone: "",
-            familyMembers: [],
-            captchaToken: "",
-            appointment_date: "",
-            appointment_time: ""
+            keyPath:"appdata"
         });
     };
-    openDB.onsuccess = () => {
+    openDB.onsuccess = (event) => {
+        const db = event.target.result;
         const tx = db.transaction("users", "readwrite");
         const store = tx.objectStore("users");
-        store.add({ id: 1, name: "John Doe" });
+        store.add({ id: 1, mobile_no: "John Doe", password:"", answers:1, problem:"abc", otp:"", captcha_token:"", authToken:"" });
+
+        const appDataStore = db.transaction("appdata", "readwrite").objectStore("appdata");
+        appDataStore.add({ captcha_token: "", highCommission: "", webFIleId: "", ivacId: "", visitPurpose: "", visaType: "", familyCount: 0, fullName: "", email: "", phone: "", familyMembers: [], captchaToken: "", appointment_date: "", appointment_time: "" });
     };
 }
 initDB();
@@ -163,13 +148,18 @@ initDB();
     };
 
     const setAppDataToIvacPage = ()=>{
-        document.querySelector("#center")[0].value = "3";
-        document.getElementById("webfile_id").value = "BGDRS54D43FD";
-        document.getElementById("first-name").value = "BGDRS54D43FD";
-        document.querySelector("#center")[1].value = "2";
-        document.getElementById("visa_type").value = "6";
-        document.getElementById("family_count").value = "0";
-        document.getElementById("visit_purpose").value = "Medical Checkup purpose";
+        try {
+            document.querySelector("#center")[0].value = document.getElementById("select-high-commission").value;
+            document.getElementById("webfile_id").value = document.getElementById("webfile").value;
+            document.getElementById("first-name").value = document.getElementById("webfile").value;
+            document.querySelector("#center")[1].value = document.getElementById("select-ivac-centerr").value;
+            document.getElementById("visa_type").value = document.getElementById("select-visa-type").value;
+            document.getElementById("family_count").value = familyCount;
+            document.getElementById("visit_purpose").value = document.getElementById("visit-purpose").value;
+            setMessage("App data set successfully");
+        }catch (e) {
+            setMessage(e.message);
+        }
     }
 
     const getTommorrowDate = () => {
@@ -625,7 +615,9 @@ initDB();
                             </select>
                         </div>
                         <div>
-                            <select name="ivac_center" id="select-ivac-center"></select>
+                            <select name="ivac_center" id="select-ivac-center">
+                            
+                            </select>
                         </div>
                         
                         <label for="visa_type">Select Visa Type</label>
@@ -643,7 +635,7 @@ initDB();
                             <textarea id="family-member-data" cols="30" rows="5" class="w-full border border-gray-300 p-2 rounded" placeholder="Enter family member name and webfile"></textarea>
                         </div>
                         <div>
-                            <input value="Medical purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
+                            <input value="Medical Checkup purpose" name="visit_purpose" id="visit-purpose" type="text" placeholder="Enter Visit Purpose Details">
                         </div>
                         <div class="flex gap-4">
                             <button id="send-app-info-button" type="button">Send app Info</button>
@@ -666,8 +658,8 @@ initDB();
                 </div>
                 <div id="tab-3" class="tab-content d-none">
                     <div id="slot-captcha-content" class="flex flex-col gap-2 w-full">
-                        <input id="date-input" type="date" value={getTommorrowDate()}>
-                        <input id="time-input" type="time" value="09:00-09:59">
+                        <input id="date-input" type="date">
+                        <input id="time-input" type="text" value="09:00-09:59">
                         <button id="slot-button" class="hidden">Get Slots</button>
                         <div id="slot-display">No slot Selected</div>
                         <div class="flex flex-col gap-2 py-2">
@@ -681,7 +673,7 @@ initDB();
                         <div>IVAC</div>
                         <div>
                             <input type="text" id="ivac-input" placeholder="Enter IVAC" maxLength="6" />
-                            <button id="ivac-button" type="button" onClick="getIVAC()">Get IVAC</button>
+                            <button id="set-app-info-to-ivac-button" type="button">Set App Info</button>
                         </div>
                     </div>
                 </div>
@@ -770,12 +762,17 @@ initDB();
     });
 
 
+
+
     htmlData.querySelector('#tab-2').addEventListener('click', function () {
         toggleTab(2);
     });
     htmlData.querySelector("#select-high-commission").addEventListener("change", async () => {
         await updateIvacCenters(Number(document.querySelector("#select-high-commission").value));
     })
+
+
+
 
 
     htmlData.querySelector('#tab-3').addEventListener('click', function () {
@@ -794,6 +791,16 @@ initDB();
         await payNow();
     });
 
+
+
+
+
+    htmlData.querySelector('#tab-4').addEventListener('click', function () {
+        toggleTab(4);
+    });
+    htmlData.querySelector('#set-app-info-to-ivac-button').addEventListener('click', async function () {
+        await setAppDataToIvacPage();
+    });
     document.body.appendChild(htmlData);
 
 
@@ -914,6 +921,15 @@ initDB();
             htmlData.style.top = panelSettings.top;
         }
 
+        if (!cloudflareCaptchaToken) {
+            const token = await document.querySelector('input[name="cf-turnstile-response"]').value;
+            if (token) {
+                await getCloudflareCaptchaToken()
+            }else {
+                setMessage("Awaiting for cloudflare token...");
+            }
+        }
+        htmlData.querySelector("#date-input").value = getTommorrowDate();
         const events = ['contextmenu', 'copy', 'cut', 'paste'];
         events.forEach(event => {
             document.body.addEventListener(event, e => e.stopImmediatePropagation(), true);
