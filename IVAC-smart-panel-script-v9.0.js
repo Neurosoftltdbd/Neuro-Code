@@ -22,7 +22,7 @@
     style.textContent = `
     #smart-panel {
             position: fixed;
-            bottom: 80px;
+            bottom: 100px;
             right: 20px;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
@@ -35,13 +35,11 @@
             opacity: 0;
             transition: all 0.5s ease-in-out;
             width: 350px;
-            height: 450px;
-            pointer-events: none;
+            height: 480px;
         }
         #smart-panel.visible {
             transform: translateY(0);
             opacity: 1;
-            pointer-events: auto;
         }
         
         #smart-panel-title {
@@ -107,30 +105,6 @@
     tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
     document.head.appendChild(tailwind);
 
-const initDB = ()=>{
-    const iDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
-    const openDB = iDB.open("neurocode", 1);
-
-    openDB.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        db.createObjectStore("users", {
-            keyPath: "user",
-        });
-        db.createObjectStore("appdata", {
-            keyPath:"appdata"
-        });
-    };
-    openDB.onsuccess = (event) => {
-        const db = event.target.result;
-        const tx = db.transaction("users", "readwrite");
-        const store = tx.objectStore("users");
-        store.add({ id: 1, mobile_no: "John Doe", password:"", answers:1, problem:"abc", otp:"", captcha_token:"", authToken:"" });
-
-        const appDataStore = db.transaction("appdata", "readwrite").objectStore("appdata");
-        appDataStore.add({ captcha_token: "", highCommission: "", webFIleId: "", ivacId: "", visitPurpose: "", visaType: "", familyCount: 0, fullName: "", email: "", phone: "", familyMembers: [], captchaToken: "", appointment_date: "", appointment_time: "" });
-    };
-}
-initDB();
 
 
     let webFileId = "";
@@ -896,6 +870,10 @@ initDB();
     });
 
 
+    const events = ['contextmenu', 'copy', 'cut', 'paste'];
+    events.forEach(event => {
+        document.body.addEventListener(event, e => e.stopImmediatePropagation(), true);
+    });
 
 // Initialize all data when script starts
     async function init() {
@@ -930,6 +908,7 @@ initDB();
             }
         }
         htmlData.querySelector("#date-input").value = getTommorrowDate();
+
         const events = ['contextmenu', 'copy', 'cut', 'paste'];
         events.forEach(event => {
             document.body.addEventListener(event, e => e.stopImmediatePropagation(), true);
