@@ -36,10 +36,12 @@
             transition: all 0.5s ease-in-out;
             width: 350px;
             height: 480px;
+            pointer-events: none;
         }
         #smart-panel.visible {
             transform: translateY(0);
             opacity: 1;
+            pointer-events: auto;
         }
         
         #smart-panel-title {
@@ -117,24 +119,51 @@
     let cloudflareCaptchaToken = "";
     let timeOut = null;
     let slotInfo = {
-        appointment_date: null,
-        appointment_time: null
+        appointment_date: "",
+        appointment_time: "09:00-09:59"
     };
+    let activeStep = 0;
+    let auth_email= "";
+    let auth_name = "";
+    let auth_phone = "";
+    let user_email = "";
+    let user_phone = "";
 
-    const setAppDataToIvacPage = ()=>{
+
+    const setAppDataToIvacPage = () => {
         try {
-            document.querySelector("#center")[0].value = document.getElementById("select-high-commission").value;
-            document.getElementById("webfile_id").value = document.getElementById("webfile").value;
-            document.getElementById("first-name").value = document.getElementById("webfile").value;
-            document.querySelector("#center")[1].value = document.getElementById("select-ivac-centerr").value;
-            document.getElementById("visa_type").value = document.getElementById("select-visa-type").value;
-            document.getElementById("family_count").value = familyCount;
-            document.getElementById("visit_purpose").value = document.getElementById("visit-purpose").value;
+            const centerElements = document.querySelectorAll("#center");
+            if (centerElements.length < 2) {
+                throw new Error("Required center elements not found");
+            }
+
+            const setValue = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.value = value;
+            };
+
+            // Set values
+            centerElements[0].value = document.getElementById("select-high-commission")?.value || "";
+            setValue("webfile_id", document.getElementById("webfile")?.value || "");
+            setValue("first-name", document.getElementById("webfile")?.value || "");
+            centerElements[1].value = document.getElementById("select-ivac-centerr")?.value || "";
+            setValue("visa_type", document.getElementById("select-visa-type")?.value || "");
+            setValue("family_count", familyCount || "");
+            setValue("visit_purpose", document.getElementById("visit-purpose")?.value || "");
+
+            // Enable button
+            const button = document.querySelector("button[type='button']");
+            if (button) {
+                button.removeAttribute("disabled");
+                button.classList.remove("cursor-not-allowed");
+            }
+
             setMessage("App data set successfully");
-        }catch (e) {
-            setMessage(e.message);
+        } catch (e) {
+            console.error("Error in setAppDataToIvacPage:", e);
+            setMessage(`Error: ${e.message}`);
         }
-    }
+    };
 
     const getTommorrowDate = () => {
         const today = new Date();
@@ -142,7 +171,26 @@
         const day = tomorrow.getDate();
         const month = tomorrow.getMonth() + 1; // Months are zero-indexed
         const year = tomorrow.getFullYear();
-        return `${day}-${month}-${year}`;
+        return `${day}/${month}/${year}`;
+    }
+
+    const getIvacAuthData = ()=>{
+        try {
+            authToken = localStorage.getItem("access_token");
+            cloudflareCaptchaToken = localStorage.getItem("captchaToken");
+            auth_email = localStorage.getItem("auth_email");
+            auth_name = localStorage.getItem("auth_name");
+            auth_phone = localStorage.getItem("auth_phone");
+            user_email = localStorage.getItem("user_email");
+            user_phone = localStorage.getItem("user_phone");
+            activeStep = localStorage.getItem("activeStep");
+            localStorage.setItem("ivacAuthToken", authToken);
+            // htmlData.querySelector("#logout").classList.remove("hidden");
+            // htmlData.querySelector("#login").classList.add("hidden");
+            setMessage("Token fetched successfully");
+        }catch (e) {
+            setMessage(e.message)
+        }
     }
 
     const setMessage = (msg) => document.getElementById("message").textContent = msg;
@@ -304,22 +352,21 @@
         });
 
         if (response.status === "success") {
-            setMessage(response.message + " and " + response.data.slot_available === "false" ? "Slot Available" : "Slot Not Available");
+            setMessage(response.message + " and " + response.data.slot_available ? "Slot Available" : "Slot Not Available");
             authToken = response.data.access_token;
             await localStorage.setItem("ivacAuthToken", authToken);
             await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
-            await localStorage.setItem("access_token", response.data.access_token);
             fullName = response.data.name;
             email = response.data.email;
             phone = response.data.mobile_no;
-            const data = response.data;
-            for (const key in data) {
+            const data = await response.data;
+            for (let key in data) {
                 if (data.hasOwnProperty(key)) {
-                    localStorage.setItem(key, data[key]);
+                    await localStorage.setItem(key, data[key]);
                 }
             }
-            document.querySelector("#logout").classList.remove("hidden");
-            document.querySelector("#login").classList.add("hidden");
+            // document.querySelector("#logout").classList.remove("hidden");
+            // document.querySelector("#login").classList.add("hidden");
             toggleTab(1);
         } else {
             setMessage(response.message);
@@ -351,7 +398,7 @@
 
 
         let payload = {
-            captcha_token_t6d8n3: cloudflareCaptchaToken,
+            y6e7uk_token_t6d8n3: cloudflareCaptchaToken,
             highcom: highCommission.toString(),
             webfile_id: webFileId,
             webfile_id_repeat: webFileId,
@@ -361,7 +408,7 @@
             visit_purpose: visitPurpose,
         };
         try {
-            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-info-submit-y6u4d8", payload);
+            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-r5s7h3-submit-hyju6t", payload);
             if (response.status === "success") {
                 setMessage(response.message + " Payable amount: " + response.data.payable_amount);
             }
@@ -472,16 +519,16 @@
         }
 
         const payload = {
-            appointment_date: slotInfo.appointment_date || getTommorrowDate(),
+            appointment_date: slotInfo.appointment_date || "03/09/2025",
             appointment_time: slotInfo.appointment_time || "09:00-09:59",
-            captcha_token_y4v9f6: cloudflareCaptchaToken,
+            k5t0g8_token_y4v9f6: cloudflareCaptchaToken,
             selected_payment: {
                 name: "VISA",
                 slug: "visacard",
                 link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
             }
         };
-        const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-now-d7h3s9", payload);
+        const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/h7j3wt-now-y0k3d6", payload);
 
         if (sendPayment.status === "success") {
             setMessage(sendPayment.message);
@@ -493,6 +540,8 @@
                 `;
                 window.open(sendPayment.data.payment_url, '_blank', activeTab);
             }
+        }else {
+            setMessage(sendPayment.message);
         }
     }
 
@@ -567,7 +616,7 @@
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
                             <p>Or</p>
-                            <button id="get-auth-token-button" type="button">Get ivac auth token</button>
+                            <button id="get-auth-token-button" type="button">Get ivac auth data</button>
                             <button id="get-captcha-token-button" type="button">Get captcha token</button>
                             <button id="get-cookie-button" class="hidden" type="button">Get cookie</button>
                         </div>
@@ -632,7 +681,7 @@
                 </div>
                 <div id="tab-3" class="tab-content d-none">
                     <div id="slot-captcha-content" class="flex flex-col gap-2 w-full">
-                        <input id="date-input" type="date">
+                        <input id="date-input" type="date" value="">
                         <input id="time-input" type="text" value="09:00-09:59">
                         <button id="slot-button" class="hidden">Get Slots</button>
                         <div id="slot-display">No slot Selected</div>
@@ -679,20 +728,7 @@
     htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
     htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
     htmlData.querySelector('#get-auth-token-button').addEventListener('click', async () => {
-        const token = localStorage.getItem("access_token");
-        const captchaToken = localStorage.getItem("captchaToken");
-        if (!token) {
-            setMessage("Auth token not found");
-        } else if (!captchaToken) {
-            setMessage("Captcha token not found");
-        } else {
-            authToken = token;
-            cloudflareCaptchaToken = captchaToken;
-            localStorage.setItem("ivacAuthToken", token);
-            htmlData.querySelector("#logout").classList.remove("hidden");
-            htmlData.querySelector("#login").classList.add("hidden");
-            setMessage("Token fetched successfully");
-        }
+        getIvacAuthData();
     });
     htmlData.querySelector('#get-captcha-token-button').addEventListener('click', async () => {
         const captchaToken = await getCloudflareCaptchaToken();
@@ -877,20 +913,19 @@
 
 // Initialize all data when script starts
     async function init() {
+        slotInfo.appointment_date = getTommorrowDate();
         await updateIvacCenters(4);
-        const savedToken = localStorage.getItem("ivacAuthToken");
-        if (authToken == null && savedToken != null) {
-            authToken = savedToken;
-        }
+        await getIvacAuthData();
+        htmlData.querySelector("#date-input").value = slotInfo.appointment_date;
 
-        if (authToken) {
-            setMessage("Authentication token found!")
-            htmlData.querySelector("#logout").classList.remove("hidden");
-            htmlData.querySelector("#login").classList.add("hidden");
-        } else {
-            htmlData.querySelector("#logout").classList.add("hidden");
-            htmlData.querySelector("#login").classList.remove("hidden");
-        }
+        // if (authToken) {
+        //     setMessage("Authentication token found!")
+        //     htmlData.querySelector("#logout").classList.remove("hidden");
+        //     htmlData.querySelector("#login").classList.add("hidden");
+        // } else {
+        //     htmlData.querySelector("#logout").classList.add("hidden");
+        //     htmlData.querySelector("#login").classList.remove("hidden");
+        // }
 
 
         const panelSettings = localStorage.getItem('panelPosition');
@@ -900,13 +935,20 @@
         }
 
         if (!cloudflareCaptchaToken) {
-            const token = await document.querySelector('input[name="cf-turnstile-response"]').value;
-            if (token) {
-                await getCloudflareCaptchaToken()
-            }else {
-                setMessage("Awaiting for cloudflare token...");
+            const turnstileResponse = document.querySelector('input[name="cf-turnstile-response"]')?.value;
+
+            if (turnstileResponse) {
+                // If token exists, get the Cloudflare token
+                await getCloudflareCaptchaToken();
+            } else {
+                // If no token found, show message and try again after a delay
+                setMessage("Awaiting Cloudflare token...");
+                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 1 second before retrying
+                // You might want to call this function again or use a different retry mechanism
             }
         }
+
+
         htmlData.querySelector("#date-input").value = getTommorrowDate();
 
         const events = ['contextmenu', 'copy', 'cut', 'paste'];
