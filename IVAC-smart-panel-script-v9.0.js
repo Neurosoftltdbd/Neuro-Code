@@ -119,7 +119,7 @@
     let cloudflareCaptchaToken = "";
     let timeOut = null;
     let slotInfo = {
-        appointment_date: "",
+        appointment_date: "04/09/2025",
         appointment_time: "09:00-09:59"
     };
     let activeStep = 0;
@@ -241,6 +241,13 @@
                             "Accept": "application/json",
                             "Authorization": `Bearer ${authToken}`,
                             "language": "en",
+                            "Referer": "https://payment.ivacbd.com/",
+                            "Origin": "https://payment.ivacbd.com",
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36",
+                            "scheme": "https",
+                            "cache-control": "no-cache",
+                            "Connection": "keep-alive",
+                            "content-encoding": "gzip"
                         },
                         body: JSON.stringify(body),
                     });
@@ -356,6 +363,11 @@
             authToken = response.data.access_token;
             await localStorage.setItem("ivacAuthToken", authToken);
             await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
+            await localStorage.setItem("user_phone", response.data.mobile_no);
+            await localStorage.setItem("user_email", response.data.email);
+            await localStorage.setItem("auth_name", response.data.name);
+            await localStorage.setItem("auth_email", response.data.email);
+            await localStorage.setItem("auth_phone", response.data.mobile_no);
             fullName = response.data.name;
             email = response.data.email;
             phone = response.data.mobile_no;
@@ -411,6 +423,7 @@
             const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-r5s7h3-submit-hyju6t", payload);
             if (response.status === "success") {
                 setMessage(response.message + " Payable amount: " + response.data.payable_amount);
+                await sendPersonalInfoToServer();
             }
         } catch (error) {
             setMessage(error.message);
@@ -437,6 +450,7 @@
         const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
         if (personalInfoSubmit.status === "success") {
             setMessage(personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
+            await sendOverviewToServer();
         }
     }
 
@@ -444,6 +458,7 @@
         const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
         if (sendOverview.status === "success") {
             setMessage(sendOverview.message);
+            await payNow();
             toggleTab(3);
         }
     }
@@ -519,7 +534,7 @@
         }
 
         const payload = {
-            appointment_date: slotInfo.appointment_date || "03/09/2025",
+            appointment_date: slotInfo.appointment_date || "04/09/2025",
             appointment_time: slotInfo.appointment_time || "09:00-09:59",
             k5t0g8_token_y4v9f6: cloudflareCaptchaToken,
             selected_payment: {
@@ -913,7 +928,7 @@
 
 // Initialize all data when script starts
     async function init() {
-        slotInfo.appointment_date = getTommorrowDate();
+        [slotInfo.appointment_date] = await Promise.all([getTommorrowDate()]);
         await updateIvacCenters(4);
         await getIvacAuthData();
         htmlData.querySelector("#date-input").value = slotInfo.appointment_date;
