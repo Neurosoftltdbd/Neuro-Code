@@ -13,7 +13,7 @@ const DashboardSidebar = () => {
     return (
         <div className="flex flex-col justify-between gap-4 p-4 bg-gray-200 w-[200px] md:w-[300px] border-r border-gray-300 h-screen transition-all duration-500 ease-in-out">
             <div>
-                <h2 className="font-bold"><Link href="/" ><i className="bi bi-house-fill me-2"></i></Link>Neuro Code Dashboard</h2>
+                <h2 className="font-bold"><Link href="/" ><i className="bi bi-house-fill me-2"></i></Link>Dashboard</h2>
                 <hr className="my-4"/>
                 <ul className="flex flex-col gap-2">
                     {

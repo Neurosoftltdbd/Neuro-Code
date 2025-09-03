@@ -87,7 +87,6 @@ const IvacPanelPage = () => {
 
 
     const submitApplicationData = async (data:object) => {
-        clearLog();
         const response = await fetch("/api/ivac", {
             method: "POST",
             body: JSON.stringify(data),
@@ -107,25 +106,25 @@ const IvacPanelPage = () => {
             <h2 className="text-2xl font-bold">IVAC Panel</h2>
             <hr/>
             <div className="flex gap-4">
-                <div className="content mt-4 w-2/3 overscroll-y-auto">
-                    <div>
+                <div className="content mt-4 w-2/3 ">
+                    <div className={"h-[80vh] overflow-y-scroll no-scrollbar"}>
                         {
                                 <>
-                                    <div className="login-card flex flex-col gap-2 shadow-lg rounded p-4 my-2">
+                                    <div className="login-card flex flex-col gap-2 bg-gray-100 shadow-lg rounded p-4 my-2">
                                         <div className="flex justify-between gap-3 items-center">
                                             <input value={loginData.mobile_no} onChange={(e) => setLoginData({...loginData, mobile_no: e.target.value})}
                                                    type="tel" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC mobile number" autoComplete="tel"/>
-                                            <button onClick={verifyMobile} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded">Verify mobile</button>
+                                            <button onClick={verifyMobile} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded">Verify mobile</button>
                                         </div>
                                         <div className="flex justify-between gap-3 items-center">
                                             <input value={loginData.password} onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                                                    type="password" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC password"/>
-                                            <button onClick={sendLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded w-fit">Send login OTP</button>
+                                            <button onClick={sendLoginOtp} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded w-fit">Send login OTP</button>
                                         </div>
                                         <div className="flex justify-between gap-3 items-center">
                                             <input value={loginData.otp} onChange={(e) => setLoginData({...loginData, otp: e.target.value})}
                                                    type="text" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter 6 digit OTP" />
-                                            <button onClick={verifyLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded w-fit">Verify OTP</button>
+                                            <button onClick={verifyLoginOtp} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded w-fit">Verify OTP</button>
                                         </div>
                                     </div>
 
