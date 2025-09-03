@@ -7,7 +7,9 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "st": "nodemon pup.js"
+    "st": "nodemon pup.js",
+    "obfuscate": "javascript-obfuscator nhrepon.js --output output.js"
+
   },
   "dependencies": {
     "bootstrap-icons": "^1.13.1",

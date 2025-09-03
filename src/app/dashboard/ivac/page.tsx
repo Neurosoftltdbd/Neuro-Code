@@ -1,67 +1,92 @@
 "use client";
 import {useState} from "react";
-import {getCloudflareToken} from "@/app/dashboard/ivac/BreakHumanCaptch";
+import {PostRequest} from "./NetworkRequest";
+
 
 const IvacPanelPage = () => {
-    const [isLogin, setIsLogin] = useState(false);
+    const [retrying, setRetrying] = useState(3);
+    const [messages, setMessages] = useState<string[]>([]);
+    const setMessage = (message: string) => {setMessages([...messages, message]);}
+    const [cloudFlareToken, setCloudFlareToken] = useState("");
+    const [personalInfo, setPersonalInfo] = useState({
+        name: "",
+        dob: "",
+        gender: "",
+    });
+    const ivacCenters = [
+        [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
+        [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
+        [[2, "IVAC , RAJSHAHI"], [7, "I[VAC, RANGPUR"], [18, "IVAC, THAKURGAON"], [19, "IVAC, BOGURA"], [24, "IVAC, KUSHTIA"]],
+        [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
+        [[3, "IVAC, KHULNA"]]
+    ];
 
     const [appData, setAppData] = useState({
-        webfileId: "",
-        highCommission: "4",
-        ivacId: "4",
-        visaType: "13",
-        familyCount: 0,
-        visitPurpose: "Medical purpose",
-        familyData: [] as { name: string, webfileId: string }[]
+        captcha_token_t6d8n3: cloudFlareToken,
+        highcom: "4",
+        webfile_id: "",
+        webfile_id_repeat: "",
+        ivac_id: "4",
+        visa_type: "13",
+        family_count: "0",
+        visit_purpose: "Medical purpose entry",
+        familyData: [] as { name: string, webfile_no: string, again_webfile_no: string }[]
     });
 
     const [loginData, setLoginData] = useState({
-        mobileNo: "",
+        mobile_no: "",
         password: "",
-        otp: "",
-        captcha_token: ""
+        captcha_token: cloudFlareToken,
+        answer: 1,
+        problem: "abc",
+        otp: ""
     });
-    const sendLoginOtp = async () => {
-        clearLog();
-        const res = await fetch("/api/ivac/get-captcha-token");
-        const data = await res.json();
-        const token = data.captchaToken;
-        if(token){
-            loginData.captcha_token = token;
-            const response = await fetch("/api/ivac/login", {
-                method: "POST",
-                body: JSON.stringify(loginData),
-            });
-            const resData = await response.json();
-            if (resData.status === "success") {
-                setMessage(resData.message);
-            }else {
-                setMessage(resData.message);
-            }
+
+    const verifyMobile = async ()=>{
+        if(loginData.mobile_no === ""){
+            setMessage("Mobile number is required");
+            return;
+        }
+        const res = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify",{mobile_no: loginData.mobile_no}, retrying);
+        if(res.status === "success"){
+            setMessage(res.message);
+            setTimeout(()=>{sendLoginOtp()}, 5000);
         }else {
-            setMessage("Failed to get Cloudflare token");
+            setMessage(res.message);
+        }
+    }
+    const sendLoginOtp = async () => {
+        if(loginData.password === ""){
+            setMessage("Password is required");
+            return;
+        }
+        const res = await PostRequest("https://payment.ivacbd.com/api/v2/login",{mobile_no: loginData.mobile_no, password:loginData.password}, retrying);
+        if(res.status === "success"){
+            setMessage(res.message);
+        }else {
+            setMessage(res.message);
         }
     }
     const verifyLoginOtp = async () => {
-        clearLog();
-        const response = await fetch("/api/ivac/login/verify", {
-            method: "POST",
-            body: JSON.stringify(loginData),
-        });
-        const resData = await response.json();
-        if (resData.status === "success") {
-            setMessage(resData.message);
-            localStorage.setItem("token", resData.data.access_token);
-            setIsLogin(true);
+        if(loginData.otp === ""){
+            setMessage("OTP is required");
+            return;
+        }
+        const res = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp",{mobile_no: loginData.mobile_no, password:loginData.password, otp:loginData.otp}, retrying);
+        if(res.status === "success"){
+            setMessage(res.message);
         }else {
-            setMessage(resData.message);
+            setMessage(res.message);
         }
     }
 
 
 
 
-    const handleSubmit = async (data:object) => {
+
+
+
+    const submitApplicationData = async (data:object) => {
         clearLog();
         const response = await fetch("/api/ivac", {
             method: "POST",
@@ -75,10 +100,6 @@ const IvacPanelPage = () => {
         }
     }
 
-    const setMessage = (msg:string) => document.getElementById("log-message")!.appendChild(document.createTextNode(msg));
-    const clearLog = () => {
-        document.getElementById("log-message")!.innerHTML = "";
-    }
 
 
     return (
@@ -86,20 +107,34 @@ const IvacPanelPage = () => {
             <h2 className="text-2xl font-bold">IVAC Panel</h2>
             <hr/>
             <div className="flex gap-4">
-                <div className="content mt-4 w-2/3">
+                <div className="content mt-4 w-2/3 overscroll-y-auto">
                     <div>
                         {
-                            isLogin ?
                                 <>
-                                    <div className="logout-from-ivac flex justify-between gap-2 shadow-md rounded p-4 my-4">
-                                        <p>You are logged in to IVAC panel.</p>
-                                        <button id="logout-from-ivac" className="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded w-fit">Logout from IVAC</button>
+                                    <div className="login-card flex flex-col gap-2 shadow-lg rounded p-4 my-2">
+                                        <div className="flex justify-between gap-3 items-center">
+                                            <input value={loginData.mobile_no} onChange={(e) => setLoginData({...loginData, mobile_no: e.target.value})}
+                                                   type="tel" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC mobile number" autoComplete="tel"/>
+                                            <button onClick={verifyMobile} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded">Verify mobile</button>
+                                        </div>
+                                        <div className="flex justify-between gap-3 items-center">
+                                            <input value={loginData.password} onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                                   type="password" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC password"/>
+                                            <button onClick={sendLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded w-fit">Send login OTP</button>
+                                        </div>
+                                        <div className="flex justify-between gap-3 items-center">
+                                            <input value={loginData.otp} onChange={(e) => setLoginData({...loginData, otp: e.target.value})}
+                                                   type="text" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter 6 digit OTP" />
+                                            <button onClick={verifyLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 text-nowrap rounded w-fit">Verify OTP</button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input value={appData.webfileId} onChange={(e) => setAppData({...appData, webfileId: e.target.value})} id="webfile" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter IVAC Webfile"/>
+
+                                    <div className="application-data shadow-lg rounded p-4 my-2">
+                                        <h2>Application Data</h2>
+                                        <input value={appData.webfile_id} onChange={(e) => setAppData({...appData, webfile_id: e.target.value})} id="webfile" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter IVAC Webfile"/>
                                         <div className="flex flex-col gap-2">
                                             <label htmlFor="highCommission">Select High Commission</label>
-                                            <select value={appData.highCommission} onChange={(e) => setAppData({...appData, highCommission: e.target.value})} name="highCommission" id="selectHighCommission" className="rounded border border-gray-300 p-2">
+                                            <select value={appData.highcom} onChange={(e) => setAppData({...appData, highcom: e.target.value})} className="rounded border border-gray-300 p-2">
                                                 <option value="4">Sylhet</option>
                                                 <option value="1">Dhaka</option>
                                                 <option value="2">Chittagong</option>
@@ -107,55 +142,49 @@ const IvacPanelPage = () => {
                                                 <option value="5">Khulna</option>
                                             </select>
                                         </div>
-                                        <input value={appData.visitPurpose} onChange={(e) => setAppData({...appData, visitPurpose: e.target.value})} id="visitPurpose" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter Visit Purpose"/>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="ivacCenter">Select IVAC Center</label>
+                                            <select value={appData.ivac_id} onChange={(e) => setAppData({...appData, ivac_id: e.target.value})} id="ivacCenter" className="rounded border border-gray-300 p-2">
+                                                {
+                                                    ivacCenters[appData.highcom - 1].map((center, index) => <option key={index} value={center[0]}>{center[1]}</option>)
+                                                }
+                                            </select>
+                                        </div>
+                                        <input value={appData.visit_purpose} onChange={(e) => setAppData({...appData, visit_purpose: e.target.value})} id="visitPurpose" className="rounded border border-gray-300 p-2 my-2 w-full" type="text" placeholder="Enter Visit Purpose"/>
                                         <div>
                                             <label htmlFor="familyData">Family data: </label>
                                             <textarea
-                                                value={appData.familyData.map(({ name, webfileId }) => `${name}, ${webfileId}`).join('\n')}
+                                                value={appData.familyData.map(({ name, webfile_no }) => `${name}, ${webfile_no}`).join('\n')}
                                                 onChange={(e) =>
                                                     {
                                                         const familyData = e.target.value.split('\n')
-                                                            .filter(line => line.trim() !== '') // Good practice to filter out empty lines
+                                                            .filter(line => line.trim() !== '')
                                                             .map(line => {
                                                                 const [name, webfileId] = line.split(',').map(item => item.trim());
-                                                                return { name, webfileId };
+                                                                return { name: name, webfile_no: webfileId, again_webfile_no: webfileId };
                                                             });
-                                                        setAppData({...appData, familyData, familyCount: familyData.length});
+                                                        setAppData({...appData, familyData, family_count: familyData.length.toString()});
+                                                        return null;
                                                     }
                                             }
                                                 className="rounded border border-gray-300 p-2 my-2 w-full" name="familyData" id="familyData" cols={30} rows={5}></textarea>
                                         </div>
-
-                                        <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit" onClick={() => handleSubmit(appData)}>Submit</button>
-
+                                        <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit" onClick={() => submitApplicationData(appData)}>Submit</button>
                                     </div>
                                 </>
-                                :
-                                <div className="login-to-ivac flex flex-col gap-2 shadow-md rounded p-4">
-                                    <input value={loginData.mobileNo}
-                                           onChange={(e) => setLoginData({...loginData, mobileNo: e.target.value})}
-                                           type="tel" className="rounded border border-gray-300 p-2 my-2"
-                                           placeholder="Enter IVAC mobile number"
-                                           autoComplete="tel"
-                                    />
-                                    <input value={loginData.password}
-                                           onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                                           type="password" className="rounded border border-gray-300 p-2 my-2"
-                                           placeholder="Enter IVAC password"/>
-                                    <button onClick={sendLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit">Send login OTP</button>
-                                    <input value={loginData.otp} onChange={(e) => setLoginData({...loginData, otp: e.target.value})} type="text" className="rounded border border-gray-300 p-2 my-2" placeholder="Enter 6 digit OTP" />
-                                    <button onClick={verifyLoginOtp} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded w-fit">Verify OTP</button>
-                                </div>
-
                         }
                     </div>
                 </div>
                 <div className="log flex flex-col mt-4 w-1/3">
                     <div className="log-header flex items-center justify-between">
                         <h3>Log message</h3>
-                        <button onClick={clearLog} id="clear-log" className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded w-fit">Clear Log</button>
+                        <button onClick={() => setMessages([])} id="clear-log" className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded w-fit">Clear Log</button>
                     </div>
-                    <div id="log-message"></div>
+                    <div id="log-message">
+                        {
+                            messages && messages.map((msg, index) => <p key={index}>{"> " + msg}</p>)
+                        }
+                    </div>
                 </div>
             </div>
         </div>
