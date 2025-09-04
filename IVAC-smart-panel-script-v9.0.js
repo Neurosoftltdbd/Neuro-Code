@@ -107,6 +107,12 @@
     tailwind.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
     document.head.appendChild(tailwind);
 
+    let cloudflareScript = document.createElement('script');
+    cloudflareScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    cloudflareScript.async = true;
+    cloudflareScript.defer = true;
+    document.head.appendChild(cloudflareScript);
+
 
 
     let webFileId = "";
@@ -119,7 +125,7 @@
     let cloudflareCaptchaToken = "";
     let timeOut = null;
     let slotInfo = {
-        appointment_date: "04/09/2025",
+        appointment_date: "2025/09/05",
         appointment_time: "09:00-09:59"
     };
     let activeStep = 0;
@@ -129,6 +135,9 @@
     let user_email = "";
     let user_phone = "";
 
+    let ip = "160.187.130.93";
+
+    const setMessage = (msg) => document.getElementById("message").textContent = msg;
 
     const setAppDataToIvacPage = () => {
         try {
@@ -171,7 +180,7 @@
         const day = tomorrow.getDate();
         const month = tomorrow.getMonth() + 1; // Months are zero-indexed
         const year = tomorrow.getFullYear();
-        return `${day}/${month}/${year}`;
+        return `${year}/${month < 10 ? '0' + month : month}/${day < 10 ? '0' + day : day}`;
     }
 
     const getIvacAuthData = ()=>{
@@ -192,8 +201,6 @@
             setMessage(e.message)
         }
     }
-
-    const setMessage = (msg) => document.getElementById("message").textContent = msg;
 
     function getRandomInt(min, max) {
         min = Math.ceil(min); // Ensure min is an integer
@@ -230,6 +237,7 @@
 
         console.log(allCookies);
     }
+
     const PostRequest = async (url, body) => {
         return new Promise((resolve, reject) => {
             setTimeout(async () => {
@@ -238,16 +246,57 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Accept": "application/json",
+                            "Accept": "application/json, text/plain, */*",
                             "Authorization": `Bearer ${authToken}`,
-                            "language": "en",
-                            "Referer": "https://payment.ivacbd.com/",
-                            "Origin": "https://payment.ivacbd.com",
-                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36",
-                            "scheme": "https",
-                            "cache-control": "no-cache",
-                            "Connection": "keep-alive",
-                            "content-encoding": "gzip"
+                            "language": "en-US,en;q=0.9",
+                            // "Authority": "payment.ivacbd.com",
+                            // "Referer": "https://payment.ivacbd.com/",
+                            // "Origin": "https://payment.ivacbd.com",
+                            // "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+                            // "scheme": "https",
+                            // "cache-control": "no-cache",
+                            // "Connection": "keep-alive",
+                            // "content-encoding": "gzip, deflate, br, zstd",
+                            // "Priority": "u=0, i",
+                            // "upgrade-insecure-requests":"0",
+                            // "cf-turnstile-response": cloudflareCaptchaToken,
+                            // "cf-turnstile-language": "en",
+                            // "Cf-Ray": "979b098b2808814e-DAC",
+                            // "Cf-Visitor": "2",
+                            // "Cf-Connecting-Ip": ip,
+                            // "Expect-CT": "max-age=31536000, enforce",
+                            // "Referrer-Policy": "strict-origin-when-cross-origin",
+                            // "Expect": "100-continue",
+                            // "Expires": "thu, 25 sep 2025 11:25:16 gmt",
+                            // "Referer-policy": "strict-origin-when-cross-origin",
+                            // "Server": "cloudflare",
+                            // "Server-Timing":" cf-cache-status; d=0, cf-rb-cache; d=0",
+                            // "Vary": "Accept-Encoding",
+                            // "X-Content-Type-Options": "nosniff",
+                            // "X-Frame-Options": "DENY",
+                            // "X-XSS-Protection": "1; mode=block",
+                            // "X-Permitted-Cross-Domain-Policies": "none",
+                            // "Access-Control-Allow-Origin": "*",
+                            // "Cookie": "cf_clearance=G0evVC9yXqdwQHt0uJB4pBo4bHccM.gMWCsF_RD.L1w-1756903617-1.2.1.1-Qu5VTgylUkmKbs854Z5hfYAuhBAeZ7vmIO0Zz2DwmRneGVTBwUtC7LSpR9n6vB1fbnxncRyAhGzJaaY2lDc10l5l_Ba5wnbqbsZDy5Yod6kbi7XWuAVesR62KVzgEgiG92nzebQ7LZMR8HHnw12A0zIY1xwCYC9CoM_IhCzPbemd9lwbwtUOsiLFeD.FudAaTQXYKpipcMubxy8AIlSBx3DC65NOvcffscuvkyDMJ54",
+                            // "Forwarded": `for="172.66.165.241";proto=https;by=${ip}`,
+                            // "Forwarded-For": ip,
+                            // "Forwarded-Proto": "https",
+                            // "Forwarded-By": ip,
+                            // "X-Forwarded-For": `172.66.165.241, ${ip}, 203.0.113.195, 192.0.2.123, 198.51.100.42`,
+                            // "X-Forwarded-Proto": "https",
+                            // "X-Forwarded-By": ip,
+                            // "X-Forwarded-Host": "payment.ivacbd.com",
+                            // "X-Forwarded-Port": "443",
+                            // "X-Forwarded-Server": "payment.ivacbd.com",
+                            // "X-Forwarded-Server-Port": "443",
+                            // "X-Forwarded-Server-Proto": "https",
+                            // "X-Forwarded-Server-By": ip,
+                            // "X-Forwarded-Server-Host": "ivacbd.com",
+                            // "X-TLS-Bits":"128",
+                            // "X-TLS-Cipher": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                            // "X-nr-eternal-service": "external",
+                            // "X-SSL-CLIENT-CN": "carlos"
+
                         },
                         body: JSON.stringify(body),
                     });
@@ -263,7 +312,7 @@
                     setMessage(e.message);
                     reject(e);
                 }
-            }, getRandomInt(3000, 7000));
+            }, getRandomInt(1000, 5000));
 
         });
     }
@@ -295,7 +344,7 @@
                     setMessage(e.message);
                     reject(e);
                 }
-            }, getRandomInt(2000, 5000));
+            }, getRandomInt(1000, 5000));
         });
     }
 
@@ -534,8 +583,8 @@
         }
 
         const payload = {
-            appointment_date: slotInfo.appointment_date || "04/09/2025",
-            appointment_time: slotInfo.appointment_time || "09:00-09:59",
+            appointment_date: slotInfo.appointment_date,
+            appointment_time: slotInfo.appointment_time,
             k5t0g8_token_y4v9f6: cloudflareCaptchaToken,
             selected_payment: {
                 name: "VISA",
@@ -614,7 +663,6 @@
                 <button id="tab-1"><i class="bi bi-info-circle"></i> Info</button>
                 <button id="tab-2"><i class="bi bi-lock"></i> Otp</button>
                 <button id="tab-3"><i class="bi bi-calendar"></i> Slot</button>
-                <button id="tab-4"><i class="bi bi-settings"></i>IVAC</button>
             </div>
             <div class="tab-content-body py-4 w-full overflow-y-auto h-[300px] text-sm">
                 <div id="tab-0" class="tab-content">
@@ -631,9 +679,16 @@
                             <input type="text" id="otp" name="otp" required placeholder="Enter OTP" >
                             <button id="verify-login-otp-button" type="button">Verify</button>
                             <p>Or</p>
+                            <div class="flex flex-col gap-2 py-3">
+                                <div class="cf-turnstile" data-sitekey="0x4AAAAAABpNUpzYeppBoYpe"></div>
+                                <div class="flex gap-2">
+                                    <button id="cf-button" type="button">Generate CF token</button>
+                                    <button id="get-captcha-token-button" type="button">Get CF token</button>
+                                </div>
+                            </div>
                             <button id="get-auth-token-button" type="button">Get ivac auth data</button>
-                            <button id="get-captcha-token-button" type="button">Get captcha token</button>
                             <button id="get-cookie-button" class="hidden" type="button">Get cookie</button>
+                            <button id="set-app-info-to-ivac-button" type="button">Set App Info</button>
                         </div>
                     </div>
                 </div>
@@ -706,18 +761,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab-4" class="tab-content d-none"> 
-                    <div>
-                        <div>IVAC</div>
-                        <div>
-                            <input type="text" id="ivac-input" placeholder="Enter IVAC" maxLength="6" />
-                            <button id="set-app-info-to-ivac-button" type="button">Set App Info</button>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                
             </div>
             
         </div>
@@ -742,6 +785,13 @@
 
     htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
     htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
+    htmlData.querySelector('#cf-button').addEventListener('click', async function() {
+        await turnstile.reset();
+        setMessage("Generating Cloudflare token...");
+        await turnstile.execute();
+        setMessage("Cloudflare token generated");
+        await getCloudflareCaptchaToken();
+    });
     htmlData.querySelector('#get-auth-token-button').addEventListener('click', async () => {
         getIvacAuthData();
     });
@@ -758,6 +808,13 @@
     htmlData.querySelector('#get-cookie-button').addEventListener('click', async () => {
         await getCookie();
     });
+    htmlData.querySelector('#set-app-info-to-ivac-button').addEventListener('click', async function () {
+        await setAppDataToIvacPage();
+    });
+
+
+
+
 
 
     htmlData.querySelector('#tab-1').addEventListener('click', () => {
@@ -789,6 +846,9 @@
 
 
 
+
+
+
     htmlData.querySelector('#tab-2').addEventListener('click', function () {
         toggleTab(2);
     });
@@ -816,16 +876,6 @@
         await payNow();
     });
 
-
-
-
-
-    htmlData.querySelector('#tab-4').addEventListener('click', function () {
-        toggleTab(4);
-    });
-    htmlData.querySelector('#set-app-info-to-ivac-button').addEventListener('click', async function () {
-        await setAppDataToIvacPage();
-    });
     document.body.appendChild(htmlData);
 
 
@@ -928,7 +978,7 @@
 
 // Initialize all data when script starts
     async function init() {
-        [slotInfo.appointment_date] = await Promise.all([getTommorrowDate()]);
+        slotInfo.appointment_date = getTommorrowDate();
         await updateIvacCenters(4);
         await getIvacAuthData();
         htmlData.querySelector("#date-input").value = slotInfo.appointment_date;
