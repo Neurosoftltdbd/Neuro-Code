@@ -136,8 +136,10 @@
     let user_phone = "";
 
     let ip = "160.187.130.93";
+    let cfCookie = "";
 
     const setMessage = (msg) => document.getElementById("message").textContent = msg;
+
 
     const setAppDataToIvacPage = () => {
         try {
@@ -234,8 +236,7 @@
             }
             return cookies;
         }, {});
-
-        console.log(allCookies);
+        console.log("All cookies:",allCookies);
     }
 
     const PostRequest = async (url, body) => {
@@ -249,53 +250,39 @@
                             "Accept": "application/json, text/plain, */*",
                             "Authorization": `Bearer ${authToken}`,
                             "language": "en-US,en;q=0.9",
-                            // "Authority": "payment.ivacbd.com",
-                            // "Referer": "https://payment.ivacbd.com/",
-                            // "Origin": "https://payment.ivacbd.com",
-                            // "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
-                            // "scheme": "https",
-                            // "cache-control": "no-cache",
-                            // "Connection": "keep-alive",
-                            // "content-encoding": "gzip, deflate, br, zstd",
-                            // "Priority": "u=0, i",
-                            // "upgrade-insecure-requests":"0",
-                            // "cf-turnstile-response": cloudflareCaptchaToken,
-                            // "cf-turnstile-language": "en",
-                            // "Cf-Ray": "979b098b2808814e-DAC",
-                            // "Cf-Visitor": "2",
-                            // "Cf-Connecting-Ip": ip,
-                            // "Expect-CT": "max-age=31536000, enforce",
-                            // "Referrer-Policy": "strict-origin-when-cross-origin",
-                            // "Expect": "100-continue",
-                            // "Expires": "thu, 25 sep 2025 11:25:16 gmt",
-                            // "Referer-policy": "strict-origin-when-cross-origin",
-                            // "Server": "cloudflare",
-                            // "Server-Timing":" cf-cache-status; d=0, cf-rb-cache; d=0",
-                            // "Vary": "Accept-Encoding",
-                            // "X-Content-Type-Options": "nosniff",
-                            // "X-Frame-Options": "DENY",
-                            // "X-XSS-Protection": "1; mode=block",
-                            // "X-Permitted-Cross-Domain-Policies": "none",
-                            // "Access-Control-Allow-Origin": "*",
-                            // "Cookie": "cf_clearance=G0evVC9yXqdwQHt0uJB4pBo4bHccM.gMWCsF_RD.L1w-1756903617-1.2.1.1-Qu5VTgylUkmKbs854Z5hfYAuhBAeZ7vmIO0Zz2DwmRneGVTBwUtC7LSpR9n6vB1fbnxncRyAhGzJaaY2lDc10l5l_Ba5wnbqbsZDy5Yod6kbi7XWuAVesR62KVzgEgiG92nzebQ7LZMR8HHnw12A0zIY1xwCYC9CoM_IhCzPbemd9lwbwtUOsiLFeD.FudAaTQXYKpipcMubxy8AIlSBx3DC65NOvcffscuvkyDMJ54",
-                            // "Forwarded": `for="172.66.165.241";proto=https;by=${ip}`,
-                            // "Forwarded-For": ip,
-                            // "Forwarded-Proto": "https",
-                            // "Forwarded-By": ip,
-                            // "X-Forwarded-For": `172.66.165.241, ${ip}, 203.0.113.195, 192.0.2.123, 198.51.100.42`,
-                            // "X-Forwarded-Proto": "https",
-                            // "X-Forwarded-By": ip,
-                            // "X-Forwarded-Host": "payment.ivacbd.com",
-                            // "X-Forwarded-Port": "443",
-                            // "X-Forwarded-Server": "payment.ivacbd.com",
-                            // "X-Forwarded-Server-Port": "443",
-                            // "X-Forwarded-Server-Proto": "https",
-                            // "X-Forwarded-Server-By": ip,
-                            // "X-Forwarded-Server-Host": "ivacbd.com",
-                            // "X-TLS-Bits":"128",
-                            // "X-TLS-Cipher": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-                            // "X-nr-eternal-service": "external",
-                            // "X-SSL-CLIENT-CN": "carlos"
+                            "Authority": "ivacbd.com",
+                            "Referer": "https://ivacbd.com/",
+                            "Origin": "https://ivacbd.com",
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+                            "scheme": "https",
+                            "cache-control": "no-cache",
+                            "Connection": "keep-alive",
+                            "content-encoding": "gzip, deflate, br, zstd",
+                            "Cf-Ray": "97b0a8a2bf37f93f-SIN",
+                            "Priority": "u=0, i",
+                            "X-Forwarded-For": `172.66.165.241, ${ip}, 203.0.113.195, 192.0.2.123, 198.51.100.42`,
+                            "X-Forwarded-Proto": "https",
+                            "X-Forwarded-By": ip,
+                            "X-Forwarded-Host": "ivacbd.com",
+                            "X-Forwarded-Port": "443",
+                            "X-Forwarded-Server": "ivacbd.com",
+                            "X-Forwarded-Server-Port": "443",
+                            "X-Forwarded-Server-Proto": "https",
+                            "X-Forwarded-Server-By": ip,
+                            "X-Forwarded-Server-Host": "ivacbd.com",
+                            "cf-turnstile-response": cloudflareCaptchaToken,
+                            "Expect-CT": "max-age=31536000, enforce",
+                            "Referrer-Policy": "strict-origin-when-cross-origin",
+                            "Expect": "100-continue",
+                            "Expires": "thu, 25 sep 2025 11:25:16 gmt",
+                            "Referer-policy": "strict-origin-when-cross-origin",
+                            "Server": "ivacbd.com",
+                            "X-Content-Type-Options": "1000",
+                            "X-Frame-Options": "ALLOW-FROM https://ivacbd.com",
+                            "X-XSS-Protection": "1; mode=block",
+                            "X-Permitted-Cross-Domain-Policies": "ALL",
+                            "Access-Control-Allow-Origin": "*",
+                            "Cookie":cfCookie,
 
                         },
                         body: JSON.stringify(body),
@@ -687,7 +674,7 @@
                                 </div>
                             </div>
                             <button id="get-auth-token-button" type="button">Get ivac auth data</button>
-                            <button id="get-cookie-button" class="hidden" type="button">Get cookie</button>
+                            <button id="get-cookie-button" class="" type="button">Get cookie</button>
                             <button id="set-app-info-to-ivac-button" type="button">Set App Info</button>
                         </div>
                     </div>
@@ -708,6 +695,7 @@
                             </select>
                         </div>
                         <div>
+                        
                             <select name="ivac_center" id="select-ivac-center">
                             
                             </select>
@@ -811,6 +799,8 @@
     htmlData.querySelector('#set-app-info-to-ivac-button').addEventListener('click', async function () {
         await setAppDataToIvacPage();
     });
+
+
 
 
 

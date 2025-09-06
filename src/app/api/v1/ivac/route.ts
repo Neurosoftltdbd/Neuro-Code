@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {PostRequest} from "@/app/dashboard/ivac/NetworkRequest";
+import {PostRequest} from "@/utility/NetworkRequest";
 
 let ivacData: object = {
     webfileId: "",

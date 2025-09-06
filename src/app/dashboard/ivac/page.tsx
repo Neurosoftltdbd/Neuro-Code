@@ -1,6 +1,8 @@
 "use client";
 import {useState} from "react";
-import {PostRequest} from "./NetworkRequest";
+import {PostRequest} from "../../../utility/NetworkRequest";
+import LoginComponent from "@/component/ivac/LoginComponent";
+import MessageListComponent from "@/component/ivac/MessageListComponent";
 
 
 const IvacPanelPage = () => {
@@ -33,52 +35,7 @@ const IvacPanelPage = () => {
         familyData: [] as { name: string, webfile_no: string, again_webfile_no: string }[]
     });
 
-    const [loginData, setLoginData] = useState({
-        mobile_no: "",
-        password: "",
-        captcha_token: cloudFlareToken,
-        answer: 1,
-        problem: "abc",
-        otp: ""
-    });
 
-    const verifyMobile = async ()=>{
-        if(loginData.mobile_no === ""){
-            setMessage("Mobile number is required");
-            return;
-        }
-        const res = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify",{mobile_no: loginData.mobile_no}, retrying);
-        if(res.status === "success"){
-            setMessage(res.message);
-            setTimeout(()=>{sendLoginOtp()}, 5000);
-        }else {
-            setMessage(res.message);
-        }
-    }
-    const sendLoginOtp = async () => {
-        if(loginData.password === ""){
-            setMessage("Password is required");
-            return;
-        }
-        const res = await PostRequest("https://payment.ivacbd.com/api/v2/login",{mobile_no: loginData.mobile_no, password:loginData.password}, retrying);
-        if(res.status === "success"){
-            setMessage(res.message);
-        }else {
-            setMessage(res.message);
-        }
-    }
-    const verifyLoginOtp = async () => {
-        if(loginData.otp === ""){
-            setMessage("OTP is required");
-            return;
-        }
-        const res = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp",{mobile_no: loginData.mobile_no, password:loginData.password, otp:loginData.otp}, retrying);
-        if(res.status === "success"){
-            setMessage(res.message);
-        }else {
-            setMessage(res.message);
-        }
-    }
 
 
 
@@ -108,25 +65,10 @@ const IvacPanelPage = () => {
             <div className="flex gap-4">
                 <div className="content mt-4 w-2/3 ">
                     <div className={"h-[80vh] overflow-y-scroll no-scrollbar"}>
+                        <LoginComponent/>
                         {
                                 <>
-                                    <div className="login-card flex flex-col gap-2 bg-gray-100 shadow-lg rounded p-4 my-2">
-                                        <div className="flex justify-between gap-3 items-center">
-                                            <input value={loginData.mobile_no} onChange={(e) => setLoginData({...loginData, mobile_no: e.target.value})}
-                                                   type="tel" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC mobile number" autoComplete="tel"/>
-                                            <button onClick={verifyMobile} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded">Verify mobile</button>
-                                        </div>
-                                        <div className="flex justify-between gap-3 items-center">
-                                            <input value={loginData.password} onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                                                   type="password" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter IVAC password"/>
-                                            <button onClick={sendLoginOtp} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded w-fit">Send login OTP</button>
-                                        </div>
-                                        <div className="flex justify-between gap-3 items-center">
-                                            <input value={loginData.otp} onChange={(e) => setLoginData({...loginData, otp: e.target.value})}
-                                                   type="text" className="rounded border border-gray-300 p-2 my-2 w-full" placeholder="Enter 6 digit OTP" />
-                                            <button onClick={verifyLoginOtp} className="bg-green-700 hover:bg-green-800 text-white p-2 text-nowrap rounded w-fit">Verify OTP</button>
-                                        </div>
-                                    </div>
+
 
                                     <div className="application-data shadow-lg rounded p-4 my-2">
                                         <h2>Application Data</h2>
@@ -175,15 +117,7 @@ const IvacPanelPage = () => {
                     </div>
                 </div>
                 <div className="log flex flex-col mt-4 w-1/3">
-                    <div className="log-header flex items-center justify-between">
-                        <h3>Log message</h3>
-                        <button onClick={() => setMessages([])} id="clear-log" className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded w-fit">Clear Log</button>
-                    </div>
-                    <div id="log-message">
-                        {
-                            messages && messages.map((msg, index) => <p key={index}>{"> " + msg}</p>)
-                        }
-                    </div>
+                    <MessageListComponent/>
                 </div>
             </div>
         </div>
