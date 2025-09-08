@@ -111,41 +111,54 @@
     cloudflareScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
     cloudflareScript.async = true;
     cloudflareScript.defer = true;
+    cloudflareScript.crossOrigin = 'anonymous';
     document.head.appendChild(cloudflareScript);
 
 
 
-    let webFileId = "";
-    let familyCount = 0;
-    let fullName = "";
-    let email = "";
-    let phone = "";
-    let familyMembers = [];
-    let authToken = "" || localStorage.getItem('authToken');
-    let cloudflareCaptchaToken = "";
-    let timeOut = null;
-    let slotInfo = {
-        appointment_date: "2025/09/05",
-        appointment_time: "09:00-09:59"
+    let authInfo = {
+        name: "NHRepon",
+        email: "OwXyQ@example.com",
+        mobile: "01612345678",
+        password: "YourPassword123",
+        captchaToken: "",
+        authToken: "",
+        cfClearance: "",
     };
-    let activeStep = 0;
-    let auth_email= "";
-    let auth_name = "";
-    let auth_phone = "";
-    let user_email = "";
-    let user_phone = "";
 
+    let appInfo = {
+        webFileId: "BGDRS54D43FD",
+        highCommission: "4",
+        ivacCenter: "8",
+        visaType: "13",
+        familyCount: "0",
+        familyData: [],
+        visitPurpose: "Medical Checkup purpose entry",
+        appointmentDate: "2025/09/05",
+        appointmentTime: "09:00-09:59",
+        paymentMethod: {name: "VISA", slug: "visacard", link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+        },
+        captchaToken: "",
+
+    }
+
+    let autoProcess = false;
+    let timeOut = autoProcess?getRandomInt(1000, 5000):0;
     let ip = "160.187.130.93";
     let cfCookie = "";
 
-    const setMessage = (msg) => document.getElementById("message").textContent = msg;
+    const setMessage = (success, msg) => {
+        let dom = document.getElementById("message");
+        dom.textContent = msg;
+        dom.style.color = success ? "green" : "red";
+    };
 
 
     const setAppDataToIvacPage = () => {
         try {
             const centerElements = document.querySelectorAll("#center");
             if (centerElements.length < 2) {
-                throw new Error("Required center elements not found");
+                setMessage(false, "Required center elements not found");
             }
 
             const setValue = (id, value) => {
@@ -157,7 +170,7 @@
             centerElements[0].value = document.getElementById("select-high-commission")?.value || "";
             setValue("webfile_id", document.getElementById("webfile")?.value || "");
             setValue("first-name", document.getElementById("webfile")?.value || "");
-            centerElements[1].value = document.getElementById("select-ivac-centerr")?.value || "";
+            centerElements[1].value = document.getElementById("select-ivac-center")?.value || "";
             setValue("visa_type", document.getElementById("select-visa-type")?.value || "");
             setValue("family_count", familyCount || "");
             setValue("visit_purpose", document.getElementById("visit-purpose")?.value || "");
@@ -169,14 +182,13 @@
                 button.classList.remove("cursor-not-allowed");
             }
 
-            setMessage("App data set successfully");
+            setMessage(true, "App data set successfully");
         } catch (e) {
-            console.error("Error in setAppDataToIvacPage:", e);
-            setMessage(`Error: ${e.message}`);
+            setMessage(false, `Error: ${e.message}`);
         }
     };
 
-    const getTommorrowDate = () => {
+    const getTomorrowDate = () => {
         const today = new Date();
         const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
         const day = tomorrow.getDate();
@@ -187,20 +199,15 @@
 
     const getIvacAuthData = ()=>{
         try {
-            authToken = localStorage.getItem("access_token");
-            cloudflareCaptchaToken = localStorage.getItem("captchaToken");
-            auth_email = localStorage.getItem("auth_email");
-            auth_name = localStorage.getItem("auth_name");
-            auth_phone = localStorage.getItem("auth_phone");
-            user_email = localStorage.getItem("user_email");
-            user_phone = localStorage.getItem("user_phone");
+            authInfo.authToken = localStorage.getItem("access_token");
+            authInfo.captchaToken = localStorage.getItem("captchaToken");
+            authInfo.email = localStorage.getItem("auth_email");
+            authInfo.name = localStorage.getItem("auth_name");
+            authInfo.phone = localStorage.getItem("auth_phone");
             activeStep = localStorage.getItem("activeStep");
-            localStorage.setItem("ivacAuthToken", authToken);
-            // htmlData.querySelector("#logout").classList.remove("hidden");
-            // htmlData.querySelector("#login").classList.add("hidden");
-            setMessage("Token fetched successfully");
+            setMessage(true, "Token fetched successfully");
         }catch (e) {
-            setMessage(e.message)
+            setMessage(false, e.message)
         }
     }
 
@@ -215,12 +222,12 @@
             const checkToken = () => {
                 const token = document.querySelector('input[name="cf-turnstile-response"]').value;
                 if (token) {
-                    setMessage("Cloudflare token found");
+                    setMessage(true, "Cloudflare token found");
                     localStorage.setItem("captchaToken", token);
-                    cloudflareCaptchaToken = token;
+                    authInfo.captchaToken = token;
                     resolve(token);
                 } else {
-                    setMessage("Waiting for cloudflare token...");
+                    setMessage(false, "Waiting for cloudflare token...");
                     setTimeout(checkToken, 5000);
                 }
             };
@@ -229,14 +236,19 @@
     };
 
     function getCookie() {
+        if (!document.cookie) return {};
         const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
             const [name, value] = cookie.split('=').map(c => c.trim());
             if (name) {
-                cookies[name] = decodeURIComponent(value);
+                cookies[name] = decodeURIComponent(value || "");
             }
             return cookies;
         }, {});
-        console.log("All cookies:",allCookies);
+
+        console.log("All cookies:", allCookies);
+        console.log("cf_clearance:", allCookies['cf_clearance'] || "Not found");
+        authInfo.cfClearance = allCookies['cf_clearance'] || "";
+        return allCookies;
     }
 
     const PostRequest = async (url, body) => {
@@ -248,58 +260,46 @@
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json, text/plain, */*",
-                            "Authorization": `Bearer ${authToken}`,
-                            "language": "en-US,en;q=0.9",
-                            "Authority": "ivacbd.com",
-                            "Referer": "https://ivacbd.com/",
-                            "Origin": "https://ivacbd.com",
-                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+                            "Authorization": `Bearer ${authInfo.authToken}`,
+                            "Language": "en",
+                            "Cookie": `cf_clearance=${authInfo.cfClearance}; __cf_bm=${getCookie().__cf_bm || ""}; captcha_token=${cloudflareCaptchaToken};`,
+                            "authority": "payment.ivacbd.com",
                             "scheme": "https",
-                            "cache-control": "no-cache",
-                            "Connection": "keep-alive",
-                            "content-encoding": "gzip, deflate, br, zstd",
-                            "Cf-Ray": "97b0a8a2bf37f93f-SIN",
-                            "Priority": "u=0, i",
-                            "X-Forwarded-For": `172.66.165.241, ${ip}, 203.0.113.195, 192.0.2.123, 198.51.100.42`,
-                            "X-Forwarded-Proto": "https",
-                            "X-Forwarded-By": ip,
-                            "X-Forwarded-Host": "ivacbd.com",
-                            "X-Forwarded-Port": "443",
-                            "X-Forwarded-Server": "ivacbd.com",
-                            "X-Forwarded-Server-Port": "443",
-                            "X-Forwarded-Server-Proto": "https",
-                            "X-Forwarded-Server-By": ip,
-                            "X-Forwarded-Server-Host": "ivacbd.com",
-                            "cf-turnstile-response": cloudflareCaptchaToken,
-                            "Expect-CT": "max-age=31536000, enforce",
-                            "Referrer-Policy": "strict-origin-when-cross-origin",
-                            "Expect": "100-continue",
-                            "Expires": "thu, 25 sep 2025 11:25:16 gmt",
-                            "Referer-policy": "strict-origin-when-cross-origin",
-                            "Server": "ivacbd.com",
-                            "X-Content-Type-Options": "1000",
-                            "X-Frame-Options": "ALLOW-FROM https://ivacbd.com",
-                            "X-XSS-Protection": "1; mode=block",
-                            "X-Permitted-Cross-Domain-Policies": "ALL",
-                            "Access-Control-Allow-Origin": "*",
-                            "Cookie":cfCookie,
-
+                            "accept-encoding": "gzip, deflate, br, zstd",
+                            "accept-language": "en-US,en;q=0.9",
+                            "Origin": "https://payment.ivacbd.com",
+                            "Priority": "u=1,i",
+                            "Referer": "https://payment.ivacbd.com/",
+                            "sec-ch-ua":`"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"`,
+                            "sec-ch-ua-arch":`"x86"`,
+                            "sec-ch-ua-bitness":`"64"`,
+                            "sec-ch-ua-full-version":`"139.0.7258.157"`,
+                            "sec-ch-ua-full-version-list":`"Not;A=Brand";v="99.0.0.0", "Google Chrome";v="139.0.7258.157", "Chromium";v="139.0.7258.157"`,
+                            "sec-ch-ua-mobile":`"?0"`,
+                            "sec-ch-ua-model":`""`,
+                            "sec-ch-ua-platform":`"Windows"`,
+                            "sec-ch-ua-platform-version":`"10.0.0"`,
+                            "sec-fetch-dest":"empty",
+                            "sec-fetch-mode":"cors",
+                            "sec-fetch-site":"same-origin",
+                            "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
                         },
                         body: JSON.stringify(body),
                     });
                     const data = await response.json();
                     if (response.ok) {
+                        setMessage(true, data.message);
                         resolve(data);
-                        setMessage(data.message);
+                        return data;
                     } else {
-                        setMessage(data.message);
+                        setMessage(false, data.message);
                         return {status: "failed", data: data};
                     }
                 } catch (e) {
-                    setMessage(e.message);
+                    setMessage(false, e.message);
                     reject(e);
                 }
-            }, getRandomInt(1000, 5000));
+            }, timeOut);
 
         });
     }
