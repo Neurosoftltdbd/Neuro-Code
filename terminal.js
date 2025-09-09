@@ -3,7 +3,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
-// node is.js
+// node terminal.js
 const run =async () => {
     const mobile = "01829938427";
     const password = "Repon7248";

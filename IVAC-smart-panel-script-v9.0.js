@@ -188,6 +188,16 @@
             setMessage(false, error.message);
         }
     }
+    const getSavedData = ()=>{
+        try {
+            authInfo = JSON.parse(localStorage.getItem("auth-info"));
+            appInfo = JSON.parse(localStorage.getItem("app-info"));
+            settings = JSON.parse(localStorage.getItem("setting"));
+            setMessage(true, "Data loaded successfully");
+        } catch (error) {
+            setMessage(false, error.message);
+        }
+    }
 
     const setAppDataToIvacPage = () => {
         try {
@@ -441,14 +451,13 @@
             authInfo.email = response.data.email;
             authInfo.slotInfo = response.data.slot_available;
             authInfo.authToken = response.data.access_token;
-
-            // await localStorage.setItem("access_token", response.data.access_token);
+            await localStorage.setItem("activeStep", "1");
             // await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
-            // await localStorage.setItem("user_phone", response.data.mobile_no);
-            // await localStorage.setItem("user_email", response.data.email);
-            // await localStorage.setItem("auth_name", response.data.name);
-            // await localStorage.setItem("auth_email", response.data.email);
-            // await localStorage.setItem("auth_phone", response.data.mobile_no);
+            await localStorage.setItem("user_phone", response.data.mobile_no);
+            await localStorage.setItem("user_email", response.data.email);
+            await localStorage.setItem("auth_name", response.data.name);
+            await localStorage.setItem("auth_email", response.data.email);
+            await localStorage.setItem("auth_phone", response.data.mobile_no);
 
             const data = await response.data;
             for (let key in data) {
@@ -483,6 +492,7 @@
             const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-r5s7h3-submit-hyju6t", payload);
             if (response.status === "success") {
                 setMessage(true, response.message + " Payable amount: " + response.data.payable_amount);
+                localStorage.setItem("activeStep", "2");
                 if (settings.autoProcess){
                     await sendPersonalInfoToServer();
                 }
@@ -512,6 +522,7 @@
         const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
         if (personalInfoSubmit.status === "success") {
             setMessage(true, personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
+            localStorage.setItem("activeStep", "3");
             if (settings.autoProcess){
                 await sendOverviewToServer();
             }
@@ -522,6 +533,7 @@
         const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
         if (sendOverview.status === "success") {
             setMessage(true, sendOverview.message);
+            localStorage.setItem("activeStep", "4");
             if (settings.autoProcess){
                 await payNow();
             }
@@ -735,8 +747,10 @@
                     </div>
                     <div id="slot-captcha-content" class="flex flex-col gap-2 w-full">
                         <input id="date-input" type="text" value="${appInfo.appointmentDate}">
-                        <input id="time-input" type="text" value="${appInfo.appointmentTime}">
-                        <button id="slot-button" class="hidden">Get Slots</button>
+                        <div class="flex gap-2 items-center">
+                            <input id="time-input" type="text" value="${appInfo.appointmentTime}" class="w-full">
+                            <button id="slot-button" class="w-fit">Get Slots</button>
+                        </div>
                         <div id="slot-display">No slot Selected</div>
                         <div class="flex flex-col gap-2 py-2">
                             <button id="paynow-button">Pay Now</button>
@@ -755,7 +769,8 @@
                     <div class="flex gap-2 flex-wrap my-2">
                         <button id="get-auth-token-button" type="button">Get ivac auth data</button>
                         <button id="get-cookie-button" class="" type="button">Get cookie</button>
-                        <button id="set-app-info-to-ivac-button" type="button">Set App Info</button> 
+                        <button id="set-app-info-to-ivac-button" type="button">Set App Info to IVAC</button> 
+                        <button id="get-saved-data-button" type="button">Get saved data</button> 
                     </div>
                 </div>
             </div>
@@ -856,6 +871,9 @@
     htmlData.querySelector('#retry-count-input').addEventListener('change', function () {
         settings.retryCount = htmlData.querySelector('#retry-count-input').value;
     });
+    htmlData.querySelector('#get-saved-data-button').addEventListener('click', function () {
+        getSavedData();
+    });
 
 
 
@@ -921,12 +939,15 @@
         htmlData.style.right = '20px';
         htmlData.style.top = '100px';
     }
-    document.addEventListener('dragstart', function (e) {
-        e.preventDefault();
+    htmlData.addEventListener('dragstart', function (e) {
+        const rect = htmlData.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
         isDragging = true;
-        offsetX = e.clientX - htmlData.offsetLeft;
-        offsetY = e.clientY - htmlData.offsetTop;
+        // Required for Firefox
+        e.dataTransfer.setData('text/plain', '');
     });
+
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
         if (isDragging) {
@@ -955,6 +976,7 @@
     async function init() {
         await updateIvacCenters(1);
         await getIvacAuthData();
+        await loadSavedData();
 
         if (!authInfo.captchaToken) {
             const maxAttempts = 10; // Maximum number of attempts
