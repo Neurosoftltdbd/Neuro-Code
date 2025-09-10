@@ -1,6 +1,5 @@
 "use client";
 import {useState} from "react";
-import {PostRequest} from "../../../utility/NetworkRequest";
 import LoginComponent from "@/component/ivac/LoginComponent";
 import MessageListComponent from "@/component/ivac/MessageListComponent";
 
@@ -10,11 +9,7 @@ const IvacPanelPage = () => {
     const [messages, setMessages] = useState<string[]>([]);
     const setMessage = (message: string) => {setMessages([...messages, message]);}
     const [cloudFlareToken, setCloudFlareToken] = useState("");
-    const [personalInfo, setPersonalInfo] = useState({
-        name: "",
-        dob: "",
-        gender: "",
-    });
+
     const ivacCenters = [
         [[9, "IVAC, BARISAL"], [12, "IVAC, JESSORE"], [17, "IVAC, Dhaka (JFP)"], [20, "IVAC, SATKHIRA"]],
         [[5, "IVAC, CHITTAGONG"], [21, "IVAC, CUMILLA"], [22, "IVAC, NOAKHALI"], [23, "IVAC, BRAHMANBARIA"]],
@@ -87,7 +82,7 @@ const IvacPanelPage = () => {
                                             <label htmlFor="ivacCenter">Select IVAC Center</label>
                                             <select value={appData.ivac_id} onChange={(e) => setAppData({...appData, ivac_id: e.target.value})} id="ivacCenter" className="rounded border border-gray-300 p-2">
                                                 {
-                                                    ivacCenters[appData.highcom - 1].map((center, index) => <option key={index} value={center[0]}>{center[1]}</option>)
+                                                    ivacCenters[Number(appData.highcom) - 1].map((center, index) => <option key={index} value={center[0]}>{center[1]}</option>)
                                                 }
                                             </select>
                                         </div>

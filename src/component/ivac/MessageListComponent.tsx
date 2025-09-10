@@ -15,8 +15,8 @@ const MessageListComponent = () => {
             <div id="log-message" className="flex flex-col gap-1 overflow-y-scroll h-[80vh] no-scrollbar ">
                 {
                     messageList && messageList.map((item, index) => item.success ?
-                        <p key={index} className="text-green-600"><i className="bi bi-check-circle-fill"></i> {item.message}</p>
-                        : <p key={index} className="text-red-600"><i className="bi bi-x-circle-fill"></i> {item.message}</p>)
+                        <p key={index} className="text-green-600 p-1"><i className="bi bi-check-circle-fill"></i> {item.message}</p>
+                        : <p key={index} className="text-red-600 p-1"><i className="bi bi-x-circle-fill"></i> {item.message}</p>)
                 }
             </div>
         </div>

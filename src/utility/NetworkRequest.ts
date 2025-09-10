@@ -1,10 +1,14 @@
-import axios from "axios";
+
+export interface ApiResponse {
+    status: 'success' | 'error';
+    message: string;
+    [key: string]: string; // For additional properties that might be in the response
+}
 
 let authToken = '';
 
 if (typeof window !== 'undefined') {
     authToken = localStorage.getItem('token') || '';
-
 }
 
 export const GetRequest = async (url: string, seconds: number) => {
@@ -21,7 +25,8 @@ export const GetRequest = async (url: string, seconds: number) => {
                         origin: 'https://ivacbd.com/',
                         scheme: 'https',
                         host: "ivacbd.com",
-                        useragent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36'
+                        useragent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/244.178.44.111 Safari/537.36',
+                        referer: "https://ivacbd.com/",
                     }
                 });
                 return await response.json();
@@ -32,8 +37,8 @@ export const GetRequest = async (url: string, seconds: number) => {
     });
 }
 
-export const PostRequest = async (url: string, data: object, seconds: number) => {
-    return new Promise((resolve, reject) => {
+export const PostRequest = async (url: string, data: object, seconds: number): Promise<ApiResponse> => {
+    return new Promise<ApiResponse>((resolve, reject) => {
         setTimeout(async ()=>{
             try {
                 const response = await fetch(url, {

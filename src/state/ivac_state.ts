@@ -1,6 +1,10 @@
 import {create} from "zustand/react";
+interface Message {
+    success: boolean;
+    message: string;
+}
 interface ivacStateType {
-    messageList: object[];
+    messageList: Message[];
     setMessage: (success: boolean, message: string) => void;
     clearMessage: () => void
 }

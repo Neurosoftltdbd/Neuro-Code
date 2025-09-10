@@ -32,7 +32,7 @@ export async function POST(request: NextRequest){
         visa_type: initialData.visaType,
         family_count: initialData.familyCount,
         visit_purpose: initialData.visitPurpose
-    });
+    }, 2);
     if (appInfo.status === "success") {
         messageList.push("App info submit success");
         const personalInfo = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/personal-info-submit", {
@@ -41,13 +41,13 @@ export async function POST(request: NextRequest){
             phone: initialData.phone,
             webfile_id: initialData.webfileId,
             family: initialData.familyData
-        });
+        }, 2);
         if (personalInfo.status === "success") {
             messageList.push("Personal info submit success");
-            const sendOverview = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/overview-submit", {});
+            const sendOverview = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/overview-submit", {}, 2);
             if (sendOverview.status === "success") {
                 messageList.push("Overview submit success");
-                const sendOtp = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-otp-sent", {resend: 0});
+                const sendOtp = await PostRequest("https://api-payment.ivacbd.com/api/v2/payment/pay-otp-sent", {resend: 0}, 2);
                 if (sendOtp.status === "success") {
                     messageList.push("Otp sent successfully");
                     return NextResponse.json({ status: "success", message: "Otp sent successfully", messageList: messageList });

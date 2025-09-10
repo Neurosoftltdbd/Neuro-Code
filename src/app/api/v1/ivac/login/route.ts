@@ -12,14 +12,16 @@ export async function POST(req: NextRequest) {
 
     const verifyMobileNo = await PostRequest("https://api-payment.ivacbd.com/api/v2/mobile-verify", {
         mobile_no: userData.mobileNo,
-        captcha_token:""
-    });
+        captcha_token:"",
+        answer: 1,
+        problem: "abc"
+    }, 2);
     if (verifyMobileNo.status === "success") {
         messageList.push("Mobile number verified successfully");
         const sendLoginOtp = await PostRequest("https://api-payment.ivacbd.com/api/v2/login", {
             mobile_no: userData.mobileNo,
             password: userData.password
-        });
+        }, 2);
         if (sendLoginOtp.status === "success") {
             messageList.push(sendLoginOtp.message);
             return NextResponse.json({ status: sendLoginOtp.status,message: sendLoginOtp.message, messageList: messageList });

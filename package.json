@@ -7,17 +7,20 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "st": "nodemon pup.js",
+    "st": "nodemon pup/pup.js",
     "obfuscate": "javascript-obfuscator nhrepon.js --output output.js"
   },
   "dependencies": {
     "axios": "^1.11.0",
+    "axios-retry": "^4.5.0",
     "bootstrap-icons": "^1.13.1",
     "framer-motion": "^12.23.12",
     "next": "15.5.0",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",
-    "puppeteer": "^24.17.0",
+    "puppeteer": "^24.19.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zustand": "^5.0.8"

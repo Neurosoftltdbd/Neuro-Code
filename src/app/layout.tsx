@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
+
 const poppins = Geist({
     subsets: ["latin"],
     variable: "--font-poppins",
