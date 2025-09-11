@@ -193,6 +193,12 @@
             authInfo = JSON.parse(localStorage.getItem("auth-info"));
             appInfo = JSON.parse(localStorage.getItem("app-info"));
             settings = JSON.parse(localStorage.getItem("setting"));
+
+            document.getElementById("webfile").value = appInfo.webFileId;
+            document.getElementById("select-high-commission").value = appInfo.highCommission;
+            document.getElementById("select-ivac-center").value = appInfo.ivacCenter;
+            document.getElementById("select-visa-type").value = appInfo.visaType;
+            document.getElementById("visit-purpose").value = appInfo.visitPurpose;
             setMessage(true, "Data loaded successfully");
         } catch (error) {
             setMessage(false, error.message);
@@ -311,30 +317,31 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Accept": "application/json, text/plain, */*",
                             "Authorization": `Bearer ${authInfo.authToken}`,
-                            "Language": "en",
-                            "Cookie": `cf_clearance=${authInfo.cfClearance}; __cf_bm=${getCookie().__cf_bm || ""}; captcha_token=${authInfo.captchaToken};`,
-                            "authority": "payment.ivacbd.com",
-                            "scheme": "https",
-                            "accept-encoding": "gzip, deflate, br, zstd",
-                            "accept-language": "en-US,en;q=0.9",
-                            "Origin": "https://payment.ivacbd.com",
-                            "Priority": "u=1,i",
-                            "Referer": "https://payment.ivacbd.com/",
-                            "sec-ch-ua":`"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"`,
-                            "sec-ch-ua-arch":`"x86"`,
-                            "sec-ch-ua-bitness":`"64"`,
-                            "sec-ch-ua-full-version":`"139.0.7258.157"`,
-                            "sec-ch-ua-full-version-list":`"Not;A=Brand";v="99.0.0.0", "Google Chrome";v="139.0.7258.157", "Chromium";v="139.0.7258.157"`,
-                            "sec-ch-ua-mobile":`"?0"`,
-                            "sec-ch-ua-model":`""`,
-                            "sec-ch-ua-platform":`"Windows"`,
-                            "sec-ch-ua-platform-version":`"10.0.0"`,
-                            "sec-fetch-dest":"empty",
-                            "sec-fetch-mode":"cors",
-                            "sec-fetch-site":"same-origin",
-                            "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+                            //"Accept": "application/json, text/plain, */*",
+                            // "Language": "en",
+                            // "Cookie": `cf_clearance=${authInfo.cfClearance}; __cf_bm=${getCookie().__cf_bm || ""}; captcha_token=${authInfo.captchaToken};`,
+                            // "authority": "payment.ivacbd.com",
+                            // "scheme": "https",
+                            // "accept-encoding": "gzip, deflate, br, zstd",
+                            // "accept-language": "en-US,en;q=0.9",
+                            // "Origin": "https://payment.ivacbd.com",
+                            // "Priority": "u=1,i",
+                            // "Referer": "https://payment.ivacbd.com/",
+                            // "sec-ch-ua":`"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"`,
+                            // "sec-ch-ua-arch":`"x86"`,
+                            // "sec-ch-ua-bitness":`"64"`,
+                            // "sec-ch-ua-full-version":`"139.0.7258.157"`,
+                            // "sec-ch-ua-full-version-list":`"Not;A=Brand";v="99.0.0.0", "Google Chrome";v="139.0.7258.157", "Chromium";v="139.0.7258.157"`,
+                            // "sec-ch-ua-mobile":`"?0"`,
+                            // "sec-ch-ua-model":`""`,
+                            // "sec-ch-ua-platform":`"Windows"`,
+                            // "sec-ch-ua-platform-version":`"10.0.0"`,
+                            // "sec-fetch-dest":"empty",
+                            // "sec-fetch-mode":"cors",
+                            // "sec-fetch-site":"same-origin",
+                            // "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+                            //
                         },
                         body: JSON.stringify(body),
                     });
@@ -730,8 +737,9 @@
                             <button id="send-personal-info-button" type="button">personal Info</button>
                             <button id="send-overview-button" type="button">overview</button>
                         </div>
-                        <div>
+                        <div class="flex gap-4">
                             <button id="save-data-button" type="button">Save Data</button>
+                            <button id="get-saved-data-button" type="button">Get saved data</button> 
                         </div>
                     </div>
                 </div>
@@ -770,7 +778,7 @@
                         <button id="get-auth-token-button" type="button">Get ivac auth data</button>
                         <button id="get-cookie-button" class="" type="button">Get cookie</button>
                         <button id="set-app-info-to-ivac-button" type="button">Set App Info to IVAC</button> 
-                        <button id="get-saved-data-button" type="button">Get saved data</button> 
+                        
                     </div>
                 </div>
             </div>
@@ -834,6 +842,9 @@
     htmlData.querySelector("#save-data-button").addEventListener("click", async () => {
         saveData();
         });
+    htmlData.querySelector('#get-saved-data-button').addEventListener('click', function () {
+        getSavedData();
+    });
 
 
     htmlData.querySelector('#tab-2').addEventListener('click', function () {
@@ -871,9 +882,7 @@
     htmlData.querySelector('#retry-count-input').addEventListener('change', function () {
         settings.retryCount = htmlData.querySelector('#retry-count-input').value;
     });
-    htmlData.querySelector('#get-saved-data-button').addEventListener('click', function () {
-        getSavedData();
-    });
+
 
 
 
