@@ -966,5 +966,10 @@ function init() {
     });
 
 }
-
-window.addEventListener('load', init);
+if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+}else if(document.readyState === 'interactive') {
+    window.addEventListener('load', init);
+}else {
+    init();
+}
