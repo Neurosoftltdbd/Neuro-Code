@@ -1,0 +1,31 @@
+{
+  "name": "ivac",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon app.js",
+    "build": "uglifyjs IVAC.js -o script.js",
+    "ts": "nodemon ts.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neurosoftltdbd/ivac.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Neurosoftltdbd/ivac/issues"
+  },
+  "homepage": "https://github.com/Neurosoftltdbd/ivac#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+
+  }
+}
