@@ -26,8 +26,16 @@ async function run() {
             '--disable-web-security',
             '--disable-features=IsolateOrigins,site-per-process',
             '--window-size=1920,1080',
-            '--start-maximized'
-        ]
+            '--start-maximized',
+            '--disable-dev-shm-usage',
+            '--disable-extensions',
+            '--disable-gpu',
+            '--disable-features=Vulkan'
+        ],
+        proxy: {
+            server: 'socks5://127.0.0.1:1080'
+
+        }
     });
 
     try {
@@ -39,9 +47,9 @@ async function run() {
         // Set extra headers
         await page.setExtraHTTPHeaders({
             'accept-language': 'en-US,en;q=0.9',
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'accept': 'application/json, text/plain, */*',
             'accept-encoding': 'gzip, deflate, br',
-            'upgrade-insecure-requests': '1'
+            'upgrade-insecure-requests': '0'
         });
 
         console.log('Navigating to page...');
@@ -58,7 +66,19 @@ async function run() {
         console.log('Navigating to target site...');
         await page.goto('https://payment.ivacbd.com/', {
             waitUntil: 'domcontentloaded',
-            timeout: 120000 // 2 minutes timeout
+            timeout: 120000, // 2 minutes timeout
+            refererPolicy: 'no-referrer-when-downgrade',
+            protocol: 'https',
+            headers: {
+                'accept-language': 'en-US,en;q=0.9',
+                'accept': 'application/json, text/plain, */*',
+                'accept-encoding': 'gzip, deflate, br',
+                'upgrade-insecure-requests': '0'
+            },
+            proxy: {
+                url: '118.179.152.102',
+                port: 9999
+            }
         });
 
         // Wait for Cloudflare challenge to complete
@@ -99,10 +119,6 @@ async function run() {
         } catch (error) {
             console.error('Error injecting script:', error);
         }
-
-        // Take a screenshot
-        await page.screenshot({ path: 'cloudflare_page.png', fullPage: true });
-        console.log('Screenshot saved as cloudflare_page.png');
 
         // Get page content
         const content = await page.content();

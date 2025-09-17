@@ -8,7 +8,7 @@
   "main": "pup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node pup.js"
+    "ps": "node pup.js"
   },
   "dependencies": {
     "puppeteer-extra": "^3.3.6",
