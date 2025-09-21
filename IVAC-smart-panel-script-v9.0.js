@@ -3,6 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      9.0
 // @description  Panel with full functionality
+// @copyright    2025 NHRepon
 // @author       NHRepon
 // @match        https://payment.ivacbd.com/*
 // @match        https://nhrepon-portfolio.vercel.app/*
@@ -10,6 +11,9 @@
 // @grant        GM_openInTab
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_deleteValue
+// @grant        GM_addStyle
+// @connect      neuro-code.vercel.app
 // @run-at       document-end
 // @inject-into  content
 // @grant        GM_xmlhttpRequest
@@ -114,16 +118,15 @@
     document.head.appendChild(cloudflareScript);
 
 
-
     let authInfo = {
-        name: "NHRepon",
-        email: "OwXyQ@example.com",
-        mobile: "01612345678",
-        password: "YourPassword123",
+        name: "",
+        email: "",
+        mobile: "",
+        password: "",
         captchaToken: "",
         authToken: "",
         cfClearance: "",
-        slotInfo:""
+        slotInfo: ""
     };
 
     let appInfo = {
@@ -136,12 +139,26 @@
         visitPurpose: "Medical Checkup purpose entry",
         appointmentDate: "",
         appointmentTime: "09:00-09:59",
-        paymentMethod: {name: "VISA", slug: "visacard", link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
+        paymentMethod: {
+            name: "VISA", slug: "visacard", link: "https://securepay.sslcommerz.com/gwprocess/v4/image/gw1/visa.png"
         }
     }
     let settings = {
         autoProcess: false,
-        retryCount: 0
+        retryCount: 0,
+        retryInterval: 0
+    }
+    let apiList = {
+        mobileVerify: "https://payment.ivacbd.com/api/v2/mobile-verify",
+        sendLogin: "https://payment.ivacbd.com/api/v2/login",
+        verifyLoginOpt: "https://payment.ivacbd.com/api/v2/login-otp",
+        sendApplicationData: "https://payment.ivacbd.com/api/v2/payment/application-r5s7h3-submit-hyju6t",
+        sendPersonalInfo: "https://payment.ivacbd.com/api/v2/payment/personal-info-submit",
+        sendOverview: "https://payment.ivacbd.com/api/v2/payment/overview-submit",
+        sendPaymentOtp: "https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
+        verifyPaymentOtp: "https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
+        getSlotTime: "https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
+        payNow: "https://payment.ivacbd.com/api/v2/payment/h7j3wt-now-y0k3d6"
     }
 
 
@@ -150,12 +167,14 @@
         dom.textContent = msg;
         dom.style.color = success ? "green" : "red";
     };
+
     function getRandomInt(min, max) {
         min = Math.ceil(min); // Ensure min is an integer
         max = Math.floor(max); // Ensure max is an integer
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    const saveData = ()=>{
+
+    const saveData = () => {
         try {
             authInfo.mobile = document.getElementById('userMobile').value;
             authInfo.password = document.getElementById('userPassword').value;
@@ -188,7 +207,7 @@
             setMessage(false, error.message);
         }
     }
-    const getSavedData = ()=>{
+    const getSavedData = () => {
         try {
             authInfo = JSON.parse(localStorage.getItem("auth-info"));
             appInfo = JSON.parse(localStorage.getItem("app-info"));
@@ -246,23 +265,22 @@
         return `${year}/${month < 10 ? '0' + month : month}/${day < 10 ? '0' + day : day}`;
     }
     appInfo.appointmentDate = getTomorrowDate();
-    const getIvacAuthData = ()=>{
+    const getIvacAuthData = () => {
         try {
-            if(localStorage.getItem("access_token")){
+            if (localStorage.getItem("access_token")) {
                 authInfo.authToken = localStorage.getItem("access_token");
                 authInfo.captchaToken = localStorage.getItem("captchaToken");
                 authInfo.email = localStorage.getItem("auth_email");
                 authInfo.name = localStorage.getItem("auth_name");
                 authInfo.phone = localStorage.getItem("auth_phone");
                 setMessage(true, "Token fetched successfully");
-            }else {
+            } else {
                 setMessage(false, "Token not found");
             }
-        }catch (e) {
+        } catch (e) {
             setMessage(false, e.message)
         }
     }
-
 
 
     const getCloudflareCaptchaToken = () => {
@@ -288,78 +306,73 @@
             await turnstile.execute();
             setMessage(true, "Cloudflare token generated successfully");
             await getCloudflareCaptchaToken();
-        }catch (e) {
+        } catch (e) {
             setMessage(false, e.message);
         }
     }
 
     function getCookie() {
-        if (!document.cookie) return {};
-        const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
-            const [name, value] = cookie.split('=').map(c => c.trim());
-            if (name) {
-                cookies[name] = decodeURIComponent(value || "");
-            }
-            return cookies;
-        }, {});
-
-        console.log("All cookies:", allCookies);
-        console.log("cf_clearance:", allCookies['cf_clearance'] || "Not found");
-        authInfo.cfClearance = allCookies['cf_clearance'] || "";
-        return allCookies;
+        // if (!document.cookie) return {};
+        // const allCookies = document.cookie.split(';').reduce((cookies, cookie) => {
+        //     const [name, value] = cookie.split('=').map(c => c.trim());
+        //     if (name) {
+        //         cookies[name] = decodeURIComponent(value || "");
+        //     }
+        //     return cookies;
+        // }, {});
+        GM_cookie.list({name: "cf_clearance"}, (cookie) => {
+            console.log(cookie);
+        })
     }
 
     const PostRequest = async (url, body) => {
+        let maxAttempts = 10;
+        let attempts = 0;
+        let success = false;
         return new Promise((resolve, reject) => {
-            setTimeout(async () => {
-                try {
-                    const response = await fetch(url, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${authInfo.authToken}`,
-                            //"Accept": "application/json, text/plain, */*",
-                            // "Language": "en",
-                            // "Cookie": `cf_clearance=${authInfo.cfClearance}; __cf_bm=${getCookie().__cf_bm || ""}; captcha_token=${authInfo.captchaToken};`,
-                            // "authority": "payment.ivacbd.com",
-                            // "scheme": "https",
-                            // "accept-encoding": "gzip, deflate, br, zstd",
-                            // "accept-language": "en-US,en;q=0.9",
-                            // "Origin": "https://payment.ivacbd.com",
-                            // "Priority": "u=1,i",
-                            // "Referer": "https://payment.ivacbd.com/",
-                            // "sec-ch-ua":`"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"`,
-                            // "sec-ch-ua-arch":`"x86"`,
-                            // "sec-ch-ua-bitness":`"64"`,
-                            // "sec-ch-ua-full-version":`"139.0.7258.157"`,
-                            // "sec-ch-ua-full-version-list":`"Not;A=Brand";v="99.0.0.0", "Google Chrome";v="139.0.7258.157", "Chromium";v="139.0.7258.157"`,
-                            // "sec-ch-ua-mobile":`"?0"`,
-                            // "sec-ch-ua-model":`""`,
-                            // "sec-ch-ua-platform":`"Windows"`,
-                            // "sec-ch-ua-platform-version":`"10.0.0"`,
-                            // "sec-fetch-dest":"empty",
-                            // "sec-fetch-mode":"cors",
-                            // "sec-fetch-site":"same-origin",
-                            // "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
-                            //
-                        },
-                        body: JSON.stringify(body),
-                    });
-                    const data = await response.json();
-                    if (response.ok) {
-                        setMessage(true, data.message);
-                        resolve(data);
-                        return data;
-                    } else {
-                        setMessage(false, data.message);
-                        return {status: "failed", data: data};
+            while (!success && attempts < maxAttempts){
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${authInfo.authToken}`,
+                                "Accept": "application/json, text/plain, */*",
+                                "Language": "en",
+                                "authority": "ivacbd.com",
+                                "scheme": "https",
+                                "accept-encoding": "gzip, deflate, br, zstd",
+                                "accept-language": "en-US,en;q=0.9",
+                                "Origin": "https://payment.ivacbd.com",
+                                "Priority": "u=1,i",
+                                "Referer": "https://ivacbd.com/",
+                            },
+                            body: JSON.stringify(body),
+                        });
+                        const data = await response.json();
+                        if (response.ok && data.status === "success") {
+                            success = true;
+                            setMessage(true, data.message);
+                            resolve(data);
+                            return data;
+                        } else {
+                            attempts++;
+                            if (attempts >= maxAttempts) {
+                                setMessage(false, `Max attempts ${attempts} of ${maxAttempts} failed`);
+                                reject(new Error("Max attempts reached"));
+                            }
+                            setMessage(false, `Attempts ${attempts} of ${maxAttempts} failed and ${data.message}` );
+                            return {status: "failed", data: data};
+                        }
+                    } catch (e) {
+                        attempts++;
+                        setMessage(false, `Attempts ${attempts} of ${maxAttempts} failed and ${e.message}`);
+                        reject(e);
                     }
-                } catch (e) {
-                    setMessage(false, e.message);
-                    reject(e);
-                }
-            }, settings.autoProcess?settings.retryCount*1000:0);
 
+                }, settings.autoProcess ? settings.retryInterval * 1000 : 1000);
+            }
         });
     }
 
@@ -389,7 +402,7 @@
                     setMessage(e.message);
                     reject(e);
                 }
-            }, settings.autoProcess?settings.retryCount*1000:0);
+            }, settings.autoProcess ? settings.retryCount * 1000 : 0);
         });
     }
 
@@ -398,24 +411,24 @@
         const mobile = document.getElementById('userMobile').value;
         const password = document.getElementById('userPassword').value;
         if (!mobile) {
-            setMessage(false,"Please enter a mobile number");
+            setMessage(false, "Please enter a mobile number");
             return;
         }
         if (!password) {
-            setMessage(false,"Please enter a password");
+            setMessage(false, "Please enter a password");
             return;
         }
 
         if (!authInfo.captchaToken) {
             const cfct = await getCloudflareCaptchaToken();
             if (!cfct) {
-                setMessage(false,"Cloudflare captcha token not found in login request");
+                setMessage(false, "Cloudflare captcha token not found in login request");
                 return;
             }
         }
 
 
-        const response = await PostRequest("https://payment.ivacbd.com/api/v2/mobile-verify", {
+        const response = await PostRequest(apiList.mobileVerify, {
             mobile_no: mobile,
             captcha_token: authInfo.captchaToken,
             answer: 1,
@@ -423,7 +436,7 @@
         });
         if (response.status === "success") {
             setMessage(true, response.message);
-            const loginResponse = await PostRequest("https://payment.ivacbd.com/api/v2/login", {
+            const loginResponse = await PostRequest(apiList.sendLogin, {
                 mobile_no: mobile,
                 password: password,
             })
@@ -446,7 +459,7 @@
             setMessage(false, "Please enter an OTP");
             return;
         }
-        const response = await PostRequest("https://payment.ivacbd.com/api/v2/login-otp", {
+        const response = await PostRequest(apiList.verifyLoginOpt, {
             mobile_no: mobile,
             password: password,
             otp: otp,
@@ -459,7 +472,6 @@
             authInfo.slotInfo = response.data.slot_available;
             authInfo.authToken = response.data.access_token;
             await localStorage.setItem("activeStep", "1");
-            // await localStorage.setItem("ivacAuthUser", JSON.stringify(response.data));
             await localStorage.setItem("user_phone", response.data.mobile_no);
             await localStorage.setItem("user_email", response.data.email);
             await localStorage.setItem("auth_name", response.data.name);
@@ -482,7 +494,7 @@
 // ========== Application Submit Function ==========
     async function sendDataToServer() {
         if (!appInfo.highCommission && !appInfo.webFileId && !appInfo.ivacCenter && !appInfo.visaType) {
-            setMessage(false,"Please, provide web file id, hich commission, ivac id, visa type");
+            setMessage(false, "Please, provide web file id, hich commission, ivac id, visa type");
             return;
         }
         let payload = {
@@ -496,11 +508,11 @@
             visit_purpose: appInfo.visitPurpose,
         };
         try {
-            const response = await PostRequest("https://payment.ivacbd.com/api/v2/payment/application-r5s7h3-submit-hyju6t", payload);
+            const response = await PostRequest(apiList.sendApplicationData, payload);
             if (response.status === "success") {
                 setMessage(true, response.message + " Payable amount: " + response.data.payable_amount);
                 localStorage.setItem("activeStep", "2");
-                if (settings.autoProcess){
+                if (settings.autoProcess) {
                     await sendPersonalInfoToServer();
                 }
             }
@@ -508,6 +520,7 @@
             setMessage(false, error.message);
         }
     }
+
     async function sendPersonalInfoToServer() {
         let personalData = {};
         if (appInfo.familyData.length > 0) {
@@ -526,22 +539,22 @@
                 webfile_id: appInfo.webFileId,
             }
         }
-        const personalInfoSubmit = await PostRequest("https://payment.ivacbd.com/api/v2/payment/personal-info-submit", personalData);
+        const personalInfoSubmit = await PostRequest(apiList.sendPersonalInfo, personalData);
         if (personalInfoSubmit.status === "success") {
             setMessage(true, personalInfoSubmit.message + " Payable amount: " + personalInfoSubmit.data.payable_amount);
             localStorage.setItem("activeStep", "3");
-            if (settings.autoProcess){
+            if (settings.autoProcess) {
                 await sendOverviewToServer();
             }
         }
     }
 
     async function sendOverviewToServer() {
-        const sendOverview = await PostRequest("https://payment.ivacbd.com/api/v2/payment/overview-submit", {captcha_token: cloudflareCaptchaToken});
+        const sendOverview = await PostRequest(apiList.sendOverview, {captcha_token: cloudflareCaptchaToken});
         if (sendOverview.status === "success") {
             setMessage(true, sendOverview.message);
             localStorage.setItem("activeStep", "4");
-            if (settings.autoProcess){
+            if (settings.autoProcess) {
                 await payNow();
             }
             toggleTab(2);
@@ -552,7 +565,7 @@
 // ========== Send OTP Function ==========
     async function sendOTP(resend = false) {
         try {
-            const sendOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-sent",
+            const sendOtp = await PostRequest(apiList.sendPaymentOtp,
                 {resend: resend ? 1 : 0});
             if (sendOtp.status === "success") {
                 setMessage(true, sendOtp.message);
@@ -571,7 +584,7 @@
             return;
         }
         try {
-            const verifyOtp = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-otp-verify",
+            const verifyOtp = await PostRequest(apiList.verifyPaymentOtp,
                 {otp: otp});
             if (verifyOtp.status === "success") {
                 setMessage(true, verifyOtp.message);
@@ -579,7 +592,7 @@
                 if (verifyOtp.data) {
                     document.getElementById('date-input').value = verifyOtp.data.slot_dates[0];
                     appInfo.appointmentDate = verifyOtp.data.slot_dates[0];
-                    const slotTimes = await PostRequest("https://payment.ivacbd.com/api/v2/payment/pay-slot-time",
+                    const slotTimes = await PostRequest(apiList.getSlotTime,
                         {appointment_date: verifyOtp.data.slot_dates[0] || appInfo.appointmentDate});
                     if (slotTimes.status === "success") {
                         setMessage(true, slotTimes.message);
@@ -611,7 +624,7 @@
             k5t0g8_token_y4v9f6: authInfo.captchaToken,
             selected_payment: appInfo.paymentMethod
         };
-        const sendPayment = await PostRequest("https://payment.ivacbd.com/api/v2/payment/h7j3wt-now-y0k3d6", payload);
+        const sendPayment = await PostRequest(apiList.payNow, payload);
         if (sendPayment.status === "success") {
             setMessage(true, sendPayment.message);
             if (sendPayment.data) {
@@ -622,7 +635,7 @@
                 localStorage.setItem("paymentUrl", sendPayment.data.payment_url);
                 window.open(sendPayment.data.payment_url, '_blank', activeTab);
             }
-        }else {
+        } else {
             setMessage(false, sendPayment.message);
         }
     }
@@ -637,7 +650,7 @@
             [[4, "IVAC, SYLHET"], [8, "IVAC, MYMENSINGH"]],
             [[3, "IVAC, KHULNA"]]
         ];
-        const centers = ivacCenters[highCom-1];
+        const centers = ivacCenters[highCom - 1];
         if (centers) {
             for (let i = 0; i < centers.length; i++) {
                 const option = document.createElement('option');
@@ -647,7 +660,6 @@
             }
         }
     }
-
 
 
     function toggleTab(index) {
@@ -794,7 +806,7 @@
     });
     htmlData.querySelector('#send-login-otp-button').addEventListener('click', sendLoginOtp);
     htmlData.querySelector('#verify-login-otp-button').addEventListener('click', verifyLoginOtp);
-    htmlData.querySelector('#cf-button').addEventListener('click', async function() {
+    htmlData.querySelector('#cf-button').addEventListener('click', async function () {
         await generateCloudflareCaptchaToken()
     });
     htmlData.querySelector('#get-auth-token-button').addEventListener('click', async () => {
@@ -809,12 +821,6 @@
     htmlData.querySelector('#set-app-info-to-ivac-button').addEventListener('click', async function () {
         await setAppDataToIvacPage();
     });
-
-
-
-
-
-
 
 
     htmlData.querySelector('#tab-1').addEventListener('click', () => {
@@ -841,7 +847,7 @@
     })
     htmlData.querySelector("#save-data-button").addEventListener("click", async () => {
         saveData();
-        });
+    });
     htmlData.querySelector('#get-saved-data-button').addEventListener('click', function () {
         getSavedData();
     });
@@ -864,9 +870,6 @@
     });
 
 
-
-
-
     htmlData.querySelector('#tab-3').addEventListener('click', function () {
         toggleTab(3);
     });
@@ -884,12 +887,7 @@
     });
 
 
-
-
     document.body.appendChild(htmlData);
-
-
-
 
 
 // Create toggle button for the panel (fixed position)
@@ -926,37 +924,24 @@
     });
 
 
-
-
-
-
-
 // Make the panel draggable
     htmlData.draggable = true;
     let isDragging = false;
-    let offsetX, offsetY;
 
-// Load saved position if exists
     const savedPosition = localStorage.getItem('panelPosition');
     if (savedPosition) {
         htmlData.style.position = 'fixed';
         htmlData.style.left = savedPosition.left;
         htmlData.style.top = savedPosition.top;
     } else {
-        // Default position if none saved
         htmlData.style.position = 'fixed';
         htmlData.style.right = '20px';
         htmlData.style.top = '100px';
     }
     htmlData.addEventListener('dragstart', function (e) {
-        const rect = htmlData.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
         isDragging = true;
-        // Required for Firefox
         e.dataTransfer.setData('text/plain', '');
     });
-
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
         if (isDragging) {
@@ -981,7 +966,6 @@
     });
 
 
-// Initialize all data when script starts
     async function init() {
         await updateIvacCenters(1);
         await getIvacAuthData();
@@ -991,7 +975,7 @@
             const maxAttempts = 10; // Maximum number of attempts
             let attempts = 0;
             let success = false;
-            
+
             while (!success && attempts < maxAttempts) {
                 const turnstileResponse = document.querySelector('input[name="cf-turnstile-response"]')?.value;
                 if (turnstileResponse) {
@@ -1013,7 +997,6 @@
                 }
             }
         }
-
 
 
     }

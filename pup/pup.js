@@ -27,7 +27,10 @@ async function run() {
             '--disable-features=IsolateOrigins,site-per-process',
             '--window-size=1920,1080',
             '--start-maximized'
-        ]
+        ],
+        proxy: {
+            server: '103.82.8.189'
+        }
     });
 
     try {
@@ -47,7 +50,7 @@ async function run() {
         console.log('Navigating to page...');
 
         // First, visit a neutral page to establish a clean session
-        await page.goto('https://www.google.com', {
+        await page.goto('https://www.ivacbd.com', {
             waitUntil: 'networkidle2',
             timeout: 60000
         });
@@ -56,7 +59,8 @@ async function run() {
 
         // Now navigate to the target site
         console.log('Navigating to target site...');
-        await page.goto('https://payment.ivacbd.com/', {
+        const pg = await browser.newPage();
+        await pg.goto('https://payment.ivacbd.com/', {
             waitUntil: 'domcontentloaded',
             timeout: 120000 // 2 minutes timeout
         });
@@ -76,7 +80,7 @@ async function run() {
         try {
             const scriptPath = resolve(__dirname, '../IVAC-smart-panel-script-v9.0.js');
             const scriptContent = readFileSync(scriptPath, 'utf8');
-            
+
             // Remove the UserScript header if it exists
             const scriptWithoutHeader = scriptContent.replace(
                 /^\/\/ ==UserScript==[\s\S]*?\/\/ ==\/UserScript==\s*/,
@@ -89,13 +93,13 @@ async function run() {
                 scriptEl.textContent = script;
                 document.head.appendChild(scriptEl);
             }, scriptWithoutHeader);
-            
+
             console.log('IVAC Smart Panel script injected successfully');
-            
+
             // Take a screenshot after injection
             await page.screenshot({ path: 'after_injection.png', fullPage: true });
             console.log('Screenshot after injection saved as after_injection.png');
-            
+
         } catch (error) {
             console.error('Error injecting script:', error);
         }
