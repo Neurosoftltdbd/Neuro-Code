@@ -14,6 +14,7 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @connect      neuro-code.vercel.app
+// @connect      payment.ivacbd.com
 // @run-at       document-end
 // @inject-into  content
 // @grant        GM_xmlhttpRequest
@@ -377,6 +378,52 @@
     }
 
 
+    // const PostRequest = async (url, body)=>{
+    //     let success = false;
+    //     let attempts = 0;
+    //     let maxAttempts = 10;
+    //     while (!success && attempts < maxAttempts){
+    //         try {
+    //             GM_xmlhttpRequest({
+    //                     method: "POST",
+    //                     url: url,
+    //                     data: JSON.stringify(body),
+    //                     headers: {
+    //                         "Content-Type": "application/json",
+    //                         "Accept": "application/json",
+    //                         "Authorization": `Bearer ${authInfo.authToken}`,
+    //                         "language": "en",
+    //                         "authority": "ivacbd.com",
+    //                         "scheme": "https",
+    //                         "accept-encoding": "gzip, deflate, br, zstd",
+    //                         "accept-language": "en-US,en;q=0.9",
+    //                         "Origin": "https://payment.ivacbd.com",
+    //                         "Priority": "u=1,i",
+    //                         "Referer": "https://ivacbd.com/",
+    //                     },
+    //                     responseType: "json",
+    //                     timeout: 10000,
+    //                     onload:(res)=>{
+    //                         console.log(res);
+    //                         if(res.status === 200){
+    //                             success = true;
+    //                             setMessage(true, res.message);
+    //                         }else{
+    //                             success = false;
+    //                             setMessage(false, res.message);
+    //                         }
+    //                     },
+    //                     onerror: function (response) {
+    //                         console.error(response);
+    //                     }
+    //
+    //                 })
+    //         }catch (e) {
+    //             console.error(e);
+    //         }
+    //     }
+    // }
+    //
     const GetRequest = async (url) => {
         return new Promise((resolve, reject) => {
             setTimeout(async () => {
@@ -969,7 +1016,7 @@
     async function init() {
         await updateIvacCenters(1);
         await getIvacAuthData();
-        await loadSavedData();
+        //await loadSavedData();
 
         if (!authInfo.captchaToken) {
             const maxAttempts = 10; // Maximum number of attempts

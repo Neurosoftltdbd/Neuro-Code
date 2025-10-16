@@ -15,7 +15,65 @@ puppeteer.use(StealthPlugin());
 // Add delay function
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Jitter helpers for more human-like pacing
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const jitter = (base, pct = 0.25) => {
+  const delta = Math.floor(base * pct);
+  return rand(Math.max(0, base - delta), base + delta);
+};
+const humanPause = async (baseMs = 800) => {
+  await delay(jitter(baseMs));
+};
+
+// Random mouse wiggles to simulate idle human presence
+async function humanMouseWiggle(page, { moves = 8 } = {}) {
+  try {
+    const viewport = page.viewport();
+    const startX = rand(50, Math.max(60, (viewport?.width || 1200) - 60));
+    const startY = rand(50, Math.max(60, (viewport?.height || 800) - 60));
+    await page.mouse.move(startX, startY, { steps: rand(5, 12) });
+    for (let i = 0; i < moves; i++) {
+      await delay(rand(80, 220));
+      const x = startX + rand(-40, 40);
+      const y = startY + rand(-25, 25);
+      await page.mouse.move(x, y, { steps: rand(2, 10) });
+    }
+  } catch {}
+}
+
+// Smooth scroll to bottom and a bit up
+async function gentleScroll(page) {
+  try {
+    await page.evaluate(async () => {
+      const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+      const total = document.body.scrollHeight;
+      const steps = Math.max(4, Math.min(18, Math.floor(total / 600)));
+      const chunk = Math.ceil(total / steps);
+      for (let i = 0; i < steps; i++) {
+        window.scrollBy({ top: chunk, behavior: 'smooth' });
+        await sleep(200 + Math.floor(Math.random() * 300));
+      }
+      await sleep(300 + Math.floor(Math.random() * 300));
+      window.scrollBy({ top: -Math.floor(chunk / 2), behavior: 'smooth' });
+    });
+  } catch {}
+}
+
+// Choose a realistic UA and viewport
+const USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15'
+];
+const VIEWPORTS = [
+  { width: 1920, height: 1080 },
+  { width: 1600, height: 900 },
+  { width: 1536, height: 864 },
+  { width: 1366, height: 768 }
+];
+
 async function run() {
+    const vp = VIEWPORTS[rand(0, VIEWPORTS.length - 1)];
     const browser = await puppeteer.launch({
         headless: false,
         defaultViewport: null,
@@ -23,54 +81,57 @@ async function run() {
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
+            `--window-size=${vp.width},${vp.height}`,
+            '--start-maximized',
             '--disable-web-security',
             '--disable-features=IsolateOrigins,site-per-process',
-            '--window-size=1920,1080',
-            '--start-maximized'
+            //'--proxy-server=2f1d8a0cc7b893e8:yk8QRD9o@res.proxy-seller.com:10000',
         ],
-        proxy: {
-            server: '103.82.8.189'
-        }
+        ignoreDefaultArgs: ['--disable-extensions'],
+        ignoreHTTPSErrors: true,
     });
 
     try {
         const page = await browser.newPage();
-
-        // Set a realistic user agent
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36');
-
-        // Set extra headers
+        await page.setUserAgent(USER_AGENTS[rand(0, USER_AGENTS.length - 1)]);
         await page.setExtraHTTPHeaders({
             'accept-language': 'en-US,en;q=0.9',
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             'accept-encoding': 'gzip, deflate, br',
-            'upgrade-insecure-requests': '1'
+            'upgrade-insecure-requests': '1',
         });
+
+        // BEFORE injecting script: optionally bypass CSP (use responsibly)
+        await page.setBypassCSP(true); // only if you control the target or have permission
 
         console.log('Navigating to page...');
 
-        // First, visit a neutral page to establish a clean session
         await page.goto('https://www.ivacbd.com', {
             waitUntil: 'networkidle2',
             timeout: 60000
         });
 
-        await delay(3000); // Wait for 3 seconds
+        await humanPause(1500);
+        await humanMouseWiggle(page);
+        await gentleScroll(page);
 
         // Now navigate to the target site
         console.log('Navigating to target site...');
-        const pg = await browser.newPage();
-        await pg.goto('https://payment.ivacbd.com/', {
+        await page.goto('https://payment.ivacbd.com/', {
             waitUntil: 'domcontentloaded',
             timeout: 120000 // 2 minutes timeout
         });
+        await humanPause(1200);
+        await humanMouseWiggle(page);
 
         // Wait for Cloudflare challenge to complete
         console.log('Waiting for Cloudflare challenge...');
         await page.waitForFunction(
-            'document.querySelector("body").innerText.includes("payment.ivacbd.com")',
+            () => document.readyState === 'complete' || document.readyState === 'interactive',
             { timeout: 120000 }
-        ).catch(e => console.log('Cloudflare challenge might be present'));
+        ).catch(() => console.log('Page may still be loading or blocked'));
+        await humanPause(1000);
+        await gentleScroll(page);
 
         // await page.evaluate(() => {
         //     document.body.innerHTML = `<h2>Hello, hacker</h2>`;
@@ -78,7 +139,7 @@ async function run() {
 
         // Read and inject the IVAC smart panel script
         try {
-            const scriptPath = resolve(__dirname, '../IVAC-smart-panel-script-v9.0.js');
+            const scriptPath = resolve(__dirname, './ivac-rupon.js');
             const scriptContent = readFileSync(scriptPath, 'utf8');
 
             // Remove the UserScript header if it exists
@@ -118,7 +179,9 @@ async function run() {
 
         // Keep the browser open for manual inspection
         console.log('Keeping browser open for 2 minutes...');
-        await delay(120000);
+        await humanPause(2000);
+        await humanMouseWiggle(page, { moves: 12 });
+        await delay(118000);
 
     } catch (error) {
         console.error('Error:', error);

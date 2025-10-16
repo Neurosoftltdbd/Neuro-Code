@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "pup", "play", "IVAC-Rupon", "IVAC-Pannel", "IVAC-smart-extension", "IVAC-smart-panel-script-v9.0.js"]
 }
