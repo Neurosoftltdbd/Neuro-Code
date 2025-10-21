@@ -252,7 +252,7 @@ class BrowserService {
     async close() {
         try {
             if (this.context) await this.context.close();
-            if (this.browser) await this.browser.close();
+            //if (this.browser) await this.browser.close();
             this.browser = this.context = this.page = null;
             await logger.info('Browser closed successfully');
         } catch (error) {

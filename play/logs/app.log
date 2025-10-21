@@ -1238,3 +1238,614 @@ Call log:
 [2025-10-16T12:09:46.984Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
 [2025-10-16T12:09:46.984Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
 [2025-10-16T12:09:47.327Z] [INFO] Browser closed successfully 
+[2025-10-16T12:37:26.245Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-16T12:37:26.251Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-16T12:37:26.252Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-16T12:37:26.851Z] [INFO] Found 26 proxies from api.proxyscrape.com 
+[2025-10-16T12:37:26.852Z] [INFO] Testing 26 proxies... 
+[2025-10-16T12:37:31.866Z] [DEBUG] Proxy connection timeout (180.149.232.153:61245) 
+[2025-10-16T12:37:31.866Z] [DEBUG] Proxy connection timeout (182.160.105.46:14157) 
+[2025-10-16T12:37:31.866Z] [DEBUG] Proxy connection timeout (119.18.146.202:5720) 
+[2025-10-16T12:37:31.867Z] [INFO] Found 2 working proxies 
+[2025-10-16T12:37:31.867Z] [INFO] Using proxy: 123.200.4.70:10521 
+[2025-10-16T12:37:31.868Z] [INFO] Launching browser... 
+[2025-10-16T12:37:32.572Z] [INFO] Browser initialized successfully 
+[2025-10-16T12:37:32.629Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-16T12:37:32.641Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:37:40.786Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-16T12:37:40.799Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:37:41.020Z] [WARN] Navigation attempt 1 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-16T12:37:41.021Z] [INFO] Retrying in 3000ms... 
+[2025-10-16T12:37:44.075Z] [INFO] [Attempt 2/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-16T12:37:44.082Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:38:10.924Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-16T12:38:10.936Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:38:17.223Z] [WARN] Navigation attempt 2 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-16T12:38:17.224Z] [INFO] Retrying in 3000ms... 
+[2025-10-16T12:38:20.269Z] [INFO] [Attempt 3/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-16T12:38:20.274Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:38:28.395Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-16T12:38:28.412Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:38:28.643Z] [WARN] Navigation attempt 3 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-16T12:38:28.645Z] [ERROR] All 3 navigation attempts failed {"error":"undefined"}
+[2025-10-16T12:38:28.646Z] [ERROR] Application error {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-16T12:38:28.646Z] [ERROR] Fatal error: {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-16T12:38:28.880Z] [INFO] Browser closed successfully 
+[2025-10-16T12:39:03.221Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-16T12:39:03.225Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-16T12:39:03.226Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-16T12:39:03.422Z] [INFO] Found 26 proxies from api.proxyscrape.com 
+[2025-10-16T12:39:03.422Z] [INFO] Testing 26 proxies... 
+[2025-10-16T12:39:08.425Z] [DEBUG] Proxy connection timeout (123.200.4.70:10521) 
+[2025-10-16T12:39:08.425Z] [DEBUG] Proxy connection timeout (180.149.232.153:61245) 
+[2025-10-16T12:39:08.426Z] [DEBUG] Proxy connection timeout (119.18.147.196:9107) 
+[2025-10-16T12:39:08.426Z] [DEBUG] Proxy connection timeout (182.160.105.46:14157) 
+[2025-10-16T12:39:08.427Z] [INFO] Found 1 working proxies 
+[2025-10-16T12:39:08.428Z] [INFO] Using proxy: 119.18.146.202:5720 
+[2025-10-16T12:39:08.428Z] [INFO] Launching browser... 
+[2025-10-16T12:39:08.747Z] [INFO] Browser initialized successfully 
+[2025-10-16T12:39:08.809Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-16T12:39:08.824Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:39:11.826Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-16T12:39:11.833Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-16T12:39:11.845Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:39:11.860Z] [DEBUG] → GET https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015 
+[2025-10-16T12:39:11.861Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=98f79e2a098bbc22 
+[2025-10-16T12:39:11.919Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:39:12.031Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=98f79e2a098bbc22 
+[2025-10-16T12:39:12.066Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit 
+[2025-10-16T12:39:12.195Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/98f79e2a098bbc22/gvh_Boou3qfdi.9QC1iAfoBy1bSboow8ub2tvLF_R9s-1760618354-1.2.1.1-ZA9ytQcDiANkLPCR2jFGZivFi9lhv9BiEdnrTLrBzqk23DXrtfGSRHCl6SaH6hj6 
+[2025-10-16T12:39:12.266Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/98f79e2a098bbc22/gvh_Boou3qfdi.9QC1iAfoBy1bSboow8ub2tvLF_R9s-1760618354-1.2.1.1-ZA9ytQcDiANkLPCR2jFGZivFi9lhv9BiEdnrTLrBzqk23DXrtfGSRHCl6SaH6hj6 
+[2025-10-16T12:39:17.342Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/98f79e2a098bbc22/gvh_Boou3qfdi.9QC1iAfoBy1bSboow8ub2tvLF_R9s-1760618354-1.2.1.1-ZA9ytQcDiANkLPCR2jFGZivFi9lhv9BiEdnrTLrBzqk23DXrtfGSRHCl6SaH6hj6 
+[2025-10-16T12:39:17.415Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/98f79e2a098bbc22/gvh_Boou3qfdi.9QC1iAfoBy1bSboow8ub2tvLF_R9s-1760618354-1.2.1.1-ZA9ytQcDiANkLPCR2jFGZivFi9lhv9BiEdnrTLrBzqk23DXrtfGSRHCl6SaH6hj6 
+[2025-10-16T12:39:19.432Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:39:19.476Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-16T12:39:19.484Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-16T12:39:19.514Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:39:19.557Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:39:19.629Z] [INFO] Page loaded with status: 403 
+[2025-10-16T12:39:20.072Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-16T12:39:20.089Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-16T12:39:20.090Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-16T12:39:20.090Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-16T12:39:20.104Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-16T12:39:20.331Z] [ERROR] Browser console error: Failed to load resource: net::ERR_TIMED_OUT {"error":"undefined"}
+[2025-10-16T12:39:28.104Z] [ERROR] Browser console error: Failed to load resource: net::ERR_TIMED_OUT {"error":"undefined"}
+[2025-10-16T12:39:50.174Z] [WARN] IVAC script injected but may not have initialized properly 
+[2025-10-16T12:39:50.174Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-16T12:39:50.175Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-16T12:39:50.533Z] [INFO] Browser closed successfully 
+[2025-10-16T12:44:25.158Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.14.90 
+[2025-10-16T12:44:25.161Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-16T12:44:25.162Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-16T12:44:25.687Z] [INFO] Found 14 proxies from api.proxyscrape.com 
+[2025-10-16T12:44:25.688Z] [INFO] Testing 14 proxies... 
+[2025-10-16T12:44:30.694Z] [DEBUG] Proxy connection timeout (118.179.5.177:6248) 
+[2025-10-16T12:44:30.696Z] [DEBUG] Proxy connection timeout (202.181.16.173:3325) 
+[2025-10-16T12:44:30.697Z] [DEBUG] Proxy connection timeout (119.18.151.113:8444) 
+[2025-10-16T12:44:30.698Z] [DEBUG] Proxy connection timeout (103.85.159.150:19201) 
+[2025-10-16T12:44:30.699Z] [DEBUG] Proxy connection timeout (144.48.163.126:8080) 
+[2025-10-16T12:44:33.266Z] [DEBUG] Proxy connection error (117.58.242.231:36514): "connect ECONNREFUSED 117.58.242.231:36514"
+[2025-10-16T12:44:33.267Z] [DEBUG] Proxy connection error (137.59.49.248:19201): "connect ECONNREFUSED 137.59.49.248:19201"
+[2025-10-16T12:44:33.269Z] [DEBUG] Proxy connection error (202.5.56.141:2727): "connect ECONNREFUSED 202.5.56.141:2727"
+[2025-10-16T12:44:33.291Z] [DEBUG] Proxy connection error (202.5.56.59:2727): "connect ECONNREFUSED 202.5.56.59:2727"
+[2025-10-16T12:44:36.219Z] [DEBUG] Proxy connection timeout (202.4.125.221:9999) 
+[2025-10-16T12:44:38.802Z] [DEBUG] Proxy connection error (202.5.56.151:2727): "connect ECONNREFUSED 202.5.56.151:2727"
+[2025-10-16T12:44:38.803Z] [DEBUG] Proxy connection error (202.5.57.39:2727): "connect ECONNREFUSED 202.5.57.39:2727"
+[2025-10-16T12:44:41.747Z] [DEBUG] Proxy connection timeout (43.224.118.206:8989) 
+[2025-10-16T12:44:41.746Z] [DEBUG] Proxy connection timeout (119.148.39.30:8444) 
+[2025-10-16T12:44:42.258Z] [WARN] No working proxies found in the list 
+[2025-10-16T12:44:42.260Z] [WARN] No working proxy found, continuing without proxy 
+[2025-10-16T12:44:42.261Z] [INFO] Launching browser... 
+[2025-10-16T12:44:42.593Z] [INFO] Browser initialized successfully 
+[2025-10-16T12:44:42.645Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-16T12:44:42.665Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:44:42.735Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-16T12:44:42.740Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-16T12:44:42.750Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:44:42.769Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:44:42.865Z] [INFO] Page loaded with status: 403 
+[2025-10-16T12:44:43.277Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-16T12:44:43.285Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-16T12:44:43.286Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-16T12:44:43.287Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-16T12:44:43.300Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-16T12:44:43.509Z] [DEBUG] ← 302 https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-16T12:44:43.510Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-16T12:44:43.574Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-16T12:44:43.586Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/0v9nv/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-16T12:44:43.625Z] [DEBUG] ← 200 https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-16T12:44:43.805Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/0v9nv/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-16T12:44:43.926Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-16T12:44:43.927Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=98f7a64508c6f93e&lang=auto 
+[2025-10-16T12:44:43.929Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-16T12:44:43.990Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=98f7a64508c6f93e&lang=auto 
+[2025-10-16T12:44:44.154Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/98f7a64508c6f93e/NcqjQnUoiuga8XmAE6kt7_sjKvmp6lmNpJupzedvZW4-1760618686-1.2.1.1-7NBHVXOpJUYGCRUuYLLjDPLvZQnzmtXed51kSOU4R1wV9qLjCdtJPVCEVGKz57pP 
+[2025-10-16T12:44:44.284Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/98f7a64508c6f93e/NcqjQnUoiuga8XmAE6kt7_sjKvmp6lmNpJupzedvZW4-1760618686-1.2.1.1-7NBHVXOpJUYGCRUuYLLjDPLvZQnzmtXed51kSOU4R1wV9qLjCdtJPVCEVGKz57pP 
+[2025-10-16T12:44:45.108Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/98f7a64508c6f93e/1760618686677/4yWBU_bBWKKpjLI 
+[2025-10-16T12:44:45.119Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-16T12:44:45.609Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-16T12:44:45.609Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-16T12:44:45.790Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/98f7a64508c6f93e/1760618686682/9b38ed3b22c2556b9947b8b5334a99e04df9f0b00baf81ca1f9289b3075e28fb/aPPZ4eu5RSYAEBr 
+[2025-10-16T12:44:45.848Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/98f7a64508c6f93e/1760618686682/9b38ed3b22c2556b9947b8b5334a99e04df9f0b00baf81ca1f9289b3075e28fb/aPPZ4eu5RSYAEBr 
+[2025-10-16T12:44:45.848Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-16T12:44:47.921Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/98f7a64508c6f93e/NcqjQnUoiuga8XmAE6kt7_sjKvmp6lmNpJupzedvZW4-1760618686-1.2.1.1-7NBHVXOpJUYGCRUuYLLjDPLvZQnzmtXed51kSOU4R1wV9qLjCdtJPVCEVGKz57pP 
+[2025-10-16T12:44:48.071Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/98f7a64508c6f93e/NcqjQnUoiuga8XmAE6kt7_sjKvmp6lmNpJupzedvZW4-1760618686-1.2.1.1-7NBHVXOpJUYGCRUuYLLjDPLvZQnzmtXed51kSOU4R1wV9qLjCdtJPVCEVGKz57pP 
+[2025-10-16T12:44:49.976Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-16T12:44:49.994Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-16T12:44:50.004Z] [ERROR] Failed to inject IVAC smart panel script: {"error":"page.evaluate: Execution context was destroyed, most likely because of a navigation."}
+[2025-10-16T12:44:50.005Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-16T12:44:50.006Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-16T12:44:50.006Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-16T12:44:50.013Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-16T12:44:50.575Z] [INFO] Browser closed successfully 
+[2025-10-18T05:48:58.046Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.14.90 
+[2025-10-18T05:48:58.054Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T05:48:58.055Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T05:48:58.811Z] [INFO] Found 19 proxies from api.proxyscrape.com 
+[2025-10-18T05:48:58.811Z] [INFO] Testing 19 proxies... 
+[2025-10-18T05:49:03.819Z] [DEBUG] Proxy connection timeout (43.224.116.186:19201) 
+[2025-10-18T05:49:03.820Z] [DEBUG] Proxy connection timeout (115.127.36.190:222) 
+[2025-10-18T05:49:03.822Z] [INFO] Found 3 working proxies 
+[2025-10-18T05:49:03.825Z] [INFO] Using proxy: 113.11.64.18:9107 
+[2025-10-18T05:49:03.827Z] [INFO] Launching browser... 
+[2025-10-18T05:49:04.991Z] [INFO] Browser initialized successfully 
+[2025-10-18T05:49:05.091Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T05:49:05.130Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T05:49:06.252Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T05:49:06.261Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-18T05:49:06.289Z] [DEBUG] → GET https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015 
+[2025-10-18T05:49:06.292Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:49:06.297Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=9905c0270e193f11 
+[2025-10-18T05:49:06.335Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:49:06.433Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=9905c0270e193f11 
+[2025-10-18T05:49:06.459Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit 
+[2025-10-18T05:49:06.498Z] [DEBUG] ← 200 https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015 
+[2025-10-18T05:49:06.595Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c0270e193f11/Rcmc59ccNsdKOyW47wEFb_eS6lbY3UpNjGZ2Va2KUmk-1760766547-1.2.1.1-L30XGJCcOD.M9CmqM5auCigbKOShv.E38QZ7bw7gcu3k8rtbTQ2AW8zpI.q_2ME9 
+[2025-10-18T05:49:06.601Z] [INFO] Page loaded with status: 403 
+[2025-10-18T05:49:06.610Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit 
+[2025-10-18T05:49:06.616Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/rum? 
+[2025-10-18T05:49:06.655Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c0270e193f11/Rcmc59ccNsdKOyW47wEFb_eS6lbY3UpNjGZ2Va2KUmk-1760766547-1.2.1.1-L30XGJCcOD.M9CmqM5auCigbKOShv.E38QZ7bw7gcu3k8rtbTQ2AW8zpI.q_2ME9 
+[2025-10-18T05:49:06.711Z] [DEBUG] ← 204 https://payment.ivacbd.com/cdn-cgi/rum? 
+[2025-10-18T05:49:06.713Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/a15nx/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal/auto 
+[2025-10-18T05:49:13.877Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/a15nx/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal/auto 
+[2025-10-18T05:49:14.039Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T05:49:14.040Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c056dc76dce8&lang=auto 
+[2025-10-18T05:49:14.042Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:49:14.201Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c056dc76dce8&lang=auto 
+[2025-10-18T05:49:14.208Z] [ERROR] Browser console error: Potential permissions policy violation: autoplay is not allowed in this document. {"error":"undefined"}
+[2025-10-18T05:49:14.374Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:14.483Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:15.173Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:49:15.172Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:49:15.427Z] [WARN] Cloudflare protection detected, waiting... 
+[2025-10-18T05:49:15.493Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c056dc76dce8/1760766555264/da43a6f6aa8475d2f3ce694be3b4c79aa798352cd8251050f51fcf3760573644/LI0WE5zvfnVwr10 
+[2025-10-18T05:49:15.546Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c056dc76dce8/1760766555264/da43a6f6aa8475d2f3ce694be3b4c79aa798352cd8251050f51fcf3760573644/LI0WE5zvfnVwr10 
+[2025-10-18T05:49:15.547Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T05:49:16.047Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/9905c056dc76dce8/1760766555265/ooKNQZ33OxWixVm 
+[2025-10-18T05:49:16.049Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:49:17.758Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:18.191Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:45.444Z] [WARN] Cloudflare challenge may still be active: "page.waitForFunction: Timeout 30000ms exceeded."
+[2025-10-18T05:49:45.444Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-18T05:49:45.467Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-18T05:49:45.468Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T05:49:45.469Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T05:49:45.484Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:49:45.558Z] [DEBUG] ← 302 https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T05:49:45.558Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T05:49:45.675Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T05:49:45.726Z] [DEBUG] ← 200 https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T05:49:58.416Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:58.558Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c056dc76dce8/3TW0ecFmUAIh6z3jaz7JYx_p0Bycg2bxgvtcnQsaq9s-1760766554-1.2.1.1-LhmhHqU8BJVG6G.V33M.3SpUQTRPUpz2nuqyR2yCdDIEtvGLdKz45vNF1G9trJ2T 
+[2025-10-18T05:49:58.594Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c0270e193f11/Rcmc59ccNsdKOyW47wEFb_eS6lbY3UpNjGZ2Va2KUmk-1760766547-1.2.1.1-L30XGJCcOD.M9CmqM5auCigbKOShv.E38QZ7bw7gcu3k8rtbTQ2AW8zpI.q_2ME9 
+[2025-10-18T05:49:58.641Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c0270e193f11/Rcmc59ccNsdKOyW47wEFb_eS6lbY3UpNjGZ2Va2KUmk-1760766547-1.2.1.1-L30XGJCcOD.M9CmqM5auCigbKOShv.E38QZ7bw7gcu3k8rtbTQ2AW8zpI.q_2ME9 
+[2025-10-18T05:50:00.658Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T05:50:00.714Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T05:50:00.715Z] [ERROR] Failed to inject IVAC smart panel script: {"error":"page.evaluate: Execution context was destroyed, most likely because of a navigation."}
+[2025-10-18T05:50:00.716Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T05:50:00.716Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T05:50:01.257Z] [INFO] Browser closed successfully 
+[2025-10-18T05:51:18.830Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.14.90 
+[2025-10-18T05:51:18.834Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T05:51:18.835Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T05:51:18.901Z] [INFO] Found 19 proxies from api.proxyscrape.com 
+[2025-10-18T05:51:18.902Z] [INFO] Testing 19 proxies... 
+[2025-10-18T05:51:23.913Z] [DEBUG] Proxy connection timeout (43.224.116.186:19201) 
+[2025-10-18T05:51:23.914Z] [DEBUG] Proxy connection timeout (115.127.36.190:222) 
+[2025-10-18T05:51:23.914Z] [DEBUG] Proxy connection timeout (202.5.33.229:5720) 
+[2025-10-18T05:51:23.915Z] [DEBUG] Proxy connection timeout (103.245.109.70:21458) 
+[2025-10-18T05:51:23.915Z] [INFO] Found 1 working proxies 
+[2025-10-18T05:51:23.917Z] [INFO] Using proxy: 113.11.64.18:9107 
+[2025-10-18T05:51:23.917Z] [INFO] Launching browser... 
+[2025-10-18T05:51:24.244Z] [INFO] Browser initialized successfully 
+[2025-10-18T05:51:24.293Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T05:51:24.304Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T05:51:32.422Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T05:51:32.440Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T05:51:39.643Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T05:51:39.648Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-18T05:51:39.657Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:51:39.733Z] [DEBUG] → GET https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015 
+[2025-10-18T05:51:39.734Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=9905c3e5c9afa721 
+[2025-10-18T05:51:39.744Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:51:39.984Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=9905c3e5c9afa721 
+[2025-10-18T05:51:40.000Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit 
+[2025-10-18T05:51:40.137Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c3e5c9afa721/Yw9z4aKfLNY6.Sd2YK6KK9xJn_czbfNHeVqr.Re60K0-1760766700-1.2.1.1-CODIG3uCSAG9tPMCw1tKo8xq59D8FByNENx1Hq4Jfq4PNoxYURBB0AQvn1czbUKK 
+[2025-10-18T05:51:40.220Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c3e5c9afa721/Yw9z4aKfLNY6.Sd2YK6KK9xJn_czbfNHeVqr.Re60K0-1760766700-1.2.1.1-CODIG3uCSAG9tPMCw1tKo8xq59D8FByNENx1Hq4Jfq4PNoxYURBB0AQvn1czbUKK 
+[2025-10-18T05:51:40.240Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit 
+[2025-10-18T05:51:40.292Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/2uqu4/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal/auto 
+[2025-10-18T05:51:41.467Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/2uqu4/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal/auto 
+[2025-10-18T05:51:41.556Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T05:51:41.557Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c3f149e08620&lang=auto 
+[2025-10-18T05:51:41.559Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:51:41.839Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c3f149e08620&lang=auto 
+[2025-10-18T05:51:41.844Z] [ERROR] Browser console error: Potential permissions policy violation: autoplay is not allowed in this document. {"error":"undefined"}
+[2025-10-18T05:51:42.010Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:42.167Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:43.263Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c3f149e08620/1760766702922/d1ff6926fcee88a6aa0acf2157a6b7bb401bc7904cd4a20559f5e1f163742bb8/LjYsgefc20kZGDq 
+[2025-10-18T05:51:43.323Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c3f149e08620/1760766702922/d1ff6926fcee88a6aa0acf2157a6b7bb401bc7904cd4a20559f5e1f163742bb8/LjYsgefc20kZGDq 
+[2025-10-18T05:51:43.323Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T05:51:43.759Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/9905c3f149e08620/1760766702936/cSsInjRiQIvAaGF 
+[2025-10-18T05:51:43.760Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:51:43.963Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:51:43.962Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:51:45.788Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:46.122Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:47.740Z] [ERROR] Browser console error: Failed to load resource: net::ERR_TIMED_OUT {"error":"undefined"}
+[2025-10-18T05:51:51.764Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:52.059Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c3f149e08620/YH6_pUK9Cv393fVdE83l8ESF91ibPn9dmX6JIzPLboA-1760766702-1.2.1.1-pve4WvXnTumxOFu7JrB6wXh2R0lHkp8.yHWhYbr2A5Ms7nVALIud69hvf1OwGIq7 
+[2025-10-18T05:51:52.084Z] [DEBUG] → POST https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c3e5c9afa721/Yw9z4aKfLNY6.Sd2YK6KK9xJn_czbfNHeVqr.Re60K0-1760766700-1.2.1.1-CODIG3uCSAG9tPMCw1tKo8xq59D8FByNENx1Hq4Jfq4PNoxYURBB0AQvn1czbUKK 
+[2025-10-18T05:51:52.172Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/challenge-platform/h/g/flow/ov1/590219057:1760099306:vISi_bGz35Eg8APS3VUgRG2qY1yRk8PjQmfY2qEzQ4o/9905c3e5c9afa721/Yw9z4aKfLNY6.Sd2YK6KK9xJn_czbfNHeVqr.Re60K0-1760766700-1.2.1.1-CODIG3uCSAG9tPMCw1tKo8xq59D8FByNENx1Hq4Jfq4PNoxYURBB0AQvn1czbUKK 
+[2025-10-18T05:51:52.803Z] [INFO] Page loaded with status: 403 
+[2025-10-18T05:51:52.813Z] [WARN] Cloudflare protection detected, waiting... 
+[2025-10-18T05:51:56.187Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T05:51:56.239Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T05:51:56.248Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-18T05:51:56.259Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:51:56.308Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T05:51:59.383Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-18T05:51:59.397Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-18T05:51:59.399Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T05:51:59.398Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T05:51:59.412Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:51:59.496Z] [DEBUG] ← 302 https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T05:51:59.496Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T05:51:59.644Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T05:51:59.656Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/77i5u/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T05:51:59.690Z] [DEBUG] ← 200 https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T05:51:59.942Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/77i5u/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T05:52:00.041Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T05:52:00.042Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c464d8da8620&lang=auto 
+[2025-10-18T05:52:00.043Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:52:00.261Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c464d8da8620&lang=auto 
+[2025-10-18T05:52:00.436Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:00.652Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:01.366Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:52:01.365Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:52:02.165Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/9905c464d8da8620/1760766721334/z3FRZEgB9Vrwm3p 
+[2025-10-18T05:52:02.168Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:52:02.177Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c464d8da8620/1760766721334/c214b66101274f6f0ddabb321bc354811f4d0b826f7ec9345fb0d0493ec404c8/s04HmtBJKNbKqHX 
+[2025-10-18T05:52:02.222Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c464d8da8620/1760766721334/c214b66101274f6f0ddabb321bc354811f4d0b826f7ec9345fb0d0493ec404c8/s04HmtBJKNbKqHX 
+[2025-10-18T05:52:02.223Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T05:52:03.972Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:04.412Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:09.407Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:09.530Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c464d8da8620/LXT3Q4vLwN8sjqk4fMRxAz79dOJgL4OjJ8UZUozX_Oc-1760766720-1.2.1.1-HksXMcLApQ7rpHCNcVnX7niUa6QtZr4zq4U9b_jaU5pIq4clIwgy0R_H0qzB6Ssh 
+[2025-10-18T05:52:09.543Z] [ERROR] Page error: [Cloudflare Turnstile] Error: 600010. {"error":"undefined"}
+[2025-10-18T05:52:16.645Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rchlBYftJ0lyOwOdQz8hnosL5zH3qz_1sYZbz73WzdYxoM-1760766720-1.3.1.1-lcn171HvPJScef5D8I.sI46A.wwDjDfvje1rg1tljkY/77i5u/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/api/normal/auto 
+[2025-10-18T05:52:16.679Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rchlBYftJ0lyOwOdQz8hnosL5zH3qz_1sYZbz73WzdYxoM-1760766720-1.3.1.1-lcn171HvPJScef5D8I.sI46A.wwDjDfvje1rg1tljkY/77i5u/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/api/normal/auto 
+[2025-10-18T05:52:16.746Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T05:52:16.747Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c4cd78718620&lang=auto 
+[2025-10-18T05:52:16.748Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:52:17.075Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=9905c4cd78718620&lang=auto 
+[2025-10-18T05:52:17.234Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:17.349Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:18.157Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c4cd78718620/1760766738129/846dc788f69253467d8d0d87a07ab73062cc30480d79eceaf844cc9c9baa1088/vG05UnBkMGor0j6 
+[2025-10-18T05:52:18.418Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T05:52:18.417Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/9905c4cd78718620/1760766738129/846dc788f69253467d8d0d87a07ab73062cc30480d79eceaf844cc9c9baa1088/vG05UnBkMGor0j6 
+[2025-10-18T05:52:18.562Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/9905c4cd78718620/1760766738131/KVaRUts70C4zIMl 
+[2025-10-18T05:52:18.563Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T05:52:18.590Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:52:18.591Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T05:52:20.562Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:20.705Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:25.298Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:25.424Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/9905c4cd78718620/jBTj9yc7190PZFYotqTdxrIfKuDtz2BIRmdYPTpwS6A-1760766737-1.2.1.1-Z4ATBN2olvHDuUj_53ympqFSxu3LHmG38.1400NOJOtmWMs.SAlmsH6e5_5yVHmn 
+[2025-10-18T05:52:25.475Z] [ERROR] Page error: [Cloudflare Turnstile] Error: 600010. {"error":"undefined"}
+[2025-10-18T05:52:29.469Z] [WARN] IVAC script injected but may not have initialized properly 
+[2025-10-18T05:52:29.470Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T05:52:29.470Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T05:52:29.852Z] [INFO] Browser closed successfully 
+[2025-10-18T06:55:37.367Z] [INFO] Domain payment.ivacbd.com is reachable at 172.67.68.164 
+[2025-10-18T06:55:37.369Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T06:55:37.370Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T06:55:37.777Z] [INFO] Found 21 proxies from api.proxyscrape.com 
+[2025-10-18T06:55:37.778Z] [INFO] Testing 21 proxies... 
+[2025-10-18T06:55:42.785Z] [DEBUG] Proxy connection timeout (45.115.113.182:4334) 
+[2025-10-18T06:55:42.786Z] [DEBUG] Proxy connection timeout (103.85.159.201:19201) 
+[2025-10-18T06:55:42.786Z] [DEBUG] Proxy connection timeout (123.200.4.70:10521) 
+[2025-10-18T06:55:42.787Z] [DEBUG] Proxy connection timeout (103.230.63.105:19201) 
+[2025-10-18T06:55:42.787Z] [DEBUG] Proxy connection timeout (119.18.149.9:5720) 
+[2025-10-18T06:55:48.292Z] [DEBUG] Proxy connection timeout (27.147.152.66:58080) 
+[2025-10-18T06:55:48.292Z] [DEBUG] Proxy connection timeout (202.5.34.3:8443) 
+[2025-10-18T06:55:48.293Z] [DEBUG] Proxy connection timeout (103.245.109.70:21458) 
+[2025-10-18T06:55:48.293Z] [DEBUG] Proxy connection timeout (118.179.5.177:6248) 
+[2025-10-18T06:55:48.293Z] [DEBUG] Proxy connection timeout (121.200.61.221:6565) 
+[2025-10-18T06:55:50.849Z] [DEBUG] Proxy connection error (117.58.242.231:36514): "connect ECONNREFUSED 117.58.242.231:36514"
+[2025-10-18T06:55:50.867Z] [DEBUG] Proxy connection error (137.59.49.248:19201): "connect ECONNREFUSED 137.59.49.248:19201"
+[2025-10-18T06:55:53.803Z] [DEBUG] Proxy connection timeout (103.192.158.115:46) 
+[2025-10-18T06:55:53.803Z] [DEBUG] Proxy connection timeout (202.4.125.221:9999) 
+[2025-10-18T06:55:53.803Z] [DEBUG] Proxy connection timeout (144.48.163.126:8080) 
+[2025-10-18T06:55:56.377Z] [DEBUG] Proxy connection error (202.5.56.151:2727): "connect ECONNREFUSED 202.5.56.151:2727"
+[2025-10-18T06:55:56.378Z] [DEBUG] Proxy connection error (202.5.57.39:2727): "connect ECONNREFUSED 202.5.57.39:2727"
+[2025-10-18T06:55:56.378Z] [DEBUG] Proxy connection error (202.5.56.141:2727): "connect ECONNREFUSED 202.5.56.141:2727"
+[2025-10-18T06:55:59.313Z] [DEBUG] Proxy connection timeout (202.5.56.59:2727) 
+[2025-10-18T06:55:59.313Z] [DEBUG] Proxy connection timeout (119.148.39.30:8444) 
+[2025-10-18T06:56:04.830Z] [DEBUG] Proxy connection timeout (43.224.118.206:8989) 
+[2025-10-18T06:56:05.336Z] [WARN] No working proxies found in the list 
+[2025-10-18T06:56:05.338Z] [WARN] No working proxy found, continuing without proxy 
+[2025-10-18T06:56:05.339Z] [INFO] Launching browser... 
+[2025-10-18T06:56:05.779Z] [INFO] Browser initialized successfully 
+[2025-10-18T06:56:05.837Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T06:56:05.852Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T06:56:05.938Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T06:56:05.944Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-18T06:56:05.950Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T06:56:05.965Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T06:56:06.058Z] [INFO] Page loaded with status: 403 
+[2025-10-18T06:56:06.476Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-18T06:56:06.484Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-18T06:56:06.486Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T06:56:06.487Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T06:56:06.501Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T06:56:06.566Z] [DEBUG] ← 302 https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T06:56:06.567Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T06:56:06.581Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T06:56:06.597Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/tjab6/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T06:56:06.668Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/tjab6/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T06:56:06.773Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T06:56:06.774Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=99062250097633bc&lang=auto 
+[2025-10-18T06:56:06.776Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T06:56:06.795Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=99062250097633bc&lang=auto 
+[2025-10-18T06:56:06.806Z] [DEBUG] ← 200 https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T06:56:06.979Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/99062250097633bc/1AeMrpeFxO67TDCYeIcRVDT7oQhbY4FAAc.DzWd_Pqg-1760770567-1.2.1.1-_ms8wItm9A2L1BF3d3GpII1lGClCClT7jn6hfZ8lJWtu1mGBEKIYWSb0Pl_5HYcA 
+[2025-10-18T06:56:07.045Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/99062250097633bc/1AeMrpeFxO67TDCYeIcRVDT7oQhbY4FAAc.DzWd_Pqg-1760770567-1.2.1.1-_ms8wItm9A2L1BF3d3GpII1lGClCClT7jn6hfZ8lJWtu1mGBEKIYWSb0Pl_5HYcA 
+[2025-10-18T06:56:07.530Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T06:56:07.531Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T06:56:08.177Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/99062250097633bc/1760770568027/0_m_1-VzLrR6t5h 
+[2025-10-18T06:56:08.179Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T06:56:08.196Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/99062250097633bc/1760770568027/45e39e4b5c5e56612a931173f3f4527a0ea8115912b3dede69a200d62eb9c5b1/WckhBvib-wUXhs5 
+[2025-10-18T06:56:08.211Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T06:56:08.210Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/99062250097633bc/1760770568027/45e39e4b5c5e56612a931173f3f4527a0ea8115912b3dede69a200d62eb9c5b1/WckhBvib-wUXhs5 
+[2025-10-18T06:56:09.914Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/99062250097633bc/1AeMrpeFxO67TDCYeIcRVDT7oQhbY4FAAc.DzWd_Pqg-1760770567-1.2.1.1-_ms8wItm9A2L1BF3d3GpII1lGClCClT7jn6hfZ8lJWtu1mGBEKIYWSb0Pl_5HYcA 
+[2025-10-18T06:56:10.314Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/99062250097633bc/1AeMrpeFxO67TDCYeIcRVDT7oQhbY4FAAc.DzWd_Pqg-1760770567-1.2.1.1-_ms8wItm9A2L1BF3d3GpII1lGClCClT7jn6hfZ8lJWtu1mGBEKIYWSb0Pl_5HYcA 
+[2025-10-18T06:56:19.121Z] [INFO] Shutting down... 
+[2025-10-18T12:54:03.515Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:54:03.519Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:54:03.520Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:54:07.114Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:54:07.115Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:54:12.117Z] [DEBUG] Proxy connection timeout (58.147.171.12:8085) 
+[2025-10-18T12:54:12.118Z] [DEBUG] Proxy connection timeout (103.124.251.12:8081) 
+[2025-10-18T12:54:12.118Z] [DEBUG] Proxy connection timeout (113.11.64.18:9107) 
+[2025-10-18T12:54:12.119Z] [DEBUG] Proxy connection timeout (103.204.211.48:32255) 
+[2025-10-18T12:54:12.119Z] [DEBUG] Proxy connection timeout (119.18.148.69:2314) 
+[2025-10-18T12:54:14.684Z] [DEBUG] Proxy connection error (137.59.49.248:19201): "connect ECONNREFUSED 137.59.49.248:19201"
+[2025-10-18T12:54:17.637Z] [DEBUG] Proxy connection timeout (121.200.61.221:6565) 
+[2025-10-18T12:54:17.638Z] [DEBUG] Proxy connection timeout (43.224.116.188:19201) 
+[2025-10-18T12:54:17.638Z] [DEBUG] Proxy connection timeout (144.48.163.126:8080) 
+[2025-10-18T12:54:17.638Z] [INFO] Found 1 working proxies 
+[2025-10-18T12:54:17.639Z] [INFO] Using proxy: 103.117.194.250:8080 
+[2025-10-18T12:54:17.639Z] [INFO] Launching browser... 
+[2025-10-18T12:54:18.586Z] [INFO] Browser initialized successfully 
+[2025-10-18T12:54:18.632Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:54:18.643Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:54:26.764Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:54:26.778Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:54:34.891Z] [WARN] Navigation attempt 1 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:54:34.892Z] [INFO] Retrying in 3000ms... 
+[2025-10-18T12:54:37.951Z] [INFO] [Attempt 2/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:54:37.956Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:54:46.072Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:54:46.098Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:54:54.193Z] [WARN] Navigation attempt 2 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:54:54.195Z] [INFO] Retrying in 3000ms... 
+[2025-10-18T12:54:57.250Z] [INFO] [Attempt 3/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:54:57.255Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:55:05.368Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:55:05.378Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:55:13.495Z] [WARN] Navigation attempt 3 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:55:13.496Z] [ERROR] All 3 navigation attempts failed {"error":"undefined"}
+[2025-10-18T12:55:13.497Z] [ERROR] Application error {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-18T12:55:13.497Z] [ERROR] Fatal error: {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-18T12:55:13.747Z] [INFO] Browser closed successfully 
+[2025-10-18T12:56:00.954Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:56:00.956Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:56:00.956Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:56:01.029Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:56:01.030Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:56:04.268Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:56:04.269Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:56:04.270Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:56:04.336Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:56:04.337Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:56:09.344Z] [DEBUG] Proxy connection timeout (58.147.171.12:8085) 
+[2025-10-18T12:56:09.345Z] [DEBUG] Proxy connection timeout (103.124.251.12:8081) 
+[2025-10-18T12:56:09.345Z] [DEBUG] Proxy connection timeout (113.11.64.18:9107) 
+[2025-10-18T12:56:09.346Z] [DEBUG] Proxy connection timeout (103.204.211.48:32255) 
+[2025-10-18T12:56:09.347Z] [DEBUG] Proxy connection timeout (119.18.148.69:2314) 
+[2025-10-18T12:56:11.932Z] [DEBUG] Proxy connection error (137.59.49.248:19201): "connect ECONNREFUSED 137.59.49.248:19201"
+[2025-10-18T12:56:14.863Z] [DEBUG] Proxy connection timeout (43.224.116.188:19201) 
+[2025-10-18T12:56:14.864Z] [DEBUG] Proxy connection timeout (103.117.194.250:8080) 
+[2025-10-18T12:56:14.864Z] [DEBUG] Proxy connection timeout (144.48.163.126:8080) 
+[2025-10-18T12:56:14.864Z] [INFO] Found 1 working proxies 
+[2025-10-18T12:56:14.865Z] [INFO] Using proxy: 121.200.61.221:6565 
+[2025-10-18T12:56:14.865Z] [INFO] Launching browser... 
+[2025-10-18T12:56:15.168Z] [INFO] Browser initialized successfully 
+[2025-10-18T12:56:15.214Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:56:15.226Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:56:23.348Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:56:23.357Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:56:31.460Z] [WARN] Navigation attempt 1 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:56:31.460Z] [INFO] Retrying in 3000ms... 
+[2025-10-18T12:56:34.515Z] [INFO] [Attempt 2/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:56:34.520Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:56:42.645Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:56:42.661Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:56:50.780Z] [WARN] Navigation attempt 2 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:56:50.782Z] [INFO] Retrying in 3000ms... 
+[2025-10-18T12:56:53.842Z] [INFO] [Attempt 3/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:56:53.845Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:57:01.967Z] [WARN] Initial load failed, retrying with networkidle: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "domcontentloaded"[22m
+ 
+[2025-10-18T12:57:01.975Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:57:10.092Z] [WARN] Navigation attempt 3 failed: page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/
+Call log:
+[2m  - navigating to "https://payment.ivacbd.com/", waiting until "networkidle"[22m
+ 
+[2025-10-18T12:57:10.093Z] [ERROR] All 3 navigation attempts failed {"error":"undefined"}
+[2025-10-18T12:57:10.093Z] [ERROR] Application error {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-18T12:57:10.093Z] [ERROR] Fatal error: {"error":"page.goto: net::ERR_TIMED_OUT at https://payment.ivacbd.com/\nCall log:\n\u001b[2m  - navigating to \"https://payment.ivacbd.com/\", waiting until \"networkidle\"\u001b[22m\n"}
+[2025-10-18T12:57:10.311Z] [INFO] Browser closed successfully 
+[2025-10-18T12:57:17.699Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:57:17.704Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:57:17.705Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:57:17.769Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:57:17.770Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:57:21.783Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:57:21.788Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:57:21.789Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:57:21.848Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:57:21.849Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:57:26.858Z] [DEBUG] Proxy connection timeout (58.147.171.12:8085) 
+[2025-10-18T12:57:26.858Z] [DEBUG] Proxy connection timeout (103.124.251.12:8081) 
+[2025-10-18T12:57:26.858Z] [DEBUG] Proxy connection timeout (103.204.211.48:32255) 
+[2025-10-18T12:57:26.859Z] [DEBUG] Proxy connection timeout (119.18.148.69:2314) 
+[2025-10-18T12:57:26.859Z] [INFO] Found 1 working proxies 
+[2025-10-18T12:57:26.860Z] [INFO] Using proxy: 113.11.64.18:9107 
+[2025-10-18T12:57:26.860Z] [INFO] Launching browser... 
+[2025-10-18T12:57:27.217Z] [INFO] Browser initialized successfully 
+[2025-10-18T12:57:27.285Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:57:27.297Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:57:27.700Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:57:27.705Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:57:27.706Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:57:27.769Z] [INFO] Found 18 proxies from api.proxyscrape.com 
+[2025-10-18T12:57:27.769Z] [INFO] Testing 18 proxies... 
+[2025-10-18T12:57:30.184Z] [INFO] Shutting down... 
+[2025-10-18T12:57:30.185Z] [INFO] Browser closed successfully 
+[2025-10-18T12:59:14.555Z] [INFO] Domain payment.ivacbd.com is reachable at 104.26.15.90 
+[2025-10-18T12:59:14.557Z] [INFO] No proxies in cache, fetching fresh list... 
+[2025-10-18T12:59:14.557Z] [INFO] Fetching proxies from: https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=5000&country=BD 
+[2025-10-18T12:59:14.901Z] [INFO] Found 15 proxies from api.proxyscrape.com 
+[2025-10-18T12:59:14.901Z] [INFO] Testing 15 proxies... 
+[2025-10-18T12:59:19.912Z] [DEBUG] Proxy connection timeout (119.18.149.9:5720) 
+[2025-10-18T12:59:19.914Z] [DEBUG] Proxy connection timeout (202.5.33.229:5720) 
+[2025-10-18T12:59:19.915Z] [DEBUG] Proxy connection timeout (103.245.109.70:21458) 
+[2025-10-18T12:59:19.916Z] [DEBUG] Proxy connection timeout (119.18.147.216:63636) 
+[2025-10-18T12:59:19.918Z] [DEBUG] Proxy connection timeout (103.10.55.137:8664) 
+[2025-10-18T12:59:22.475Z] [DEBUG] Proxy connection error (117.58.242.231:36514): "connect ECONNREFUSED 117.58.242.231:36514"
+[2025-10-18T12:59:22.491Z] [DEBUG] Proxy connection error (137.59.49.248:19201): "connect ECONNREFUSED 137.59.49.248:19201"
+[2025-10-18T12:59:22.497Z] [DEBUG] Proxy connection error (202.5.56.59:2727): "connect ECONNREFUSED 202.5.56.59:2727"
+[2025-10-18T12:59:25.425Z] [DEBUG] Proxy connection timeout (144.48.163.126:8080) 
+[2025-10-18T12:59:25.426Z] [DEBUG] Proxy connection timeout (202.4.125.221:9999) 
+[2025-10-18T12:59:27.983Z] [DEBUG] Proxy connection error (202.5.56.151:2727): "connect ECONNREFUSED 202.5.56.151:2727"
+[2025-10-18T12:59:27.984Z] [DEBUG] Proxy connection error (202.5.57.39:2727): "connect ECONNREFUSED 202.5.57.39:2727"
+[2025-10-18T12:59:28.000Z] [DEBUG] Proxy connection error (202.5.56.141:2727): "connect ECONNREFUSED 202.5.56.141:2727"
+[2025-10-18T12:59:30.935Z] [DEBUG] Proxy connection timeout (119.148.39.30:8444) 
+[2025-10-18T12:59:30.936Z] [DEBUG] Proxy connection timeout (43.224.118.206:8989) 
+[2025-10-18T12:59:31.447Z] [WARN] No working proxies found in the list 
+[2025-10-18T12:59:31.450Z] [WARN] No working proxy found, continuing without proxy 
+[2025-10-18T12:59:31.452Z] [INFO] Launching browser... 
+[2025-10-18T12:59:31.748Z] [INFO] Browser initialized successfully 
+[2025-10-18T12:59:31.804Z] [INFO] [Attempt 1/3] Navigating to https://payment.ivacbd.com... 
+[2025-10-18T12:59:31.819Z] [DEBUG] → GET https://payment.ivacbd.com/ 
+[2025-10-18T12:59:31.894Z] [DEBUG] ← 403 https://payment.ivacbd.com/ 
+[2025-10-18T12:59:31.899Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 403 () {"error":"undefined"}
+[2025-10-18T12:59:31.910Z] [DEBUG] → GET https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T12:59:31.921Z] [DEBUG] ← 200 https://payment.ivacbd.com/cdn-cgi/speculation 
+[2025-10-18T12:59:32.017Z] [INFO] Page loaded with status: 403 
+[2025-10-18T12:59:32.430Z] [INFO] Injecting IVAC smart panel script... 
+[2025-10-18T12:59:32.448Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css 
+[2025-10-18T12:59:32.448Z] [DEBUG] → GET https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T12:59:32.449Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T12:59:32.461Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T12:59:32.539Z] [DEBUG] ← 302 https://challenges.cloudflare.com/turnstile/v0/api.js 
+[2025-10-18T12:59:32.540Z] [DEBUG] → GET https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T12:59:32.556Z] [DEBUG] ← 200 https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js 
+[2025-10-18T12:59:32.567Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/fils3/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T12:59:32.642Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/ov2/av0/rch/fils3/0x4AAAAAABpNUpzYeppBoYpe/auto/fbE/new/normal/auto 
+[2025-10-18T12:59:32.742Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/cmg/1 
+[2025-10-18T12:59:32.743Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=990836b5f883ba5c&lang=auto 
+[2025-10-18T12:59:32.745Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T12:59:32.774Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/orchestrate/chl_api/v1?ray=990836b5f883ba5c&lang=auto 
+[2025-10-18T12:59:32.956Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/990836b5f883ba5c/0vVv..Tr2LF4aJ3ev9BVC_1n9irikpUlIHFXQ7csNAs-1760792374-1.2.1.1-30fx.wAqoRJYLp4hyTah.teSniMSylWcRy86tfPO1rIwdrlqd21diwiwqIgalwa4 
+[2025-10-18T12:59:33.040Z] [DEBUG] ← 200 https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 
+[2025-10-18T12:59:33.075Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/990836b5f883ba5c/0vVv..Tr2LF4aJ3ev9BVC_1n9irikpUlIHFXQ7csNAs-1760792374-1.2.1.1-30fx.wAqoRJYLp4hyTah.teSniMSylWcRy86tfPO1rIwdrlqd21diwiwqIgalwa4 
+[2025-10-18T12:59:33.725Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T12:59:33.726Z] [ERROR] Browser console error: %c%d font-size:0;color:transparent NaN {"error":"undefined"}
+[2025-10-18T12:59:34.239Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/d/990836b5f883ba5c/1760792375077/8zsIVll0vxtIWdK 
+[2025-10-18T12:59:34.241Z] [ERROR] Browser console error: Failed to load resource: net::ERR_FAILED {"error":"undefined"}
+[2025-10-18T12:59:34.310Z] [DEBUG] → GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/990836b5f883ba5c/1760792375078/3decaa5dd0c18ea88eadded3be285cf5b8cb5411ee918c546257a47a1af2b11f/jQl0O0LIbhpQA_C 
+[2025-10-18T12:59:34.322Z] [DEBUG] ← 401 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/pat/990836b5f883ba5c/1760792375078/3decaa5dd0c18ea88eadded3be285cf5b8cb5411ee918c546257a47a1af2b11f/jQl0O0LIbhpQA_C 
+[2025-10-18T12:59:34.323Z] [ERROR] Browser console error: Failed to load resource: the server responded with a status of 401 () {"error":"undefined"}
+[2025-10-18T12:59:36.062Z] [DEBUG] → POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/990836b5f883ba5c/0vVv..Tr2LF4aJ3ev9BVC_1n9irikpUlIHFXQ7csNAs-1760792374-1.2.1.1-30fx.wAqoRJYLp4hyTah.teSniMSylWcRy86tfPO1rIwdrlqd21diwiwqIgalwa4 
+[2025-10-18T12:59:36.470Z] [DEBUG] ← 200 https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/flow/ov1/945103593:1760099306:Kmotsif1nvrLSLMhYcam5zxJEBiagO4PmNz5T7j1K6U/990836b5f883ba5c/0vVv..Tr2LF4aJ3ev9BVC_1n9irikpUlIHFXQ7csNAs-1760792374-1.2.1.1-30fx.wAqoRJYLp4hyTah.teSniMSylWcRy86tfPO1rIwdrlqd21diwiwqIgalwa4 
+[2025-10-18T13:00:02.511Z] [WARN] IVAC script injected but may not have initialized properly 
+[2025-10-18T13:00:02.512Z] [ERROR] Application error {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T13:00:02.512Z] [ERROR] Fatal error: {"error":"this.browserService.takeScreenshot is not a function"}
+[2025-10-18T13:00:02.885Z] [INFO] Browser closed successfully 
